@@ -1,15 +1,15 @@
-import { Routes } from './app/routes';
-import { ReactQueryClientProvider } from './shared/lib/query-client';
+import { Routes } from '@app/routes';
 import { ChakraProvider } from '@chakra-ui/react';
+import { ReactQueryClientProvider } from '@shared/lib';
 
 const App = () => {
-  return (
-    <ReactQueryClientProvider>
-      <ChakraProvider>
-        <Routes />
-      </ChakraProvider>
-    </ReactQueryClientProvider>
-  );
+	return (
+		<ReactQueryClientProvider>
+			<ChakraProvider>
+				<Routes />
+			</ChakraProvider>
+		</ReactQueryClientProvider>
+	);
 };
 
 export default App;
