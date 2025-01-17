@@ -1,35 +1,46 @@
 {
-  "name": "algo-hive-fe",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@chakra-ui/react": "2",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@tanstack/react-query": "^5.62.11",
-    "axios": "^1.7.9",
-    "framer-motion": "^11.15.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
-  }
+	"name": "algo-hive-fe",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --host",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview",
+		"format": "prettier --check --ignore-path .prettierignore ."
+	},
+	"dependencies": {
+		"@blocknote/core": "^0.22.0",
+		"@blocknote/mantine": "^0.22.0",
+		"@blocknote/react": "^0.22.0",
+		"@chakra-ui/react": "^2.10.4",
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
+		"@tanstack/react-query": "^5.64.1",
+		"axios": "^1.7.9",
+		"framer-motion": "^11.18.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-router-dom": "^6.28.2"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.17.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@trivago/prettier-plugin-sort-imports": "^5.2.1",
+		"@types/react": "^19.0.7",
+		"@types/react-dom": "^19.0.3",
+		"@typescript-eslint/eslint-plugin": "^8.20.0",
+		"@typescript-eslint/parser": "^8.20.0",
+		"@vitejs/plugin-react": "^4.3.4",
+		"eslint": "^9.17.0",
+		"eslint-plugin-react-hooks": "^5.0.0",
+		"eslint-plugin-react-refresh": "^0.4.16",
+		"globals": "^15.14.0",
+		"msw": "^2.7.0",
+		"prettier": "^3.4.2",
+		"typescript": "~5.6.2",
+		"typescript-eslint": "^8.18.2",
+		"vite": "^6.0.5"
+	}
 }
