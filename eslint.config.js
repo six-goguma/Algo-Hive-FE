@@ -78,7 +78,7 @@ export default tseslint.config(
         node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
       },
       react: {
-        version: 'detect',
+        version: '19.0.0',
       },
     },
   },
