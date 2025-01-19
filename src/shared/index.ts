@@ -1,2 +1,2 @@
 export * from './lib';
-export * from './service';
+export * from './config';
