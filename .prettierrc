@@ -2,24 +2,24 @@
     "endOfLine": "auto",
     "singleQuote": true,
     "semi": true,
-    "useTabs": false,
+    "useTabs": true,
     "tabWidth": 4,
     "trailingComma": "all",
     "printWidth": 100,
     "bracketSpacing": true,
     "arrowParens": "always",
 
-    "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+    "plugins": ["@trivago/prettier-plugin-sort-imports"],
 
     "importOrder": [
         "^react",
         "<THIRD_PARTY_MODULES>",
 
-        "^(@/app)(.*)$",
-        "^(@/pages)(.*)$",
+        "^(@app)(.*)$",
+        "^(@pages)(.*)$",
 
-        "^(@/shared)(.*)$",
-        "^(@/widgets)(.*)$",
+        "^(@shared)(.*)$",
+        "^(@widgets)(.*)$",
 
 
         "^(.*)/(.*)$"
