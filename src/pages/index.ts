@@ -4,3 +4,5 @@ export * from './main';
 export * from './mypage';
 export * from './post-detail';
 export * from './post-write';
+export * from './post-edit';
+export * from './error';
