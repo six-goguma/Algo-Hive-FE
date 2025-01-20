@@ -1,0 +1,1 @@
+export { getDynamicPath } from './DynamicPath';
