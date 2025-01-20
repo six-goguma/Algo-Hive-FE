@@ -1,29 +1,37 @@
 {
-    "endOfLine": "auto",
-    "singleQuote": true,
-    "semi": true,
-    "useTabs": true,
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "printWidth": 100,
-    "bracketSpacing": true,
-    "arrowParens": "always",
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "embeddedLanguageFormatting": "auto",
+  "endOfLine": "auto",
+  "insertPragma": false,
+  "jsxSingleQuote": true,
+  "printWidth": 100,
+  "proseWrap": "always",
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "semi": true,
+  "singleAttributePerLine": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": false,
 
-    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
 
-    "importOrder": [
-        "^react",
-        "<THIRD_PARTY_MODULES>",
+  "importOrder": [
+    "^react",
+    "<THIRD_PARTY_MODULES>",
 
-        "^(@app)(.*)$",
-        "^(@pages)(.*)$",
+    "^(@app)(.*)$",
+    "^(@pages)(.*)$",
 
-        "^(@shared)(.*)$",
-        "^(@widgets)(.*)$",
+    "^(@shared)(.*)$",
+    "^(@widgets)(.*)$",
 
-
-        "^(.*)/(.*)$"
-    ],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": false
+    "^(.*)/(.*)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": false
 }
