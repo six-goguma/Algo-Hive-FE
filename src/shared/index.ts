@@ -1,4 +1,4 @@
 export * from './lib';
-export * from './service';
-export * from './utils';
-export * from './constants';
+export * from './config';
+export * from './themes';
+export * from './providers';
