@@ -1,5 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
-import { Button } from '@widgets/layouts';
+import { Button } from '../common';
 
 const config = {
 	useSystemColorMode: true,
@@ -31,4 +31,4 @@ const config = {
 	},
 };
 
-export const GlobalStyle = extendTheme(config);
+export const globalStyle = extendTheme(config);
