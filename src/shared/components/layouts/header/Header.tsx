@@ -78,7 +78,7 @@ export const Header = () => {
                         <TriangleDownIcon
                           width="15px"
                           height="auto"
-                          color={isOpen ? 'gray' : '#868E96'}
+                          color={isOpen ? 'black' : '#868E96'}
                         />
                       </HStack>
                     </MenuButton>
