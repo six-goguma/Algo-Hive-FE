@@ -59,6 +59,8 @@ export const Header = () => {
                 <>
                   <HStack spacing="20px" cursor="pointer">
                     <Button
+                      as={Link}
+                      to={RouterPath.POST_WRITE}
                       w="full"
                       h="35px"
                       px={4}
@@ -67,7 +69,6 @@ export const Header = () => {
                       border="1.5px solid"
                       borderRadius="full"
                       _hover={{ bg: 'black', color: 'white' }}
-                      onClick={() => onClick()}
                     >
                       새 글 작성
                     </Button>
@@ -83,11 +84,13 @@ export const Header = () => {
                     </MenuButton>
                   </HStack>
                   <MenuList>
-                    <MenuItem as="a" href={RouterPath.MYPAGE}>
+                    <MenuItem as={Link} to={RouterPath.MYPAGE}>
                       마이페이지
                     </MenuItem>
                     <MenuDivider />
-                    <MenuItem onClick={() => onClick()}>로그아웃</MenuItem>
+                    <MenuItem as={Link} to={RouterPath.MAIN} onClick={() => onClick()}>
+                      로그아웃
+                    </MenuItem>
                   </MenuList>
                 </>
               )}
