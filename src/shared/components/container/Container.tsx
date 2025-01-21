@@ -37,3 +37,5 @@ export const Container = forwardRef(
     );
   },
 );
+
+Container.displayName = 'Container';
