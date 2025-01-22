@@ -1,37 +1,33 @@
 // JavaScript 기본 설정
-import js from '@eslint/js';
-
-// 글로벌 변수 환경 설정
-import globals from 'globals';
-
+import prettierConfig from 'eslint-config-prettier';
+// 웹 접근성 관련 규칙
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+// Prettier 관련 설정
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
 // React 관련 규칙 및 플러그인
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import react from 'eslint-plugin-react';
-
-// 웹 접근성 관련 규칙
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-
-// Prettier 관련 설정
-import prettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
-
+// 글로벌 변수 환경 설정
+import globals from 'globals';
 // TypeScript 관련 플러그인 및 설정
 import tseslint from 'typescript-eslint';
+
+import js from '@eslint/js';
 
 // ESLint 구성 내보내기
 export default tseslint.config(
   // 기본 설정 옵션
   {
     ignores: [
-      "dist",
-      "**/*.test.ts",
-      "**/*.test.tsx",
-      "**/*.config.{ts|tsx}",
-      "**/*.config.js",
-      "**/*.config.mjs",
-      "**/*.config.cjs",
-  ],
+      'dist',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.config.{ts|tsx}',
+      '**/*.config.js',
+      '**/*.config.mjs',
+      '**/*.config.cjs',
+    ],
   },
   {
     // 확장 규칙 설정
