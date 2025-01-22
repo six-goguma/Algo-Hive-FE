@@ -15,4 +15,13 @@ export const Layout = () => {
       </Box>
     </Box>
   );
+  return (
+    <Box>
+      <ScrollToTop />
+      <Header />
+      <Box>
+        <Outlet />
+      </Box>
+    </Box>
+  );
 };

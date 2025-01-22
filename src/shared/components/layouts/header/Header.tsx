@@ -31,24 +31,24 @@ export const Header = () => {
   };
 
   return (
-    <Flex as="header" w="full" h={HEADER_HEIGHT} bgColor="custom.gray" py="12px">
+    <Flex as='header' w='full' h={HEADER_HEIGHT} bgColor='custom.gray' py='12px'>
       <Container
-        maxWidth="100vw"
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="space-between"
+        maxWidth='100vw'
+        flexDirection='row'
+        alignItems='center'
+        justifyContent='space-between'
       >
         <Link to={RouterPath.MAIN}>
-          <Image src={LogoImage} alt="Logo" w="200px" />
+          <Image src={LogoImage} alt='Logo' w='200px' />
         </Link>
-        <HStack spacing="20px">
-          <Bell cursor="pointer" width={30} height={30} />
+        <HStack spacing='20px'>
+          <Bell cursor='pointer' width={30} height={30} />
           {!isLogin ? (
             <Button
-              w="80px"
-              h="35px"
-              border="1.5px solid"
-              borderRadius="full"
+              w='80px'
+              h='35px'
+              border='1.5px solid'
+              borderRadius='full'
               onClick={() => onClick()}
             >
               로그인
@@ -57,27 +57,27 @@ export const Header = () => {
             <Menu>
               {({ isOpen }) => (
                 <>
-                  <HStack spacing="20px" cursor="pointer">
+                  <HStack spacing='20px' cursor='pointer'>
                     <Button
                       as={Link}
                       to={RouterPath.POST_WRITE}
-                      w="full"
-                      h="35px"
+                      w='full'
+                      h='35px'
                       px={4}
-                      bg="custom.gray"
-                      color="black"
-                      border="1.5px solid"
-                      borderRadius="full"
+                      bg='custom.gray'
+                      color='black'
+                      border='1.5px solid'
+                      borderRadius='full'
                       _hover={{ bg: 'black', color: 'white' }}
                     >
                       새 글 작성
                     </Button>
                     <MenuButton>
-                      <HStack spacing="10px" cursor="pointer">
-                        <Avatar w="40px" h="auto" src="https://bit.ly/broken-link" />
+                      <HStack spacing='10px' cursor='pointer'>
+                        <Avatar w='40px' h='auto' src='https://bit.ly/broken-link' />
                         <TriangleDownIcon
-                          width="15px"
-                          height="auto"
+                          width='15px'
+                          height='auto'
                           color={isOpen ? 'black' : '#868E96'}
                         />
                       </HStack>
