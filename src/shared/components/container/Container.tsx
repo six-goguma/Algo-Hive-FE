@@ -19,16 +19,16 @@ export const Container = ({
 }: Props) => {
   return (
     <Flex
-      className="wrapper"
-      w="full"
+      className='wrapper'
+      w='full'
       justifyContent={justifyContent}
       alignItems={alignItems}
       ref={ref}
       {...props}
     >
       <Flex
-        className="inner"
-        w="full"
+        className='inner'
+        w='full'
         maxW={maxWidth ?? { base: '100%', md: '1024px' }}
         flexDirection={flexDirection ?? 'column'}
         justifyContent={justifyContent ?? 'flex-start'}
