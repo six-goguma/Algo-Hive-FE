@@ -52,7 +52,7 @@ export const AuthModal = ({
   };
   return (
     <Modal size="sm" isOpen={isOpen} onClose={onClose} scrollBehavior={scrollBehavior} isCentered>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(3px) hue-rotate(90deg)" />
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(3px)" />
       <ModalContent w="100%">
         <ModalHeader mt={5} textAlign="left">
           {modalTitle}
