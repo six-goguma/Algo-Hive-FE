@@ -16,11 +16,10 @@ import {
 
 import { TriangleDownIcon } from '@chakra-ui/icons';
 
-import { Bell } from 'lucide-react';
-
-import { RouterPath } from '@shared/constants';
+import { Bell, LogOutIcon, UserIcon } from 'lucide-react';
 
 import LogoImage from '../../../_assets/logo.png';
+import { RouterPath } from '../../../constants';
 import { Container } from '../../container';
 
 export const Header = () => {
@@ -83,12 +82,18 @@ export const Header = () => {
                       </HStack>
                     </MenuButton>
                   </HStack>
-                  <MenuList>
-                    <MenuItem as={Link} to={RouterPath.MYPAGE}>
+                  <MenuList minW='0' w='full'>
+                    <MenuItem fontSize='sm' icon={<UserIcon />} as={Link} to={RouterPath.MYPAGE}>
                       마이페이지
                     </MenuItem>
                     <MenuDivider />
-                    <MenuItem as={Link} to={RouterPath.MAIN} onClick={() => onClick()}>
+                    <MenuItem
+                      fontSize='sm'
+                      icon={<LogOutIcon />}
+                      as={Link}
+                      to={RouterPath.MAIN}
+                      onClick={() => onClick()}
+                    >
                       로그아웃
                     </MenuItem>
                   </MenuList>
