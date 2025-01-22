@@ -12,6 +12,11 @@ const config = {
       gray: '#F7F9FB',
       blue: '#0076BF',
     },
+    customGray: {
+      100: '#F7F9FB',
+      200: '#DEE2E6',
+      300: '#8B939B',
+    },
   },
   components: {
     Button,
