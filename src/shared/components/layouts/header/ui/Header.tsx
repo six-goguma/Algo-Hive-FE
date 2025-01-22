@@ -19,6 +19,8 @@ import { TriangleDownIcon } from '@chakra-ui/icons';
 
 import { Bell, LogOutIcon, UserIcon } from 'lucide-react';
 
+import { RouterPath } from '@shared/constants';
+
 import { Container } from '../../../container';
 import LogoImage from '../_assets/logo.png';
 import { LoginModal, SignupModal } from '../components';
@@ -47,13 +49,7 @@ export const Header = () => {
         <HStack spacing='20px'>
           <Bell cursor='pointer' width={30} height={30} />
           {!isLogin ? (
-            <Button
-              w='80px'
-              h='35px'
-              border='1.5px solid'
-              borderRadius='full'
-              onClick={() => onClick()}
-            >
+            <Button w='80px' h='35px' border='1.5px solid' borderRadius='full' onClick={onOpen}>
               로그인
             </Button>
           ) : (
