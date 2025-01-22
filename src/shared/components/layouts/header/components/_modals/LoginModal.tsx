@@ -2,7 +2,7 @@ import { FormControl } from '@chakra-ui/react';
 
 import { AuthModal } from '@widgets/modals';
 
-import { LOGIN_SCHEMA } from '../../schema';
+import { LOGIN_DATA } from '../../data';
 import { LoginSection } from '../login-section';
 
 type LoginModalProps = {
@@ -22,11 +22,11 @@ export const LoginModal = ({
 }: LoginModalProps) => {
   return (
     <AuthModal
-      modalTitle={LOGIN_SCHEMA.MODAL_TITLE}
+      modalTitle={LOGIN_DATA.MODAL_TITLE}
       isOpen={isOpen}
-      buttonText={LOGIN_SCHEMA.BUTTON_TEXT}
-      navigateText={LOGIN_SCHEMA.NAVIGATE_TEXT}
-      navigateModal={LOGIN_SCHEMA.NAVIGATE_MODAL}
+      buttonText={LOGIN_DATA.BUTTON_TEXT}
+      navigateText={LOGIN_DATA.NAVIGATE_TEXT}
+      navigateModal={LOGIN_DATA.NAVIGATE_MODAL}
       modalType={modalType}
       setModalType={setModalType}
       onClose={onClose}

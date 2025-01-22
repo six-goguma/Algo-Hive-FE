@@ -13,7 +13,7 @@ import {
 
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 
-import { SIGNUP_SCHEMA } from '../../schema';
+import { SIGNUP_DATA } from '../../data';
 
 export const PasswordSection = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,10 +23,10 @@ export const PasswordSection = () => {
     <Box as="section" mb={5}>
       <Flex mb={4} flexDir="column" gap={1}>
         <Text as="b" color="customGray.300">
-          {SIGNUP_SCHEMA.PASSWORD.PASSWORD_SUBTITLE}
+          {SIGNUP_DATA.PASSWORD.PASSWORD_SUBTITLE}
         </Text>
         <Text fontSize="sm" color="customGray.300">
-          {SIGNUP_SCHEMA.PASSWORD.PASSWORD_RULE}
+          {SIGNUP_DATA.PASSWORD.PASSWORD_RULE}
         </Text>
       </Flex>
       <VStack spacing={4}>
@@ -35,7 +35,7 @@ export const PasswordSection = () => {
             id="password"
             type={showPassword ? 'text' : 'password'}
             fontSize="sm"
-            placeholder={SIGNUP_SCHEMA.PASSWORD.PASSWORD_PLACEHOLDER}
+            placeholder={SIGNUP_DATA.PASSWORD.PASSWORD_PLACEHOLDER}
           />
           <InputRightElement>
             <Button
@@ -53,7 +53,7 @@ export const PasswordSection = () => {
             id="passwordConfirm"
             type={showConfirmPassword ? 'text' : 'password'}
             fontSize="sm"
-            placeholder={SIGNUP_SCHEMA.PASSWORD.PASSWORD_CONFIRM_PLACEHOLDER}
+            placeholder={SIGNUP_DATA.PASSWORD.PASSWORD_CONFIRM_PLACEHOLDER}
           />
           <InputRightElement>
             <Button

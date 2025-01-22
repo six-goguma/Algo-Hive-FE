@@ -2,7 +2,7 @@ import { FormControl } from '@chakra-ui/react';
 
 import { AuthModal } from '@widgets/modals';
 
-import { SIGNUP_SCHEMA } from '../../schema';
+import { SIGNUP_DATA } from '../../data';
 import { EmailSection, NicknameSection, PasswordSection } from '../signup-section';
 
 type SignupModalProps = {
@@ -21,11 +21,11 @@ export const SignupModal = ({
 }: SignupModalProps) => {
   return (
     <AuthModal
-      modalTitle={SIGNUP_SCHEMA.MODAL_TITLE}
+      modalTitle={SIGNUP_DATA.MODAL_TITLE}
       isOpen={isOpen}
-      buttonText={SIGNUP_SCHEMA.BUTTON_TEXT}
-      navigateText={SIGNUP_SCHEMA.NAVIGATE_TEXT}
-      navigateModal={SIGNUP_SCHEMA.NAVIGATE_MODAL}
+      buttonText={SIGNUP_DATA.BUTTON_TEXT}
+      navigateText={SIGNUP_DATA.NAVIGATE_TEXT}
+      navigateModal={SIGNUP_DATA.NAVIGATE_MODAL}
       scrollBehavior="outside"
       modalType={modalType}
       setModalType={setModalType}
