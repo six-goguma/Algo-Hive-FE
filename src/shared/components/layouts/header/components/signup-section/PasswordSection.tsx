@@ -20,7 +20,7 @@ export const PasswordSection = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <Box as="section" mb={5}>
+    <Box as="section" mb={3}>
       <Flex mb={4} flexDir="column" gap={1}>
         <Text as="b" color="customGray.300">
           {SIGNUP_DATA.PASSWORD.PASSWORD_SUBTITLE}
