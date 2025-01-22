@@ -2,7 +2,7 @@
 node_modules
 
 # 빌드된 파일과 관련 폴더 무시
-.next
+dist
 public
 
 # 환경설정 파일 무시
@@ -10,21 +10,10 @@ public
 *.config.js
 *.config.mjs
 
-# 특정 폴더 무시
-projects
-content
-public
-
 # Git 관련 파일 무시
-.git
+.github
 .gitignore
 .gitattributes
 
-# README 파일 무시
-README.md
-
-# 환경 설정 파일
-.prettierrc
-
 # 패키지 관리
-package-lock.json
+pnpm-lock.yaml
