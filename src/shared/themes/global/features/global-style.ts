@@ -14,8 +14,10 @@ const config = {
     },
     customGray: {
       100: '#F7F9FB',
-      200: '#DEE2E6',
-      300: '#8B939B',
+      200: '#EEEEEE',
+      300: '#DEE2E6',
+      400: '#8B939B',
+      500: '#868E96',
     },
   },
   components: {
