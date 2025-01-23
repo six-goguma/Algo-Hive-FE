@@ -33,6 +33,12 @@ export const PostCards = ({
       bg='white'
       flexDir='column'
       boxShadow='5px 5px 20px 0px rgba(0, 0, 0, 0.10)'
+      transition='all 0.2s ease-in-out'
+      _hover={{
+        boxShadow: '5px 5px 20px 0px rgba(0, 0, 0, 0.20)',
+        transform: 'translateY(-10px)',
+        transition: 'all 0.2s ease-in-out',
+      }}
     >
       <Flex w='full' h='167px' bg='customGray.200'>
         <Image w='full' h='167px' src={thumbnail} alt='thumbnail-img' />
