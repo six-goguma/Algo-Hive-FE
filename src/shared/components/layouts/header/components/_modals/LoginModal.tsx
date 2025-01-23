@@ -1,6 +1,6 @@
 import { FormControl } from '@chakra-ui/react';
 
-import { AuthModal } from '@widgets/modals';
+import { HeaderModal } from '@widgets/modals';
 
 import { LOGIN_DATA } from '../../data';
 import { LoginSection } from '../login-section';
@@ -21,7 +21,7 @@ export const LoginModal = ({
   setIsLogin,
 }: LoginModalProps) => {
   return (
-    <AuthModal
+    <HeaderModal
       modalTitle={LOGIN_DATA.MODAL_TITLE}
       isOpen={isOpen}
       buttonText={LOGIN_DATA.BUTTON_TEXT}
@@ -35,6 +35,6 @@ export const LoginModal = ({
       <FormControl>
         <LoginSection />
       </FormControl>
-    </AuthModal>
+    </HeaderModal>
   );
 };
