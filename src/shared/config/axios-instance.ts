@@ -1,4 +1,4 @@
-import { initInstance } from '@shared/lib';
+import { initInstance } from '../lib';
 
 export const BASE_URI = `http://algo.knu-soft.site`;
 

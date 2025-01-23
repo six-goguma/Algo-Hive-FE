@@ -22,6 +22,10 @@
 
   "importOrder": [
     "^react",
+
+    "^@chakra-ui/react$",
+    "^@chakra-ui/icons$",
+
     "<THIRD_PARTY_MODULES>",
 
     "^(@app)(.*)$",

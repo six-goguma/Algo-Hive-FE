@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 
+import { Box } from '@chakra-ui/react';
+
 import { Header } from '@shared/components';
 import { ScrollToTop } from '@shared/utils';
-
-import { Box } from '@chakra-ui/react';
 
 export const Layout = () => {
   return (
