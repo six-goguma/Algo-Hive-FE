@@ -20,49 +20,49 @@ export const PasswordSection = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <Box as="section" mb={3}>
-      <Flex mb={4} flexDir="column" gap={1}>
-        <Text as="b" color="customGray.300">
+    <Box as='section' mb={3}>
+      <Flex mb={4} flexDir='column' gap={1}>
+        <Text as='b' color='customGray.300'>
           {SIGNUP_DATA.PASSWORD.PASSWORD_SUBTITLE}
         </Text>
-        <Text fontSize="sm" color="customGray.300">
+        <Text fontSize='sm' color='customGray.300'>
           {SIGNUP_DATA.PASSWORD.PASSWORD_RULE}
         </Text>
       </Flex>
       <VStack spacing={4}>
         <InputGroup>
           <Input
-            id="password"
+            id='password'
             type={showPassword ? 'text' : 'password'}
-            fontSize="sm"
+            fontSize='sm'
             placeholder={SIGNUP_DATA.PASSWORD.PASSWORD_PLACEHOLDER}
           />
           <InputRightElement>
             <Button
-              bg="none"
-              border="none"
+              bg='none'
+              border='none'
               _hover={{}}
               onClick={() => setShowPassword(!showPassword)}
             >
-              {!showPassword ? <EyeIcon color="gray" /> : <EyeClosedIcon color="gray" />}
+              {!showPassword ? <EyeIcon color='gray' /> : <EyeClosedIcon color='gray' />}
             </Button>
           </InputRightElement>
         </InputGroup>
         <InputGroup>
           <Input
-            id="passwordConfirm"
+            id='passwordConfirm'
             type={showConfirmPassword ? 'text' : 'password'}
-            fontSize="sm"
+            fontSize='sm'
             placeholder={SIGNUP_DATA.PASSWORD.PASSWORD_CONFIRM_PLACEHOLDER}
           />
           <InputRightElement>
             <Button
-              bg="none"
-              border="none"
+              bg='none'
+              border='none'
               _hover={{}}
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {!showConfirmPassword ? <EyeIcon color="gray" /> : <EyeClosedIcon color="gray" />}
+              {!showConfirmPassword ? <EyeIcon color='gray' /> : <EyeClosedIcon color='gray' />}
             </Button>
           </InputRightElement>
         </InputGroup>
