@@ -4,18 +4,18 @@ import { LOGIN_DATA } from '../../data';
 
 export const LoginSection = () => {
   return (
-    <Box as="section">
+    <Box as='section'>
       <Flex mb={4}>
-        <Text as="b" color="customGray.300">
+        <Text as='b' color='customGray.400'>
           {LOGIN_DATA.MODAL_SUBTITLE}
         </Text>
       </Flex>
       <VStack spacing={4}>
-        <Input id="email" fontSize="sm" placeholder={LOGIN_DATA.EMAIL_PLACEHOLDER} />
+        <Input id='email' fontSize='sm' placeholder={LOGIN_DATA.EMAIL_PLACEHOLDER} />
         <Input
-          id="password"
-          type="password"
-          fontSize="sm"
+          id='password'
+          type='password'
+          fontSize='sm'
           placeholder={LOGIN_DATA.PASSWORD_PLACEHOLDER}
         />
       </VStack>

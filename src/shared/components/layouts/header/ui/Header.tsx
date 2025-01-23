@@ -7,7 +7,8 @@ import { Bell } from 'lucide-react';
 
 import { RouterPath } from '@shared/constants';
 
-import { Container } from '../../../container';
+import { Container } from '@widgets/container';
+
 import LogoImage from '../_assets/logo.png';
 import { LoginModal, NavigateMenu, SignupModal } from '../components';
 
