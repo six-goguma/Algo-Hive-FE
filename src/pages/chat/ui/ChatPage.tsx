@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Flex, Button } from '@chakra-ui/react';
+import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 
 import { ChatRoomSection, ChatRoomInsideSection } from '@pages/chat/components/room';
 import { ChatUserSection } from '@pages/chat/components/user/ChatUserSection';
+
+import { breakPoints } from '@shared/styles/variants/breakpoints';
+
+// 반응형 브레이크포인트 가져오기
 
 export const ChatPage = () => {
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [isEntered, setIsEntered] = useState(false); // 사용자 설정 완료 상태
+
+  // 화면 크기 체크 (휴대폰 뷰 여부)
+  const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
 
   const handleGoBack = () => {
     setIsEntered(false);
@@ -32,22 +39,30 @@ export const ChatPage = () => {
         게시글 보기
       </Button>
       <Flex w='full' gap='35px' h='full'>
-        <Box w='30%' bg='#F7F9FB'>
-          {isEntered ? (
-            <ChatUserSection
-              onGoBack={() => {
-                handleGoBack();
-              }}
-            />
-          ) : (
-            <ChatRoomSection onSelectRoom={setSelectedRoom} />
-          )}
-        </Box>
-        <Box w='70%' bg='#F7F9FB'>
-          {selectedRoom && (
-            <ChatRoomInsideSection roomName={selectedRoom} onComplete={() => setIsEntered(true)} />
-          )}
-        </Box>
+        {(isMobileView && !selectedRoom) || !isMobileView ? (
+          <Box w={isMobileView ? '100%' : '30%'} bg='#F7F9FB'>
+            {isEntered ? (
+              <ChatUserSection
+                onGoBack={() => {
+                  handleGoBack();
+                }}
+              />
+            ) : (
+              <ChatRoomSection onSelectRoom={setSelectedRoom} />
+            )}
+          </Box>
+        ) : null}
+
+        {(isMobileView && selectedRoom) || !isMobileView ? (
+          <Box w={isMobileView ? '100%' : '70%'} bg='#F7F9FB'>
+            {selectedRoom && (
+              <ChatRoomInsideSection
+                roomName={selectedRoom}
+                onComplete={() => setIsEntered(true)}
+              />
+            )}
+          </Box>
+        ) : null}
       </Flex>
     </Flex>
   );
