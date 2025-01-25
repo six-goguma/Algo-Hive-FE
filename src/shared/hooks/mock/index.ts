@@ -1,0 +1,1 @@
+export { useGetMockData } from './useGetMockData';
