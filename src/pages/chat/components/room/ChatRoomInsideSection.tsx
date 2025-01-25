@@ -1,6 +1,7 @@
 import { Box, Button, Text } from '@chakra-ui/react';
 
 import { ChatMessageList } from '@pages/chat/components/message/ChatMessageList';
+import { SetUserNameModal } from '@pages/chat/components/modal/SetUserNameModal';
 import { mockChatMessageList } from '@pages/chat/mock/mockChatMessageList';
 
 export const ChatRoomInsideSection = ({ roomName }: { roomName: string }) => {
@@ -18,9 +19,7 @@ export const ChatRoomInsideSection = ({ roomName }: { roomName: string }) => {
       <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} />
       </Box>
-      <Button mt='15px' h='36px' w='100px'>
-        채팅방 입장하기
-      </Button>
+      <SetUserNameModal />
     </>
   );
 };
