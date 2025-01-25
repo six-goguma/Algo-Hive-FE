@@ -2,7 +2,7 @@ import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 import { ChatRoomList } from '@pages/chat/components/room/ChatRoomList';
 
-export const ChatRoomSection = () => {
+export const ChatRoomSection = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
   return (
     <>
       <Flex w='full' justify='center'>
@@ -15,7 +15,7 @@ export const ChatRoomSection = () => {
       </Flex>
       <Box bg='blue.500' height='3px' width='100%' />
       <Box w='full' h='460px' bg='white' overflowY='auto'>
-        <ChatRoomList />
+        <ChatRoomList onSelectRoom={onSelectRoom} />
       </Box>
     </>
   );
