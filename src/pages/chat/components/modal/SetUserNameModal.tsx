@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   Modal,
   ModalOverlay,
@@ -13,11 +15,14 @@ import {
 
 export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [nickname, setNickname] = useState(''); // 닉네임 상태 관리
 
   const handleComplete = () => {
+    localStorage.setItem('userNickname', nickname); // 닉네임을 localStorage에 저장
     onClose();
     onComplete(); // 완료 후 상태 변경 호출
   };
+
   return (
     <>
       <Button mt='15px' h='36px' w='100px' onClick={onOpen}>
@@ -32,7 +37,11 @@ export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => 
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input placeholder='닉네임을 입력해 주세요.' />
+            <Input
+              placeholder='닉네임을 입력해 주세요.'
+              value={nickname} // 닉네임 상태 연결
+              onChange={(e) => setNickname(e.target.value)} // 상태 업데이트
+            />
           </ModalBody>
 
           <ModalFooter display='flex' justifyContent='center'>
