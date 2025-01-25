@@ -9,7 +9,7 @@ export const ChatUserSection = () => {
         <Text w='full' textAlign='left' fontSize='24px' color='blue.500' fontWeight={700}>
           현재 접속자
         </Text>
-        <Button h='32px' w='120px'>
+        <Button h='32px' w='140px'>
           채팅방 목록 보기
         </Button>
       </Flex>

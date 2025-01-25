@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { Box, Text } from '@chakra-ui/react';
 
+import { ChatInputBox } from '@pages/chat/components/input/ChatInputBox';
 import { ChatMessageList } from '@pages/chat/components/message/ChatMessageList';
 import { SetUserNameModal } from '@pages/chat/components/modal/SetUserNameModal';
 import { mockChatMessageList } from '@pages/chat/mock/mockChatMessageList';
@@ -12,7 +15,7 @@ export const ChatRoomInsideSection = ({
   onComplete: () => void; // onComplete Prop 추가
 }) => {
   const messages = mockChatMessageList.filter((message) => message.roomName === roomName);
-
+  const [isEntered, setIsEntered] = useState(false);
   return (
     <>
       <Box w='full' h='36px'>
@@ -24,7 +27,16 @@ export const ChatRoomInsideSection = ({
       <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} />
       </Box>
-      <SetUserNameModal onComplete={onComplete} /> {/* onComplete 전달 */}
+      {isEntered ? (
+        <ChatInputBox />
+      ) : (
+        <SetUserNameModal
+          onComplete={() => {
+            setIsEntered(true);
+            onComplete(); // 부모 상태 업데이트
+          }}
+        />
+      )}
     </>
   );
 };

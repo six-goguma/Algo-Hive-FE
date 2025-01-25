@@ -15,9 +15,9 @@ export const ChatInputBox = () => {
   };
 
   return (
-    <InputGroup border='1.5px solid #0076BF'>
+    <InputGroup border='1.5px solid #0076BF' mt='15px' h='36px'>
       <Input
-        size='lg'
+        size='sm'
         type='text'
         variant='ghost'
         colorScheme='blue'

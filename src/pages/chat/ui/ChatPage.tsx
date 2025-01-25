@@ -30,12 +30,12 @@ export const ChatPage = () => {
           )}
         </Box>
         <Box w='70%' bg='#F7F9FB'>
-          <ChatRoomInsideSection
-            roomName={selectedRoom ?? ''}
-            onComplete={() => {
-              setIsEntered(true);
-            }}
-          />
+          {selectedRoom && (
+            <ChatRoomInsideSection
+              roomName={selectedRoom}
+              onComplete={() => setIsEntered(true)} // 완료 버튼 클릭 시 상태 변경
+            />
+          )}
         </Box>
       </Flex>
     </Flex>
