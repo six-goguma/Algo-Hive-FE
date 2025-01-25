@@ -15,7 +15,7 @@ export const ChatRoomInsideSection = ({ roomName }: { roomName: string }) => {
         </Text>
       </Box>
       <Box bg='blue.500' height='3px' width='100%' />
-      <Box w='full' h='409px' bg='red.100' overflowY='auto'>
+      <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} />
       </Box>
       <Button mt='15px' h='36px' w='100px'>
