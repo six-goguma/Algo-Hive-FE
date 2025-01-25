@@ -2,11 +2,14 @@ import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
 import userIcon from '@shared/_assets/userIcon.svg';
 
-// 로컬스토리지에서 사용자 닉네임 가져오기
-const userNickname = localStorage.getItem('userNickname');
-
-export const ChatMessage = ({ message }: { message: { sender: string; content: string } }) => {
-  const isCurrentUser = message.sender === userNickname; // sender와 localStorage 닉네임 비교
+export const ChatMessage = ({
+  message,
+  userNickname,
+}: {
+  message: { sender: string; content: string };
+  userNickname: string; // Prop으로 닉네임 전달
+}) => {
+  const isCurrentUser = message.sender === userNickname; // sender와 닉네임 비교
 
   return (
     <Box w='full' h='60px' mt='18px' position='relative'>
