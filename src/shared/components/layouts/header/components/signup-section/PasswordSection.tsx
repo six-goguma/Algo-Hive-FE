@@ -22,10 +22,10 @@ export const PasswordSection = () => {
   return (
     <Box as='section' mb={3}>
       <Flex mb={4} flexDir='column' gap={1}>
-        <Text as='b' color='customGray.400'>
+        <Text as='b' color='customGray.300'>
           {SIGNUP_DATA.PASSWORD.PASSWORD_SUBTITLE}
         </Text>
-        <Text fontSize='sm' color='customGray.400'>
+        <Text fontSize='sm' color='customGray.300'>
           {SIGNUP_DATA.PASSWORD.PASSWORD_RULE}
         </Text>
       </Flex>

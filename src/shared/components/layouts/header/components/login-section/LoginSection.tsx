@@ -6,7 +6,7 @@ export const LoginSection = () => {
   return (
     <Box as='section'>
       <Flex mb={4}>
-        <Text as='b' color='customGray.400'>
+        <Text as='b' color='customGray.300'>
           {LOGIN_DATA.MODAL_SUBTITLE}
         </Text>
       </Flex>

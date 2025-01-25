@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-type AuthModalProps = {
+type HeaderModalProps = {
   modalTitle: string;
   buttonText: string;
   children: React.ReactNode;
@@ -25,7 +25,7 @@ type AuthModalProps = {
   setIsLogin: (isLogin: boolean) => void;
 };
 
-export const AuthModal = ({
+export const HeaderModal = ({
   modalTitle,
   buttonText,
   children,
@@ -37,7 +37,7 @@ export const AuthModal = ({
   modalType,
   setModalType,
   setIsLogin,
-}: AuthModalProps) => {
+}: HeaderModalProps) => {
   const onClick = () => {
     if (modalType === 'login') {
       setModalType('signup');

@@ -1,6 +1,6 @@
 import { FormControl } from '@chakra-ui/react';
 
-import { AuthModal } from '@widgets/modals';
+import { HeaderModal } from '@widgets/modals';
 
 import { SIGNUP_DATA } from '../../data';
 import { EmailSection, NicknameSection, PasswordSection } from '../signup-section';
@@ -20,7 +20,7 @@ export const SignupModal = ({
   setIsLogin,
 }: SignupModalProps) => {
   return (
-    <AuthModal
+    <HeaderModal
       modalTitle={SIGNUP_DATA.MODAL_TITLE}
       isOpen={isOpen}
       buttonText={SIGNUP_DATA.BUTTON_TEXT}
@@ -37,6 +37,6 @@ export const SignupModal = ({
         <EmailSection />
         <PasswordSection />
       </FormControl>
-    </AuthModal>
+    </HeaderModal>
   );
 };

@@ -9,6 +9,7 @@ public
 *.lock
 *.config.js
 *.config.mjs
+*.md
 
 # Git 관련 파일 무시
 .github
