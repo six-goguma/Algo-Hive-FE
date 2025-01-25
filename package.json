@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --check --ignore-path .prettierignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore ."
+    "format:fix": "cat .gitignore .prettierignore > .mergedignore && prettier --write --ignore-path .mergedignore . && rm .mergedignore"
   },
   "dependencies": {
     "@blocknote/core": "^0.22.0",
