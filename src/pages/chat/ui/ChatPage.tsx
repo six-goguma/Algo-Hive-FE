@@ -56,10 +56,20 @@ export const ChatPage = () => {
         {(isMobileView && selectedRoom) || !isMobileView ? (
           <Box w={isMobileView ? '100%' : '70%'} bg='#F7F9FB'>
             {selectedRoom && (
-              <ChatRoomInsideSection
-                roomName={selectedRoom}
-                onComplete={() => setIsEntered(true)}
-              />
+              <>
+                <ChatRoomInsideSection
+                  roomName={selectedRoom}
+                  onComplete={() => setIsEntered(true)}
+                />
+                {/* 채팅방 목록 보기 버튼 */}
+                {isMobileView && (
+                  <Flex justifyContent='center' mt='20px'>
+                    <Button colorScheme='blue' variant='outline' onClick={handleGoBack}>
+                      채팅방 목록 보기
+                    </Button>
+                  </Flex>
+                )}
+              </>
             )}
           </Box>
         ) : null}
