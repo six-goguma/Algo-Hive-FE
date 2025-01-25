@@ -39,8 +39,8 @@ export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => 
           <ModalBody>
             <Input
               placeholder='닉네임을 입력해 주세요.'
-              value={nickname} // 닉네임 상태 연결
-              onChange={(e) => setNickname(e.target.value)} // 상태 업데이트
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
             />
           </ModalBody>
 
