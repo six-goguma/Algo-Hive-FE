@@ -1,8 +1,12 @@
-import { Box, Flex, Button, Text } from '@chakra-ui/react';
+import { useState } from 'react';
+
+import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { ChatRoomSection, ChatRoomInsideSection } from '@pages/chat/components/room';
 
 export const ChatPage = () => {
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='100vh'>
       <Button
@@ -17,9 +21,16 @@ export const ChatPage = () => {
       </Button>
       <Flex w='full' gap='35px' h='full'>
         <Box w='30%' bg='#F7F9FB'>
-          <ChatRoomSection />
+          <ChatRoomSection onSelectRoom={setSelectedRoom} />
         </Box>
-        <Box w='70%' bg='#F7F9FB'></Box>
+        <Box w='70%' bg='#F7F9FB'>
+          {/* 선택된 방에 따라 ChatRoomInsideSection 출력 */}
+          {selectedRoom ? (
+            <ChatRoomInsideSection roomName={selectedRoom} />
+          ) : (
+            <Box>채팅방을 선택해주세요</Box>
+          )}
+        </Box>
       </Flex>
     </Flex>
   );
