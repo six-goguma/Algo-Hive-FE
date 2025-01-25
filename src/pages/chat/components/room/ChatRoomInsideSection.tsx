@@ -1,11 +1,16 @@
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 
 import { ChatMessageList } from '@pages/chat/components/message/ChatMessageList';
 import { SetUserNameModal } from '@pages/chat/components/modal/SetUserNameModal';
 import { mockChatMessageList } from '@pages/chat/mock/mockChatMessageList';
 
-export const ChatRoomInsideSection = ({ roomName }: { roomName: string }) => {
-  // roomName에 해당하는 메시지 바로 전달
+export const ChatRoomInsideSection = ({
+  roomName,
+  onComplete,
+}: {
+  roomName: string;
+  onComplete: () => void; // onComplete Prop 추가
+}) => {
   const messages = mockChatMessageList.filter((message) => message.roomName === roomName);
 
   return (
@@ -19,7 +24,7 @@ export const ChatRoomInsideSection = ({ roomName }: { roomName: string }) => {
       <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} />
       </Box>
-      <SetUserNameModal />
+      <SetUserNameModal onComplete={onComplete} /> {/* onComplete 전달 */}
     </>
   );
 };

@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { ChatRoomSection, ChatRoomInsideSection } from '@pages/chat/components/room';
+import { ChatUserSection } from '@pages/chat/components/user/ChatUserSection';
 
 export const ChatPage = () => {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [isEntered, setIsEntered] = useState(false); // 사용자 설정 완료 상태
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='100vh'>
@@ -21,10 +23,19 @@ export const ChatPage = () => {
       </Button>
       <Flex w='full' gap='35px' h='full'>
         <Box w='30%' bg='#F7F9FB'>
-          <ChatRoomSection onSelectRoom={setSelectedRoom} />
+          {isEntered ? (
+            <ChatUserSection /> // 사용자 정보 화면
+          ) : (
+            <ChatRoomSection onSelectRoom={setSelectedRoom} />
+          )}
         </Box>
         <Box w='70%' bg='#F7F9FB'>
-          <ChatRoomInsideSection roomName={selectedRoom ?? ''} />
+          <ChatRoomInsideSection
+            roomName={selectedRoom ?? ''}
+            onComplete={() => {
+              setIsEntered(true);
+            }}
+          />
         </Box>
       </Flex>
     </Flex>

@@ -11,8 +11,13 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-export const SetUserNameModal = () => {
+export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleComplete = () => {
+    onClose();
+    onComplete(); // 완료 후 상태 변경 호출
+  };
   return (
     <>
       <Button mt='15px' h='36px' w='100px' onClick={onOpen}>
@@ -31,7 +36,7 @@ export const SetUserNameModal = () => {
           </ModalBody>
 
           <ModalFooter display='flex' justifyContent='center'>
-            <Button h='36px' w='100px' onClick={onClose}>
+            <Button h='36px' w='100px' onClick={handleComplete}>
               완료
             </Button>
           </ModalFooter>
