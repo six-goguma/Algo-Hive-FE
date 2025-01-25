@@ -5,7 +5,7 @@ import { ChatRoomList } from '@pages/chat/components/room/ChatRoomList';
 export const ChatRoomSection = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
   return (
     <>
-      <Flex w='full' justify='center'>
+      <Flex w='full' h='36px' justify='center'>
         <Text w='full' textAlign='left' fontSize='24px' color='blue.500' fontWeight={700}>
           채팅방 목록
         </Text>

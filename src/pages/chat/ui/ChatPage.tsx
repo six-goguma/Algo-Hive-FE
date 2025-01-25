@@ -24,12 +24,7 @@ export const ChatPage = () => {
           <ChatRoomSection onSelectRoom={setSelectedRoom} />
         </Box>
         <Box w='70%' bg='#F7F9FB'>
-          {/* 선택된 방에 따라 ChatRoomInsideSection 출력 */}
-          {selectedRoom ? (
-            <ChatRoomInsideSection roomName={selectedRoom} />
-          ) : (
-            <Box>채팅방을 선택해주세요</Box>
-          )}
+          <ChatRoomInsideSection roomName={selectedRoom ?? ''} />
         </Box>
       </Flex>
     </Flex>
