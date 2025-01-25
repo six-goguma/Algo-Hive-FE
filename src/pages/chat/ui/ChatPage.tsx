@@ -1,6 +1,6 @@
 import { Box, Flex, Button, Text } from '@chakra-ui/react';
 
-import { ChatInputBox } from '../components';
+import { ChatInputBox, ChatRoomList } from '@pages/chat/components';
 
 export const ChatPage = () => {
   return (
@@ -15,7 +15,7 @@ export const ChatPage = () => {
       >
         게시글 보기
       </Button>
-      <Flex w='full' gap='35px' h='full' bg='red.300'>
+      <Flex w='full' gap='35px' h='full'>
         <Box w='30%' bg='#F7F9FB'>
           <Flex w='full' justify='center'>
             <Text w='full' textAlign='left' fontSize='24px' color='blue.500' fontWeight={700}>
@@ -26,10 +26,9 @@ export const ChatPage = () => {
             </Button>
           </Flex>
           <Box bg='blue.500' height='3px' width='100%' />
-          <Box w='full' h='460px' bg='white' overflowY='auto'></Box>
-          <Button mt='15px' h='36px' w='100px'>
-            채팅방 입장하기
-          </Button>
+          <Box w='full' h='460px' bg='white' overflowY='auto'>
+            <ChatRoomList />
+          </Box>
         </Box>
         <Box w='70%' bg='#F7F9FB'>
           <Text w='full' textAlign='left' fontSize='24px' color='blue.500' fontWeight={700}>
@@ -37,6 +36,9 @@ export const ChatPage = () => {
           </Text>
           <Box bg='blue.500' height='3px' width='100%' />
           <ChatInputBox />
+          <Button mt='15px' h='36px' w='100px'>
+            채팅방 입장하기
+          </Button>
         </Box>
       </Flex>
     </Flex>

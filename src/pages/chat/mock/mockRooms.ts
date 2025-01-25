@@ -30,4 +30,10 @@ export const mockRooms = [
   {
     roomName: '그리디 연습: Lv.2 브론즈 & 실버',
   },
+  {
+    roomName: '그리디 연습: Lv.2 브론즈 & 실버',
+  },
+  {
+    roomName: '그리디 연습: Lv.2 브론즈 & 실버',
+  },
 ];

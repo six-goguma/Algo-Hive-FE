@@ -3,3 +3,5 @@ export { ChatInputBox } from './ChatInputBox';
 // export { ChatUserListItem } from './ChatUserListItem';
 // export { ChatMessage } from './ChatMessage';
 // export { ChatMessageList } from './ChatMessageList';
+export { ChatRoomList } from './ChatRoomList';
+export { ChatRoomListItem } from './ChatRoomListItem';
