@@ -7,7 +7,7 @@ export const ChatMessage = ({
   userNickname,
 }: {
   message: { sender: string; content: string };
-  userNickname: string; // Prop으로 닉네임 전달
+  userNickname: string;
 }) => {
   const isCurrentUser = message.sender === userNickname; // sender와 닉네임 비교
 
@@ -39,7 +39,7 @@ export const ChatMessage = ({
             w='auto'
             h='38px'
             p='10px'
-            bg={isCurrentUser ? '#9BD9FF' : 'white'} // 본인 메시지일 경우 배경색 변경
+            bg={isCurrentUser ? '#9BD9FF' : 'white'}
             fontSize='12px'
             borderRadius='5px'
           >

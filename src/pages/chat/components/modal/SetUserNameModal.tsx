@@ -15,12 +15,12 @@ import {
 
 export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [nickname, setNickname] = useState(''); // 닉네임 상태 관리
+  const [nickname, setNickname] = useState('');
 
   const handleComplete = () => {
-    localStorage.setItem('userNickname', nickname); // 닉네임을 localStorage에 저장
+    localStorage.setItem('userNickname', nickname);
     onClose();
-    onComplete(); // 완료 후 상태 변경 호출
+    onComplete();
   };
 
   return (

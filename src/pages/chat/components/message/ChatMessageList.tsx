@@ -5,7 +5,7 @@ export const ChatMessageList = ({
   userNickname,
 }: {
   messages: Array<{ sender: string; content: string }>;
-  userNickname: string; // Prop으로 닉네임 전달
+  userNickname: string;
 }) => {
   return (
     <div>

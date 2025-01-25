@@ -9,8 +9,8 @@ import { ChatRoomListItem } from './ChatRoomListItem';
 export const ChatRoomList = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const handleSelect = (roomName: string) => {
-    onSelectRoom(roomName); // 선택된 채팅방 업데이트
-    setSelectedRoom(roomName); // 선택된 채팅방 업데이트
+    onSelectRoom(roomName);
+    setSelectedRoom(roomName);
   };
   return (
     <Flex flexDir='column' w='full'>

@@ -18,18 +18,18 @@ export const ChatRoomInsideSection = ({
     mockChatMessageList.filter((message) => message.roomName === roomName),
   );
   const [isEntered, setIsEntered] = useState(false);
-  const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || ''); // 닉네임 상태 관리
+  const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
 
   // 메시지 추가 함수
   const handleSendMessage = (content: string) => {
-    const newMessage = { sender: userNickname, content, roomName }; // 새로운 메시지 생성
-    setMessages((prevMessages) => [...prevMessages, newMessage]); // 상태 업데이트
+    const newMessage = { sender: userNickname, content, roomName };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
   useEffect(() => {
     const storedNickname = localStorage.getItem('userNickname') || '';
-    setUserNickname(storedNickname); // localStorage에서 닉네임 가져오기
-  }, []); // 컴포넌트 마운트 시 실행
+    setUserNickname(storedNickname);
+  }, []);
 
   return (
     <>
@@ -48,7 +48,7 @@ export const ChatRoomInsideSection = ({
         <SetUserNameModal
           onComplete={() => {
             setIsEntered(true);
-            onComplete(); // 부모 상태 업데이트
+            onComplete();
           }}
         />
       )}

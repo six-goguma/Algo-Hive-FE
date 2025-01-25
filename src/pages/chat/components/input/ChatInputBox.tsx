@@ -10,9 +10,9 @@ export const ChatInputBox = ({ onSendMessage }: { onSendMessage: (content: strin
 
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
-    if (trimmedMessage === '') return; // 빈 메시지는 전송하지 않음
-    onSendMessage(trimmedMessage); // 메시지를 상위 컴포넌트로 전달
-    setMessage(''); // 메시지 전송 후 Input 초기화
+    if (trimmedMessage === '') return;
+    onSendMessage(trimmedMessage);
+    setMessage('');
   };
 
   return (
@@ -36,11 +36,7 @@ export const ChatInputBox = ({ onSendMessage }: { onSendMessage: (content: strin
         }}
       />
       <InputRightElement height='100%' display='flex' alignItems='center'>
-        <Button
-          size='40px'
-          bg='white'
-          onClick={handleSendMessage} // 버튼 클릭 시 메시지 전송
-        >
+        <Button size='40px' bg='white' onClick={handleSendMessage}>
           <SendHorizonal size={20} color='#0076BF' />
         </Button>
       </InputRightElement>
