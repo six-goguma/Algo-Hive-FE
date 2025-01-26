@@ -1,6 +1,9 @@
 import { Flex, Text, Avatar } from '@chakra-ui/react';
 
-export const ChatUserListItem = ({ nickName }: { nickName: string }) => {
+type ChatUserListItemProps = {
+  nickName: string;
+};
+export const ChatUserListItem = ({ nickName }: ChatUserListItemProps) => {
   return (
     <Flex w='full' h='44px' align='center' pl='20px' gap='10px'>
       <Avatar boxSize='24px' />

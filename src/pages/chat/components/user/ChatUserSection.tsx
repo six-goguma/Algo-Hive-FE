@@ -2,7 +2,10 @@ import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 import { ChatUserList } from '../user';
 
-export const ChatUserSection = ({ onGoBack }: { onGoBack: () => void }) => {
+type ChatUserSectionProps = {
+  onGoBack: () => void;
+};
+export const ChatUserSection = ({ onGoBack }: ChatUserSectionProps) => {
   return (
     <>
       <Flex w='full' h='36px' justify='center'>

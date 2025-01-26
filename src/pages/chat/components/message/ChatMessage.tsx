@@ -1,12 +1,10 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 
-export const ChatMessage = ({
-  message,
-  userNickname,
-}: {
+type ChatMessageProps = {
   message: { sender: string; content: string };
   userNickname: string;
-}) => {
+};
+export const ChatMessage = ({ message, userNickname }: ChatMessageProps) => {
   const isCurrentUser = message.sender === userNickname; // sender와 닉네임 비교
 
   return (

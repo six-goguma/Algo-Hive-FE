@@ -2,7 +2,10 @@ import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 import { ChatRoomList } from './ChatRoomList';
 
-export const ChatRoomSection = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
+type ChatRoomSectionProps = {
+  onSelectRoom: (roomName: string) => void;
+};
+export const ChatRoomSection = ({ onSelectRoom }: ChatRoomSectionProps) => {
   return (
     <>
       <Flex w='full' h='36px' justify='center'>
