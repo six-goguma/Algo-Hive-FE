@@ -1,14 +1,10 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 
-import userIcon from '@shared/_assets/userIcon.svg';
-
-export const ChatMessage = ({
-  message,
-  userNickname,
-}: {
+type ChatMessageProps = {
   message: { sender: string; content: string };
   userNickname: string;
-}) => {
+};
+export const ChatMessage = ({ message, userNickname }: ChatMessageProps) => {
   const isCurrentUser = message.sender === userNickname; // sender와 닉네임 비교
 
   return (
@@ -25,7 +21,7 @@ export const ChatMessage = ({
         justifyContent={isCurrentUser ? 'flex-end' : 'flex-start'}
       >
         {/* 유저 아이콘 */}
-        {!isCurrentUser && <Image src={userIcon} alt='userIcon' boxSize='30px' />}
+        {!isCurrentUser && <Avatar boxSize='30px' />}
         <Flex flexDir='column' align={isCurrentUser ? 'flex-end' : 'flex-start'}>
           <Text
             w='full'

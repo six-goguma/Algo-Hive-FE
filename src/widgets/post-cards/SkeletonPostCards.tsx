@@ -11,8 +11,8 @@ import {
 export const SkeletonPostCards = () => {
   return (
     <Flex
-      w='300px'
-      h='380px'
+      w='290px'
+      h='400px'
       bg='white'
       flexDir='column'
       boxShadow='5px 5px 20px 0px rgba(0, 0, 0, 0.10)'
