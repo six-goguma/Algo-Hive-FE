@@ -16,7 +16,7 @@ export const ChatRoomSection = ({ onSelectRoom }: ChatRoomSectionProps) => {
           채팅방 생성
         </Button>
       </Flex>
-      <Box bg='custom.blue' height='3px' width='100%' />
+      <Box bg='custom.blue' h='3px' w='full' />
       <Box w='full' h='460px' bg='white' overflowY='auto'>
         <ChatRoomList onSelectRoom={onSelectRoom} />
       </Box>

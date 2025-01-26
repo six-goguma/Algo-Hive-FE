@@ -39,7 +39,14 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
         }}
       />
       <InputRightElement h='full'>
-        <Button size='40px' bg='white' onClick={handleSendMessage} _hover={{}}>
+        <Button
+          variant='outline'
+          size='40px'
+          border='none'
+          bg='white'
+          onClick={handleSendMessage}
+          _hover={{}}
+        >
           <SendHorizontal size={20} color='#0076BF' />
         </Button>
       </InputRightElement>
