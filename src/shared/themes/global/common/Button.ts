@@ -15,10 +15,12 @@ export const Button = defineStyleConfig({
     default: {
       bg: 'custom.blue',
       color: 'white',
+      border: '1.5px solid',
+      borderColor: 'custom.blue',
       _hover: {
         bg: 'white',
         color: 'custom.blue',
-        border: '1px solid',
+        border: '1.5px solid',
         borderColor: 'custom.blue',
       },
     },
