@@ -9,8 +9,7 @@ import { Grid } from '@widgets/grid';
 import { PostCards, SkeletonPostCards } from '@widgets/post-cards';
 
 import { POST_LIST_DUMMY_DATA } from '../../main/mock';
-import { Tabs } from '../../mypage/components/tabs';
-import { UserProfileSection } from '../components/profile/UserProfileSection';
+import { Tabs, UserProfileSection } from '../components';
 
 export const Mypage = () => {
   const { data, isPending, isError } = useGetMockData(POST_LIST_DUMMY_DATA);
