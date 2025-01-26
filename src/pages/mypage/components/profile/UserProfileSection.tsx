@@ -29,7 +29,7 @@ export const UserProfileSection = () => {
 
       <Flex
         w={{ base: 'full', sm: '150px' }}
-        flexDir={{ base: 'column', sm: 'row' }}
+        flexDir='column'
         ml={{ base: '0', sm: '30px' }}
         align={{ base: 'center', sm: 'flex-start' }}
       >
@@ -52,7 +52,14 @@ export const UserProfileSection = () => {
       </Flex>
 
       <Flex w='full' justify={{ base: 'center', sm: 'flex-end' }} mt={{ base: '20px', sm: '0' }}>
-        <Button bg='white' color='gray.500' w='80px' h='32px' fontSize='14px'>
+        <Button
+          variant='outline'
+          color='customGray.500'
+          borderColor='customGray.500'
+          w='80px'
+          h='32px'
+          fontSize='14px'
+        >
           회원탈퇴
         </Button>
       </Flex>
