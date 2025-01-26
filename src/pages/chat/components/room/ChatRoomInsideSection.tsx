@@ -39,11 +39,11 @@ export const ChatRoomInsideSection = ({
   return (
     <>
       <Box w='full' h='36px'>
-        <Text w='full' textAlign='left' fontSize='24px' color='blue.500' fontWeight={700}>
+        <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
           {roomName || ''}
         </Text>
       </Box>
-      <Box bg='blue.500' height='3px' width='100%' />
+      <Box bg='custom.blue' height='3px' width='full' />
       <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} userNickname={userNickname} /> {/* 닉네임 전달 */}
       </Box>
