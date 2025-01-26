@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 
 import { Box, Text } from '@chakra-ui/react';
 
-import { ChatInputBox } from '@pages/chat/components/input/ChatInputBox';
-import { ChatMessageList } from '@pages/chat/components/message/ChatMessageList';
-import { SetUserNameModal } from '@pages/chat/components/modal/SetUserNameModal';
 import { mockChatMessageList } from '@pages/chat/mock/mockChatMessageList';
+
+import { ChatInputBox } from '../input';
+import { ChatMessageList } from '../message';
+import { SetUserNameModal } from '../modal';
 
 export const ChatRoomInsideSection = ({
   roomName,

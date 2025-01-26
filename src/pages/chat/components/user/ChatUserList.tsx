@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 
 import { MOCK_ONLINE_USER_LIST } from '../../mock/mockOnlineUserList';
-import { ChatUserListItem } from '../user/ChatUserListItem';
+import { ChatUserListItem } from '../user';
 
 export const ChatUserList = () => {
   return (

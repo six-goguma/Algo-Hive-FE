@@ -1,4 +1,4 @@
-import { ChatMessage } from '@pages/chat/components/message/ChatMessage';
+import { ChatMessage } from './ChatMessage';
 
 export const ChatMessageList = ({
   messages,

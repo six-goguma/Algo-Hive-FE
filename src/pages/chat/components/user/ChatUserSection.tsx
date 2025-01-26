@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
-import { ChatUserList } from '@pages/chat/components/user/ChatUserList';
+import { ChatUserList } from '../user';
 
 export const ChatUserSection = ({ onGoBack }: { onGoBack: () => void }) => {
   return (

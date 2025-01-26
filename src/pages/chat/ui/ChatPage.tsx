@@ -5,7 +5,7 @@ import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 
 import { breakPoints } from '../../../shared//styles/variants/breakpoints';
 import { ChatRoomSection, ChatRoomInsideSection } from '../components/room';
-import { ChatUserSection } from '../components/user/ChatUserSection';
+import { ChatUserSection } from '../components/user';
 
 export const ChatPage = () => {
   const navigate = useNavigate();

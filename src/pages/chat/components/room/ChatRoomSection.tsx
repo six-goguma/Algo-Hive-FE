@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
-import { ChatRoomList } from '@pages/chat/components/room/ChatRoomList';
+import { ChatRoomList } from './ChatRoomList';
 
 export const ChatRoomSection = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
   return (
