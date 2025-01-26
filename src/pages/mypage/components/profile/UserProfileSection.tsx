@@ -8,8 +8,7 @@ export const UserProfileSection = () => {
       w={{ base: '100%', sm: '80%' }}
       h={{ base: 'auto', sm: '210px' }}
       mt='40px'
-      flexDir={{ base: 'column', sm: 'row' }}
-      align={{ base: 'center', sm: 'flex-start' }}
+      align='flex-start'
       p={{ base: '20px', sm: '0' }}
     >
       <Flex
@@ -31,7 +30,7 @@ export const UserProfileSection = () => {
         w={{ base: 'full', sm: '150px' }}
         flexDir='column'
         ml={{ base: '0', sm: '30px' }}
-        align={{ base: 'center', sm: 'flex-start' }}
+        align='flex-start'
       >
         <Text fontSize='20px' fontWeight='Bold' mb='6px' mt='10px'>
           {userNickname}
@@ -51,13 +50,13 @@ export const UserProfileSection = () => {
         </Box>
       </Flex>
 
-      <Flex w='full' justify={{ base: 'center', sm: 'flex-end' }} mt={{ base: '20px', sm: '0' }}>
+      <Flex w='full' justify='flex-end' mt={{ base: '80px', sm: '0' }}>
         <Button
           variant='outline'
           color='customGray.500'
           borderColor='customGray.500'
-          w='80px'
-          h='32px'
+          w={{ base: '40px', sm: '80px' }}
+          h={{ base: '28px', sm: '32px' }}
           fontSize='14px'
         >
           회원탈퇴
