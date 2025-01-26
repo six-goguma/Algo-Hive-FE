@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { InputGroup, InputRightElement, Button, Input } from '@chakra-ui/react';
 
-import { SendHorizonal } from 'lucide-react';
+import { SendHorizontal } from 'lucide-react';
 
 type ChatInputBoxProps = {
   onSendMessage: (content: string) => void;
@@ -19,7 +19,7 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
   };
 
   return (
-    <InputGroup border='1.5px solid #0076BF' mt='15px' h='36px'>
+    <InputGroup border='1.5px solid custom.blue' h='36px' alignItems='center' w='full'>
       <Input
         size='sm'
         type='text'
@@ -38,9 +38,9 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
           }
         }}
       />
-      <InputRightElement height='100%' display='flex' alignItems='center'>
-        <Button size='40px' bg='white' onClick={handleSendMessage}>
-          <SendHorizonal size={20} color='#0076BF' />
+      <InputRightElement h='full'>
+        <Button size='40px' bg='white' onClick={handleSendMessage} _hover={{}}>
+          <SendHorizontal size={20} color='#0076BF' />
         </Button>
       </InputRightElement>
     </InputGroup>
