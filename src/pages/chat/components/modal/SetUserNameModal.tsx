@@ -13,7 +13,11 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-export const SetUserNameModal = ({ onComplete }: { onComplete: () => void }) => {
+type SetUserNameModalProps = {
+  onComplete: () => void;
+};
+
+export const SetUserNameModal = ({ onComplete }: SetUserNameModalProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [nickname, setNickname] = useState('');
 

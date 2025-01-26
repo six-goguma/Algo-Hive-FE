@@ -1,12 +1,11 @@
 import { ChatMessage } from './ChatMessage';
 
-export const ChatMessageList = ({
-  messages,
-  userNickname,
-}: {
+type ChatMessageListProps = {
   messages: Array<{ sender: string; content: string }>;
   userNickname: string;
-}) => {
+};
+
+export const ChatMessageList = ({ messages, userNickname }: ChatMessageListProps) => {
   return (
     <div>
       {messages.map((message, index) => (

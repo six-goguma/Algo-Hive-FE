@@ -6,7 +6,11 @@ import { MOCK_ROOMS } from '@pages/chat/mock/mockRooms';
 
 import { ChatRoomListItem } from './ChatRoomListItem';
 
-export const ChatRoomList = ({ onSelectRoom }: { onSelectRoom: (roomName: string) => void }) => {
+type ChatRoomListProps = {
+  onSelectRoom: (roomName: string) => void;
+};
+
+export const ChatRoomList = ({ onSelectRoom }: ChatRoomListProps) => {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const handleSelect = (roomName: string) => {
     onSelectRoom(roomName);

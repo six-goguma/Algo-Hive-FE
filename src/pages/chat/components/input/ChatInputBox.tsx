@@ -4,7 +4,10 @@ import { InputGroup, InputRightElement, Button, Input } from '@chakra-ui/react';
 
 import { SendHorizonal } from 'lucide-react';
 
-export const ChatInputBox = ({ onSendMessage }: { onSendMessage: (content: string) => void }) => {
+type ChatInputBoxProps = {
+  onSendMessage: (content: string) => void;
+};
+export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
   const [message, setMessage] = useState('');
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
 

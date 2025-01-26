@@ -8,13 +8,12 @@ import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 import { SetUserNameModal } from '../modal';
 
-export const ChatRoomInsideSection = ({
-  roomName,
-  onComplete,
-}: {
+type ChatRoomInsideSectionProps = {
   roomName: string;
   onComplete: () => void;
-}) => {
+};
+
+export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSectionProps) => {
   const [messages, setMessages] = useState(
     mockChatMessageList.filter((message) => message.roomName === roomName),
   );
