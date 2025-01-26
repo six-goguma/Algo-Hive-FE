@@ -1,6 +1,4 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
-
-import userIcon from '@shared/_assets/userIcon.svg';
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 
 export const ChatMessage = ({
   message,
@@ -25,7 +23,7 @@ export const ChatMessage = ({
         justifyContent={isCurrentUser ? 'flex-end' : 'flex-start'}
       >
         {/* 유저 아이콘 */}
-        {!isCurrentUser && <Image src={userIcon} alt='userIcon' boxSize='30px' />}
+        {!isCurrentUser && <Avatar boxSize='30px' />}
         <Flex flexDir='column' align={isCurrentUser ? 'flex-end' : 'flex-start'}>
           <Text
             w='full'

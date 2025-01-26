@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 
-import { ChatRoomSection, ChatRoomInsideSection } from '@pages/chat/components/room';
-import { ChatUserSection } from '@pages/chat/components/user/ChatUserSection';
-
-import { breakPoints } from '@shared/styles/variants/breakpoints';
+import { breakPoints } from '../../../shared//styles/variants/breakpoints';
+import { ChatRoomSection, ChatRoomInsideSection } from '../components/room';
+import { ChatUserSection } from '../components/user/ChatUserSection';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ export const ChatPage = () => {
   //휴대폰 뷰
   const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
 
-  const handleGoBack = () => {
+  const goBack = () => {
     setIsEntered(false);
     setSelectedRoom(null);
   };
@@ -42,7 +41,7 @@ export const ChatPage = () => {
             {isEntered ? (
               <ChatUserSection
                 onGoBack={() => {
-                  handleGoBack();
+                  goBack();
                 }}
               />
             ) : (
@@ -62,7 +61,7 @@ export const ChatPage = () => {
 
                 {isMobileView && (
                   <Flex justifyContent='center' mt='20px'>
-                    <Button colorScheme='blue' variant='outline' onClick={handleGoBack}>
+                    <Button colorScheme='blue' variant='outline' onClick={goBack}>
                       채팅방 목록 보기
                     </Button>
                   </Flex>

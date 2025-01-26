@@ -1,11 +1,9 @@
-import { Flex, Text, Image } from '@chakra-ui/react';
-
-import userIcon from '@shared/_assets/userIcon.svg';
+import { Flex, Text, Avatar } from '@chakra-ui/react';
 
 export const ChatUserListItem = ({ nickName }: { nickName: string }) => {
   return (
     <Flex w='full' h='44px' align='center' pl='20px' gap='10px'>
-      <Image src={userIcon} alt='userIcon' boxSize='24px' />
+      <Avatar boxSize='24px' />
       <Text fontSize='12px' fontWeight='medium'>
         {nickName}
       </Text>
