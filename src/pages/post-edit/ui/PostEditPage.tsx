@@ -1,5 +1,8 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 
+import { PostTitle } from '@shared/components/post-form';
+import { PostTag } from '@shared/components/post-form';
+import { PostContent } from '@shared/components/post-form';
 import { useGetMockData } from '@shared/hooks';
 
 import { PostModal } from '@widgets/modals';
@@ -25,6 +28,9 @@ export const PostEditPage = () => {
 
   return (
     <div>
+      <PostTitle />
+      <PostTag />
+      <PostContent />
       <Button onClick={onClick}>수정하기</Button>
       <PostModal
         title={data.title}
