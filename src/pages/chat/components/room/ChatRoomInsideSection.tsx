@@ -26,6 +26,11 @@ export const ChatRoomInsideSection = ({
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
+  const completeCallback = () => {
+    setIsEntered(true);
+    onComplete();
+  };
+
   useEffect(() => {
     const storedNickname = localStorage.getItem('userNickname') || '';
     setUserNickname(storedNickname);
@@ -45,12 +50,7 @@ export const ChatRoomInsideSection = ({
       {isEntered ? (
         <ChatInputBox onSendMessage={handleSendMessage} />
       ) : (
-        <SetUserNameModal
-          onComplete={() => {
-            setIsEntered(true);
-            onComplete();
-          }}
-        />
+        <SetUserNameModal onComplete={completeCallback} />
       )}
     </>
   );
