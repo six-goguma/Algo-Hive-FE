@@ -9,7 +9,12 @@ import { QueryClientProvider } from '@tanstack/react-query';
 export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={globalStyle}>{children}</ChakraProvider>
+      <ChakraProvider
+        theme={globalStyle}
+        toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
+      >
+        {children}
+      </ChakraProvider>
     </QueryClientProvider>
   );
 };
