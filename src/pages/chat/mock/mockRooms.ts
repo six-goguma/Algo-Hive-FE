@@ -1,5 +1,4 @@
-// src/data/mockRooms.js
-export const mockRooms = [
+export const MOCK_ROOMS = [
   {
     roomName: '브론즈 도전 Lv.2: 기본 그리디',
   },

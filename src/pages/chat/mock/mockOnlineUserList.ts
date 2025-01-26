@@ -1,4 +1,4 @@
-export const mockOnlineUserList = [
+export const MOCK_ONLINE_USER_LIST = [
   { id: 1, userName: 'FastCoder' },
   { id: 2, userName: 'GreedyMaster' },
   { id: 3, userName: 'DFS_Guru' },
