@@ -18,10 +18,17 @@ export const UserProfileSection = () => {
         mb={{ base: '20px', sm: '0' }}
       >
         <Avatar boxSize={24} mb='16px' />
-        <Button w='110px' h='36px' fontSize='14px' mb='10px'>
+        <Button w={{ base: '80px', sm: '110px' }} h='36px' fontSize='14px' mb='10px'>
           이미지 업로드
         </Button>
-        <Button bg='none' border='none' w='1180x' h='36px' color='custom.blue' fontSize='14px'>
+        <Button
+          bg='none'
+          border='none'
+          w={{ base: '80px', sm: '110px' }}
+          h='36px'
+          color='custom.blue'
+          fontSize='14px'
+        >
           이미지 제거
         </Button>
       </Flex>
@@ -29,7 +36,7 @@ export const UserProfileSection = () => {
       <Flex
         w={{ base: 'full', sm: '150px' }}
         flexDir='column'
-        ml={{ base: '0', sm: '30px' }}
+        ml={{ base: '16px', sm: '30px' }}
         align='flex-start'
       >
         <Text fontSize='20px' fontWeight='Bold' mb='6px' mt='10px'>
