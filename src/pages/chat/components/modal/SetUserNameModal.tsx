@@ -33,7 +33,7 @@ export const SetUserNameModal = ({ onComplete }: SetUserNameModalProps) => {
         채팅방 입장하기
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal size='sm' isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent p='20px'>
           <ModalHeader fontSize='13px' fontWeight='Bold'>
@@ -48,7 +48,7 @@ export const SetUserNameModal = ({ onComplete }: SetUserNameModalProps) => {
             />
           </ModalBody>
 
-          <ModalFooter display='flex' justifyContent='center'>
+          <ModalFooter justifyContent='center'>
             <Button h='36px' w='100px' onClick={handleComplete}>
               완료
             </Button>

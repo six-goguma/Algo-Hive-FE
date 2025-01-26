@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 
-import { breakPoints } from '../../../shared//styles/variants/breakpoints';
-import { ChatRoomSection, ChatRoomInsideSection } from '../components/room';
-import { ChatUserSection } from '../components/user';
+import { breakPoints } from '@shared/styles';
+
+import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 
 export const ChatPage = () => {
   const navigate = useNavigate();

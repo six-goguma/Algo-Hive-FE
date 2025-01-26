@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { Box, Text } from '@chakra-ui/react';
 
-import { mockChatMessageList } from '@pages/chat/mock/mockChatMessageList';
-
+import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 import { SetUserNameModal } from '../modal';
@@ -43,7 +42,7 @@ export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSe
           {roomName || ''}
         </Text>
       </Box>
-      <Box bg='custom.blue' height='3px' width='full' />
+      <Box bg='custom.blue' h='3px' w='full' />
       <Box w='full' h='409px' overflowY='auto'>
         <ChatMessageList messages={messages} userNickname={userNickname} /> {/* 닉네임 전달 */}
       </Box>

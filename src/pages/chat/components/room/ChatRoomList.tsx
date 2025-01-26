@@ -2,8 +2,7 @@ import { useState } from 'react';
 
 import { Flex } from '@chakra-ui/react';
 
-import { MOCK_ROOMS } from '@pages/chat/mock/mockRooms';
-
+import { MOCK_ROOMS } from '../../mock';
 import { ChatRoomListItem } from './ChatRoomListItem';
 
 type ChatRoomListProps = {
