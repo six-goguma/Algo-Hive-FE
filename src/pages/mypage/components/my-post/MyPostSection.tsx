@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 
-import { POST_LIST_DUMMY_DATA } from '@pages/main/mock';
-
 import { useGetMockData } from '@shared/hooks';
 import { getDynamicPath } from '@shared/utils';
 
 import { Grid } from '@widgets/grid';
 import { SkeletonPostCards, PostCards } from '@widgets/post-cards';
 
+import { MOCK_MY_POST_LIST } from '../../data';
+
 export const MyPostSection = () => {
-  const { data, isPending } = useGetMockData(POST_LIST_DUMMY_DATA);
+  const { data, isPending } = useGetMockData(MOCK_MY_POST_LIST);
   return (
     <Grid columns={{ base: 1, sm: 2, md: 3 }} gap={20}>
       {isPending
