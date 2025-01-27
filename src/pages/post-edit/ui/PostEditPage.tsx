@@ -33,7 +33,7 @@ export const PostEditPage = () => {
         <VStack w='full' py={10} spacing='0'>
           <PostTitle />
           <Box w='full' h='8px' bg='white'>
-            <Box w='84px' h='8px' bg='#495057' ml='4' />
+            <Box w='115px' h='8px' bg='#495057' ml='50px' />
           </Box>
           <PostTag />
           <PostContent />

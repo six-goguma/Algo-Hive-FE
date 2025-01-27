@@ -7,7 +7,7 @@ export const PostTag = () => {
   const { selectedTag, handleTagClick } = useTagSelection();
 
   return (
-    <VStack w='full' h='70px' bg='white' pt='2' pl='4' align='start'>
+    <VStack w='full' h='70px' bg='white' pt='2' pl='50px' align='start'>
       <Text fontSize='sm' fontWeight='bold' color='customGray.500'>
         ※ 태그를 선택하세요
       </Text>
