@@ -1,4 +1,5 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
+import { Flex, VStack } from '@chakra-ui/react';
 
 import { PostTitle } from '@shared/components/post-form';
 import { PostTag } from '@shared/components/post-form';
@@ -27,20 +28,24 @@ export const PostEditPage = () => {
   if (isPending) return <LoadingView />;
 
   return (
-    <div>
-      <PostTitle />
-      <PostTag />
-      <PostContent />
-      <Button onClick={onClick}>수정하기</Button>
-      <PostModal
-        title={data.title}
-        isOpen={isOpen}
-        onClose={onClose}
-        buttonTitle='수정하기'
-        postType='edit'
-        imageUrl={data.thumbnail}
-        postContent={data.content}
-      />
-    </div>
+    <>
+      <Flex w='full' justifyContent='center'>
+        <VStack w='95%' py={10}>
+          <PostTitle />
+          <PostTag />
+          <PostContent />
+          <Button onClick={onClick}>수정하기</Button>
+          <PostModal
+            title={data.title}
+            isOpen={isOpen}
+            onClose={onClose}
+            buttonTitle='수정하기'
+            postType='edit'
+            imageUrl={data.thumbnail}
+            postContent={data.content}
+          />
+        </VStack>
+      </Flex>
+    </>
   );
 };

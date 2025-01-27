@@ -1,3 +1,5 @@
+import { Box } from '@chakra-ui/react';
+
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/mantine/style.css';
@@ -8,5 +10,11 @@ export const PostContent = () => {
   const editor = useCreateBlockNote();
 
   // Renders the editor instance using a React component.
-  return <BlockNoteView editor={editor} />;
+  return (
+    <>
+      <Box w='full' h='600px' overflow='auto' background='white'>
+        <BlockNoteView editor={editor} />
+      </Box>
+    </>
+  );
 };
