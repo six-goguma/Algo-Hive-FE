@@ -1,5 +1,5 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
-import { Flex, VStack } from '@chakra-ui/react';
+import { Box, Flex, VStack } from '@chakra-ui/react';
 
 import { PostTitle } from '@shared/components/post-form';
 import { PostTag } from '@shared/components/post-form';
@@ -30,8 +30,11 @@ export const PostEditPage = () => {
   return (
     <>
       <Flex w='full' justifyContent='center'>
-        <VStack w='95%' py={10}>
+        <VStack w='95%' py={10} spacing='0'>
           <PostTitle />
+          <Box w='full' h='8px' bg='white'>
+            <Box w='84px' h='8px' bg='#495057' ml='4' />
+          </Box>
           <PostTag />
           <PostContent />
           <Button onClick={onClick}>수정하기</Button>
