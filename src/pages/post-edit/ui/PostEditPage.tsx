@@ -1,5 +1,6 @@
-import { Button, useDisclosure } from '@chakra-ui/react';
-import { Box, Flex, VStack } from '@chakra-ui/react';
+import { Button, useDisclosure, Box, Flex, VStack } from '@chakra-ui/react';
+
+import { ArrowLeft } from 'lucide-react';
 
 import { PostTitle } from '@shared/components/post-form';
 import { PostTag } from '@shared/components/post-form';
@@ -37,7 +38,29 @@ export const PostEditPage = () => {
           </Box>
           <PostTag />
           <PostContent />
-          <Button onClick={onClick}>수정하기</Button>
+          <Flex
+            w='full'
+            h='50px'
+            px='50px'
+            mt={1}
+            background='white'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            <Button
+              variant='ghost'
+              colorScheme='gray'
+              fontSize='md'
+              fontWeight='normal'
+              leftIcon={<ArrowLeft />}
+              _hover={{ bg: 'transparent' }}
+            >
+              나가기
+            </Button>
+            <Button colorScheme='blue' onClick={onClick} fontWeight='medium'>
+              수정하기
+            </Button>
+          </Flex>
           <PostModal
             title={data.title}
             isOpen={isOpen}
