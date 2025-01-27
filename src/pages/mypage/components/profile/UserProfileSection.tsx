@@ -5,29 +5,26 @@ export const UserProfileSection = () => {
 
   return (
     <Flex
-      w={{ base: '100%', sm: '80%' }}
+      w='full'
       h={{ base: 'auto', sm: '210px' }}
-      mt='40px'
+      mt='30px'
       align='flex-start'
-      p={{ base: '20px', sm: '0' }}
+      px={{ base: '30px', sm: '80px' }}
     >
-      <Flex
-        w={{ base: 'full', sm: '128px' }}
-        flexDir='column'
-        align='center'
-        mb={{ base: '20px', sm: '0' }}
-      >
+      <Flex w={{ base: 'full', sm: '128px' }} flexDir='column' align='center'>
         <Avatar boxSize={24} mb='16px' />
-        <Button w={{ base: '80px', sm: '110px' }} h='36px' fontSize='14px' mb='10px'>
+        <Button w={{ base: '80px', sm: '110px' }} h='36px' fontSize='sm' mb='10px'>
           이미지 업로드
         </Button>
         <Button
+          variant='outline'
           bg='none'
           border='none'
           w={{ base: '80px', sm: '110px' }}
           h='36px'
           color='custom.blue'
-          fontSize='14px'
+          fontSize='sm'
+          _hover={{}}
         >
           이미지 제거
         </Button>
@@ -42,10 +39,10 @@ export const UserProfileSection = () => {
         <Text fontSize='20px' fontWeight='Bold' mb='6px' mt='10px'>
           {userNickname}
         </Text>
-        <Box fontSize='16px' fontWeight='Bold' bg='none' border='none' cursor='pointer'>
+        <Box bg='none' border='none' cursor='pointer'>
           <Text
             w='full'
-            fontSize='14px'
+            fontSize='sm'
             fontWeight='Bold'
             lineHeight='16px'
             textAlign='center'
@@ -64,7 +61,8 @@ export const UserProfileSection = () => {
           borderColor='customGray.500'
           w={{ base: '40px', sm: '80px' }}
           h={{ base: '28px', sm: '32px' }}
-          fontSize='14px'
+          fontSize='sm'
+          _hover={{}}
         >
           회원탈퇴
         </Button>
