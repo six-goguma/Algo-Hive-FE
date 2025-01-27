@@ -13,7 +13,7 @@ export const PostTitle = () => {
         onChange={titleChange}
         placeholder='제목을 입력하세요'
         h='75px'
-        pl='15px'
+        pl='4'
         fontSize='28px'
         fontWeight='bold'
         bg='white'

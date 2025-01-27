@@ -1,3 +1,3 @@
 export * from './PostTitle';
-export * from './PostTag';
+export * from './post-tag';
 export * from './PostContent';
