@@ -6,9 +6,9 @@ import { useState } from 'react';
 export const useTagSelection = () => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const handleTagClick = (label: string) => {
+  const onClickTag = (label: string) => {
     setSelectedTag(label);
   };
 
-  return { selectedTag, handleTagClick };
+  return { selectedTag, onClickTag };
 };
