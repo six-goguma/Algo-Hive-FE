@@ -1,7 +1,7 @@
 import { Avatar, Flex, Button, Text, Box } from '@chakra-ui/react';
 
 export const UserProfileSection = () => {
-  const userNickname = 'gogumalatte';
+  const userNickname = '고양이는 멍멍';
 
   return (
     <Flex
@@ -36,7 +36,7 @@ export const UserProfileSection = () => {
         ml={{ base: '16px', sm: '30px' }}
         align='flex-start'
       >
-        <Text fontSize='20px' fontWeight='Bold' mb='6px' mt='10px'>
+        <Text w='150px' textAlign='left' fontSize='20px' fontWeight='Bold' mb='6px' mt='10px'>
           {userNickname}
         </Text>
         <Box bg='none' border='none' cursor='pointer'>
