@@ -1,1 +1,2 @@
-export { UserProfileSection } from './UserProfileSection';
+export * from './SkeletonProfileSection';
+export * from './UserProfileSection';
