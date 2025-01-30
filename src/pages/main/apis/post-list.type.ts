@@ -1,4 +1,6 @@
-export type content = {
+import { PostResponse } from '@shared/types';
+
+export type PostContent = {
   id: number;
   title: string;
   thumbnail: string;
@@ -9,34 +11,7 @@ export type content = {
   author: 'string';
 };
 
-type sort = {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-};
-
-type pageable = {
-  offset: number;
-  sort: sort;
-  unpaged: boolean;
-  paged: boolean;
-  pageNumber: number;
-  pageSize: number;
-};
-
-export type ResponsePosts = {
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  content: content[];
-  number: number;
-  sort: sort;
-  numberOfElements: number;
-  pageable: pageable;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-};
+export type ResponsePosts = PostResponse<PostContent>;
 
 export type RequestPosts = {
   page: number;
