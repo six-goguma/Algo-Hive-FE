@@ -48,10 +48,10 @@ const config = {
         fontSize: 'md',
         px: {
           base: '16px',
-          xs: '16px',
           sm: '16px',
-          md: '64px',
-          lg: '270px',
+          md: '16px',
+          lg: '64px',
+          xl: '270px',
         },
       },
     },
