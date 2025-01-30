@@ -31,7 +31,7 @@ export const Header = () => {
         justifyContent='space-between'
       >
         <Link to={RouterPath.MAIN}>
-          <Image src={LogoImage} alt='Logo' w='200px' />
+          <Image src={LogoImage} alt='Logo' w='200px' h='auto' />
         </Link>
         <HStack spacing='20px'>
           <Bell cursor='pointer' width={30} height={30} />

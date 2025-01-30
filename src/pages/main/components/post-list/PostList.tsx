@@ -12,7 +12,7 @@ export const PostList = () => {
   const { data, isPending } = useGetMockData(POST_LIST_DUMMY_DATA);
 
   return (
-    <Grid columns={{ base: 1, sm: 2, md: 3 }} gap={20}>
+    <Grid columns={{ base: 1, md: 2, lg: 3 }} gap={20}>
       {isPending
         ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
         : data.content.map((post) => (

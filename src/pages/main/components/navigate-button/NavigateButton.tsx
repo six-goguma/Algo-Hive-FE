@@ -46,7 +46,7 @@ export const NavigateButton = () => {
               bg='none'
               aria-label='menu'
               icon={<MenuIcon />}
-              _hover={{}}
+              _hover={{ border: 'none', bg: 'none' }}
             />
           </Flex>
           <MenuList minW='0' w='full'>
