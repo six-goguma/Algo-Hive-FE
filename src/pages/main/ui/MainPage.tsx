@@ -1,15 +1,21 @@
 import { Flex, VStack } from '@chakra-ui/react';
 
-import { useGetMockData } from '@shared/hooks';
-
 import { ButtonSkeleton, NavigateButton, PostList, Tabs } from '../components';
-import { POST_LIST_DUMMY_DATA } from '../data';
+import { useGetPosts } from '../hooks';
 
 export const MainPage = () => {
-  const { isPending, isError } = useGetMockData(POST_LIST_DUMMY_DATA);
+  //TODO: useState로 Tabs값 바꿔서 넣기
+  const {
+    data: postData,
+    isPending,
+    isError,
+  } = useGetPosts({
+    page: 0,
+    size: 10,
+    sort: { key: 'createdAt', order: 'desc' },
+  });
 
   if (isError) return <div>오류가 발생했습니다.</div>;
-
   return (
     <Flex w='full' justifyContent='center'>
       <VStack spacing={10} pb={10}>
@@ -21,7 +27,7 @@ export const MainPage = () => {
             <NavigateButton />
           </Flex>
         )}
-        <PostList />
+        <PostList postData={postData?.content} isPending={isPending} />
       </VStack>
     </Flex>
   );
