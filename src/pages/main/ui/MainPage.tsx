@@ -1,49 +1,33 @@
-import { Link } from 'react-router-dom';
+import { Flex, VStack } from '@chakra-ui/react';
 
-import { Flex, Skeleton, VStack } from '@chakra-ui/react';
-
-import { useGetMockData } from '@shared/hooks';
-import { getDynamicPath } from '@shared/utils';
-
-import { Grid } from '@widgets/grid';
-import { PostCards, SkeletonPostCards } from '@widgets/post-cards';
-
-import { Tabs } from '../components';
-import { POST_LIST_DUMMY_DATA } from '../mock';
+import { ButtonSkeleton, NavigateButton, PostList, Tabs } from '../components';
+import { useGetPosts } from '../hooks';
 
 export const MainPage = () => {
-  const { data, isPending, isError } = useGetMockData(POST_LIST_DUMMY_DATA);
+  //TODO: useState로 Tabs값 바꿔서 넣기
+  const {
+    data: postData,
+    isPending,
+    isError,
+  } = useGetPosts({
+    page: 0,
+    size: 10,
+    sort: { key: 'createdAt', order: 'desc' },
+  });
 
   if (isError) return <div>오류가 발생했습니다.</div>;
-
   return (
     <Flex w='full' justifyContent='center'>
       <VStack spacing={10} pb={10}>
         {isPending ? (
-          <Flex w='full' py={8}>
-            <Skeleton w='160px' h={10} />
-          </Flex>
+          <ButtonSkeleton />
         ) : (
-          <Tabs />
+          <Flex w='full' justifyContent='space-between'>
+            <Tabs />
+            <NavigateButton />
+          </Flex>
         )}
-        <Grid columns={{ base: 1, sm: 2, md: 3 }} gap={20}>
-          {isPending
-            ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
-            : data.content.map((post) => (
-                <Link key={post.id} to={getDynamicPath.postDetail(String(post.id))}>
-                  <PostCards
-                    title={post.title}
-                    postId={post.id}
-                    thumbnail={post.thumbnail}
-                    summary={post.summary}
-                    createdAt={post.createdAt}
-                    likeCount={post.likeCount}
-                    commentCount={post.commentCount}
-                    author={post.author}
-                  />
-                </Link>
-              ))}
-        </Grid>
+        <PostList postData={postData?.content} isPending={isPending} />
       </VStack>
     </Flex>
   );

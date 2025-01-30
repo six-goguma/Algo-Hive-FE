@@ -1,0 +1,1 @@
+export { useGetChatRooms } from './useGetChatRooms';
