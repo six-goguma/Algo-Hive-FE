@@ -11,7 +11,6 @@ const locale = locales['en'];
 
 export const PostContent = () => {
   const editor = useCreateBlockNote({
-    // We override the `placeholders` in our dictionary
     dictionary: {
       ...locale,
       placeholders: {
@@ -23,10 +22,8 @@ export const PostContent = () => {
   });
 
   return (
-    <>
-      <Box w='full' h='600px' overflow='auto' background='white'>
-        <BlockNoteView editor={editor} />
-      </Box>
-    </>
+    <Box w='full' h='600px' overflow='auto' background='white'>
+      <BlockNoteView editor={editor} />
+    </Box>
   );
 };
