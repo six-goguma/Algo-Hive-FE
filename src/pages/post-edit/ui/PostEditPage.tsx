@@ -1,5 +1,8 @@
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure, Box, Flex, VStack } from '@chakra-ui/react';
 
+import { ArrowLeft } from 'lucide-react';
+
+import { PostTitle, PostTag, PostContent } from '@shared/components';
 import { useGetMockData } from '@shared/hooks';
 
 import { PostModal } from '@widgets/modals';
@@ -24,17 +27,47 @@ export const PostEditPage = () => {
   if (isPending) return <LoadingView />;
 
   return (
-    <div>
-      <Button onClick={onClick}>수정하기</Button>
-      <PostModal
-        title={data.title}
-        isOpen={isOpen}
-        onClose={onClose}
-        buttonTitle='수정하기'
-        postType='edit'
-        imageUrl={data.thumbnail}
-        postContent={data.content}
-      />
-    </div>
+    <Flex w='full' justifyContent='center'>
+      <VStack w='full' py={10} spacing='0'>
+        <PostTitle />
+        <Box w='full' h='8px' bg='white'>
+          <Box w='115px' h='8px' bg='#495057' ml='50px' />
+        </Box>
+        <PostTag />
+        <PostContent />
+        <Flex
+          w='full'
+          h='50px'
+          px='50px'
+          mt={1}
+          background='white'
+          alignItems='center'
+          justifyContent='space-between'
+        >
+          <Button
+            variant='ghost'
+            colorScheme='gray'
+            fontSize='md'
+            fontWeight='normal'
+            leftIcon={<ArrowLeft />}
+            _hover={{ bg: 'transparent' }}
+          >
+            나가기
+          </Button>
+          <Button colorScheme='blue' onClick={onClick} fontWeight='medium'>
+            수정하기
+          </Button>
+        </Flex>
+        <PostModal
+          title={data.title}
+          isOpen={isOpen}
+          onClose={onClose}
+          buttonTitle='수정하기'
+          postType='edit'
+          imageUrl={data.thumbnail}
+          postContent={data.content}
+        />
+      </VStack>
+    </Flex>
   );
 };
