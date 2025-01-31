@@ -1,1 +1,1 @@
-export { TAGDATA } from './tag-data';
+export { TAG_DATA } from './tag-data';

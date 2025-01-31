@@ -1,6 +1,6 @@
 import { Text, VStack, HStack, Tag, TagLabel } from '@chakra-ui/react';
 
-import { TAGDATA } from '../data';
+import { TAG_DATA } from '../data';
 import { useTagSelection } from '../hooks';
 
 export const PostTag = () => {
@@ -12,7 +12,7 @@ export const PostTag = () => {
         ※ 태그를 선택하세요
       </Text>
       <HStack spacing={4}>
-        {TAGDATA.map((tag) => (
+        {TAG_DATA.map((tag) => (
           <Tag
             key={tag.label}
             size='md'
