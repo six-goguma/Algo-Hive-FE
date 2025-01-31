@@ -4,7 +4,7 @@ import { TAGDATA } from '../data';
 import { useTagSelection } from '../hooks';
 
 export const PostTag = () => {
-  const { selectedTag, handleTagClick } = useTagSelection();
+  const { selectedTag, onClickTag } = useTagSelection();
 
   return (
     <VStack w='full' h='70px' bg='white' pt='2' pl='50px' align='start'>
@@ -26,7 +26,7 @@ export const PostTag = () => {
               color: 'black',
             }}
             cursor='pointer'
-            onClick={() => handleTagClick(tag.label)} // 선택 상태 변경
+            onClick={() => onClickTag(tag.label)} // 선택 상태 변경
           >
             <TagLabel>{tag.label}</TagLabel>
           </Tag>
