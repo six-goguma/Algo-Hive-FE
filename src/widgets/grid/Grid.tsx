@@ -3,7 +3,6 @@ import { SimpleGrid } from '@chakra-ui/react';
 import { breakPoints } from '@shared/styles';
 
 type ResponseGridStyle = {
-  // 'base' | 'xs' | 'sm' | 'md' | 'lg'
   [key in keyof typeof breakPoints]?: number;
 };
 
