@@ -13,7 +13,7 @@ export const NicknameSection = () => {
           {SIGNUP_DATA.NICKNAME.NICKNAME_RULE}
         </Text>
       </Flex>
-      <VStack spacing={4}>
+      <VStack gap={4}>
         <Flex w='full' gap={3} alignItems='center'>
           <Input
             id='nickname'

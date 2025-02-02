@@ -1,4 +1,6 @@
-import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { Flex, Box, Text } from '@chakra-ui/react';
+
+import { Avatar } from '@shared/components';
 
 type ChatMessageProps = {
   message: { sender: string; content: string };

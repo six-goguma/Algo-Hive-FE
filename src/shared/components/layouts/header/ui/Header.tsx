@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Flex, Image, HStack, Button, useDisclosure } from '@chakra-ui/react';
+import { Flex, Image, HStack, Button } from '@chakra-ui/react';
 
-import { Bell } from 'lucide-react';
+// import { Bell } from 'lucide-react';
 
 import { RouterPath } from '@shared/constants';
 
@@ -15,8 +15,6 @@ import { LoginModal, NavigateMenu, SignupModal } from '../components';
 export const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [modalType, setModalType] = useState('login');
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onClick = () => {
     setIsLogin(!isLogin);
@@ -33,10 +31,10 @@ export const Header = () => {
         <Link to={RouterPath.MAIN}>
           <Image src={LogoImage} alt='Logo' w='200px' />
         </Link>
-        <HStack spacing='20px'>
-          <Bell cursor='pointer' width={30} height={30} />
+        <HStack gap='20px'>
+          {/* <Bell cursor='pointer' width={30} height={30} /> */}
           {!isLogin ? (
-            <Button w='80px' h='35px' border='1.5px solid' borderRadius='full' onClick={onOpen}>
+            <Button w='80px' h='35px' border='1.5px solid' borderRadius='full'>
               로그인
             </Button>
           ) : (
@@ -45,21 +43,9 @@ export const Header = () => {
         </HStack>
       </Container>
       {modalType === 'login' ? (
-        <LoginModal
-          isOpen={isOpen}
-          onClose={onClose}
-          modalType={modalType}
-          setModalType={setModalType}
-          setIsLogin={setIsLogin}
-        />
+        <LoginModal modalType={modalType} setModalType={setModalType} setIsLogin={setIsLogin} />
       ) : (
-        <SignupModal
-          isOpen={isOpen}
-          onClose={onClose}
-          modalType={modalType}
-          setModalType={setModalType}
-          setIsLogin={setIsLogin}
-        />
+        <SignupModal modalType={modalType} setModalType={setModalType} setIsLogin={setIsLogin} />
       )}
     </Flex>
   );

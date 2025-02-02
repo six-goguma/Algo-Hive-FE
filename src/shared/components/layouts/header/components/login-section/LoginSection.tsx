@@ -10,7 +10,7 @@ export const LoginSection = () => {
           {LOGIN_DATA.MODAL_SUBTITLE}
         </Text>
       </Flex>
-      <VStack spacing={4}>
+      <VStack gap={4}>
         <Input id='email' fontSize='sm' placeholder={LOGIN_DATA.EMAIL_PLACEHOLDER} />
         <Input
           id='password'

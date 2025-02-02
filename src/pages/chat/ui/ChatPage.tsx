@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
-
-import { breakPoints } from '@shared/styles';
+import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 
@@ -13,8 +11,8 @@ export const ChatPage = () => {
   const [isEntered, setIsEntered] = useState(false);
 
   //휴대폰 뷰
-  const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
-
+  // const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
+  const isMobileView = false;
   const goBack = () => {
     setIsEntered(false);
     setSelectedRoom(null);

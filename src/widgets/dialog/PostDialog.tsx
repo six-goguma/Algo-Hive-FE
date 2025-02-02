@@ -1,28 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
 
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  DialogRoot,
+  DialogTrigger,
   Button,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogBody,
+  DialogFooter,
   Flex,
-  Text,
-  HStack,
+  DialogCloseTrigger,
+  Input,
   Textarea,
   VStack,
+  Text,
   Image,
-  Input,
+  HStack,
 } from '@chakra-ui/react';
 
-import { ImagePlus } from 'lucide-react';
+// import { ImagePlus } from 'lucide-react';
 
-type PostModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
+import { DialogActionTrigger } from '@shared/components';
+
+type PostDialogProps = {
   title: string;
   buttonTitle: string;
   postType: 'create' | 'edit';
@@ -30,15 +31,16 @@ type PostModalProps = {
   postContent?: string;
 };
 
-export const PostModal = ({
-  isOpen,
-  onClose,
+export const PostDialog = ({
+  //   isOpen,
+  //   onClose,
   title,
   buttonTitle,
   imageUrl,
   postType,
   postContent,
-}: PostModalProps) => {
+}: PostDialogProps) => {
+  const [open, setOpen] = useState(false);
   const [inputCount, setInputCount] = useState<number>(0);
   const [imgFile, setImgFile] = useState<File>();
   const [imgPath, setImgPath] = useState('');
@@ -91,15 +93,16 @@ export const PostModal = ({
   }, [imageUrl, postType, postContent]);
 
   return (
-    <Modal size='sm' isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(3px)' />
-      <ModalContent w='100%'>
-        <ModalHeader mt={5} textAlign='left' ml='3'>
-          포스트 미리보기
-        </ModalHeader>
-        <ModalCloseButton />
+    <DialogRoot lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
+      <DialogTrigger>
+        <Button variant='outline'>Open Dialog</Button>
+      </DialogTrigger>
+      <DialogContent w='full'>
+        <DialogHeader mt={5} textAlign='left' ml={3}>
+          <DialogTitle>포스트 미리보기</DialogTitle>
+        </DialogHeader>
 
-        <ModalBody textAlign='center' justifyContent='center' alignItems='center'>
+        <DialogBody>
           {showControls && (
             <Flex w='325px' pb={1} justifyContent='flex-end' gap={2}>
               <Text
@@ -114,15 +117,15 @@ export const PostModal = ({
               </Text>
             </Flex>
           )}
-          <VStack flexDir='column' textAlign='center' spacing={3} px={3}>
+          <VStack flexDir='column' textAlign='center' gap={3} px={3}>
             <Flex bgColor='#E9ECEE' justify='center' w='full' h='166px' flexDir='column'>
-              <VStack spacing={2}>
+              <VStack gap={2}>
                 {imgFile || imgPath ? (
                   <Image src={imgPath} alt='thumbnail' maxW='312px' maxH='166px' />
                 ) : (
                   <>
-                    <VStack spacing={2}>
-                      <ImagePlus strokeWidth={1} size={100} color='gray' />
+                    <VStack gap={2}>
+                      {/* <ImagePlus strokeWidth={1} size={100} color='gray' /> */}
                     </VStack>
                     <Button
                       onClick={onClick}
@@ -179,21 +182,22 @@ export const PostModal = ({
               </Flex>
             </Flex>
           </VStack>
-        </ModalBody>
+        </DialogBody>
 
-        <ModalFooter w='full' flexDir='row' px={9} mb={3}>
-          <HStack spacing={2}>
-            <Button
-              variant='outline'
-              border='none'
-              _hover={{}}
-              w='full'
-              h='40px'
-              colorScheme='custom.blue'
-              onClick={onClose}
-            >
-              취소
-            </Button>
+        <DialogFooter w='full' flexDir='row' px={9} mb={3}>
+          <HStack gap={2}>
+            <DialogActionTrigger asChild>
+              <Button
+                variant='outline'
+                border='none'
+                _hover={{}}
+                w='full'
+                h='40px'
+                colorScheme='custom.blue'
+              >
+                취소
+              </Button>
+            </DialogActionTrigger>
             <Button
               w='full'
               h='40px'
@@ -205,8 +209,9 @@ export const PostModal = ({
               {buttonTitle}
             </Button>
           </HStack>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogFooter>
+        <DialogCloseTrigger />
+      </DialogContent>
+    </DialogRoot>
   );
 };

@@ -1,4 +1,6 @@
-import { Flex, Text, Avatar } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
+
+import { Avatar } from '@shared/components';
 
 type ChatUserListItemProps = {
   nickName: string;

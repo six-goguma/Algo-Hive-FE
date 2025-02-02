@@ -1,14 +1,13 @@
-import { useToast } from '@chakra-ui/react';
+// import { useToast } from '@chakra-ui/react';
+import { toaster } from '@shared/components';
 
 type UseCustomToastProps = {
-  toastStatus: 'success' | 'error' | 'warning' | 'info';
   toastTitle: string;
   toastDescription: string;
-  duration?: number;
 };
 
 export const useCustomToast = () => {
-  const toast = useToast();
+  // const toast = useToast();
 
   /**
    * 아래 customToast는 사용예시입니다.
@@ -19,18 +18,10 @@ export const useCustomToast = () => {
     });
    * 
    */
-  const customToast = ({
-    toastStatus,
-    toastTitle,
-    toastDescription,
-    duration = 5000,
-  }: UseCustomToastProps) => {
-    toast({
+  const customToast = ({ toastTitle, toastDescription }: UseCustomToastProps) => {
+    toaster.create({
       title: toastTitle,
       description: toastDescription,
-      status: toastStatus,
-      duration,
-      variant: 'subtle',
     });
   };
 

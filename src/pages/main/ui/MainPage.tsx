@@ -18,7 +18,7 @@ export const MainPage = () => {
 
   return (
     <Flex w='full' justifyContent='center'>
-      <VStack spacing={10} pb={10}>
+      <VStack gap={10} pb={10}>
         {isPending ? (
           <Flex w='full' py={8}>
             <Skeleton w='160px' h={10} />

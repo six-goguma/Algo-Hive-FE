@@ -13,7 +13,7 @@ export const EmailSection = () => {
           {SIGNUP_DATA.EMAIL.EMAIL_RULE}
         </Text>
       </Flex>
-      <VStack spacing={4}>
+      <VStack gap={4}>
         <Flex w='full' gap={3} alignItems='center'>
           <Input id='email' fontSize='sm' placeholder={SIGNUP_DATA.EMAIL.EMAIL_PLACEHOLDER} />
           <Button w='100px' h={10}>

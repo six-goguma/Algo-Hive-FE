@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { InputGroup, InputRightElement, Button, Input } from '@chakra-ui/react';
+import { Button, Input, InputElement } from '@chakra-ui/react';
 
-import { SendHorizontal } from 'lucide-react';
+// import { SendHorizontal } from 'lucide-react';
 
 type ChatInputBoxProps = {
   onSendMessage: (content: string) => void;
@@ -19,11 +19,10 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
   };
 
   return (
-    <InputGroup border='1.5px solid custom.blue' h='36px' alignItems='center' w='full'>
+    <>
       <Input
         size='sm'
         type='text'
-        variant='ghost'
         colorScheme='blue'
         placeholder='메세지를 입력해 주세요.'
         value={message}
@@ -38,18 +37,11 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
           }
         }}
       />
-      <InputRightElement h='full'>
-        <Button
-          variant='outline'
-          size='40px'
-          border='none'
-          bg='white'
-          onClick={handleSendMessage}
-          _hover={{}}
-        >
-          <SendHorizontal size={20} color='#0076BF' />
+      <InputElement h='full'>
+        <Button variant='outline' border='none' bg='white' onClick={handleSendMessage} _hover={{}}>
+          {/* <SendHorizontal size={20} color='#0076BF' /> */}
         </Button>
-      </InputRightElement>
-    </InputGroup>
+      </InputElement>
+    </>
   );
 };

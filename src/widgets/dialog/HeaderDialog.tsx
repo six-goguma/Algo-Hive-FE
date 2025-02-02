@@ -1,43 +1,44 @@
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Flex,
-  Text,
-} from '@chakra-ui/react';
+import { useState } from 'react';
 
-type HeaderModalProps = {
+import { Button, Flex, Text } from '@chakra-ui/react';
+
+import {
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from '@shared/components';
+
+type HeaderDialogProps = {
   modalTitle: string;
   buttonText: string;
   children: React.ReactNode;
-  isOpen: boolean;
+  //   isOpen: boolean;
   navigateText: string;
   navigateModal: string;
-  scrollBehavior?: 'inside' | 'outside';
-  onClose: () => void;
+  //   scrollBehavior?: 'inside' | 'outside';
   modalType: string;
   setModalType: (modalType: string) => void;
   setIsLogin: (isLogin: boolean) => void;
 };
 
-export const HeaderModal = ({
+export const HeaderDialog = ({
   modalTitle,
   buttonText,
   children,
-  isOpen,
+  //   isOpen,
   navigateText,
   navigateModal,
-  scrollBehavior,
-  onClose,
+  //   scrollBehavior,
   modalType,
   setModalType,
   setIsLogin,
-}: HeaderModalProps) => {
+}: HeaderDialogProps) => {
+  const [open, setOpen] = useState(false);
   const onClick = () => {
     if (modalType === 'login') {
       setModalType('signup');
@@ -48,20 +49,20 @@ export const HeaderModal = ({
 
   const onLogin = () => {
     setIsLogin(true);
-    onClose();
   };
   return (
-    <Modal size='sm' isOpen={isOpen} onClose={onClose} scrollBehavior={scrollBehavior} isCentered>
-      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(3px)' />
-      <ModalContent w='100%'>
-        <ModalHeader mt={5} textAlign='left'>
-          {modalTitle}
-        </ModalHeader>
-        <ModalCloseButton />
+    <DialogRoot lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
+      <DialogTrigger>
+        <Button variant='outline'>Open Dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader mt={5} textAlign='left'>
+          <DialogTitle>{modalTitle}</DialogTitle>
+        </DialogHeader>
 
-        <ModalBody textAlign='left'>{children}</ModalBody>
+        <DialogBody>{children}</DialogBody>
 
-        <ModalFooter w='full' flexDir='column'>
+        <DialogFooter>
           <Button w='full' h='40px' px='auto' colorScheme='custom.blue' onClick={onLogin}>
             {buttonText}
           </Button>
@@ -73,8 +74,9 @@ export const HeaderModal = ({
               {navigateModal}
             </Button>
           </Flex>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogFooter>
+        <DialogCloseTrigger />
+      </DialogContent>
+    </DialogRoot>
   );
 };
