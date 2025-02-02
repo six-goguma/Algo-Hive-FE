@@ -6,6 +6,7 @@ import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
+import { useGetChatRooms } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
@@ -19,6 +20,12 @@ export const ChatPage = () => {
     setIsEntered(false);
     setSelectedRoom(null);
   };
+
+  const { data, isError } = useGetChatRooms();
+
+  console.log(data);
+
+  if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='100vh'>

@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
-import { uploadFile } from '../utils';
+// import { uploadFile } from '../utils';
 import { locales } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
@@ -18,7 +18,7 @@ export const PostContent = () => {
         default: '글을 작성해주세요...',
       },
     },
-    uploadFile,
+    // uploadFile,
   });
 
   return (

@@ -30,19 +30,28 @@ const config = {
         src: `url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff')`,
         fontStyle: 'normal',
       },
-      body: {
-        fontFamily: `"Pretendard-Regular","Apple SD Gothic Neo", Sans-serif`,
-        fontSize: 'md',
-        bg: 'custom.gray',
-        textAlign: 'center',
+      '*': {
+        margin: 0,
+        padding: 0,
+        boxSizing: 'border-box',
+      },
+      root: {
         width: '100vw',
         height: '100%',
+      },
+      body: {
+        bg: 'custom.gray',
+        color: 'black',
+        textAlign: 'center',
+
+        fontFamily: `"Pretendard-Regular","Apple SD Gothic Neo", Sans-serif`,
+        fontSize: 'md',
         px: {
           base: '16px',
-          xs: '16px',
           sm: '16px',
-          md: '64px',
-          lg: '270px',
+          md: '16px',
+          lg: '64px',
+          xl: '270px',
         },
       },
     },
