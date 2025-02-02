@@ -11,7 +11,7 @@ import { MOCK_MY_POST_LIST } from '../../data';
 export const MyPostSection = () => {
   const { data, isPending } = useGetMockData(MOCK_MY_POST_LIST);
   return (
-    <Grid columns={{ base: 1, sm: 2, md: 3 }} gap={20}>
+    <Grid columns={{ base: 1, md: 2, lg: 3 }} gap={20}>
       {isPending
         ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
         : data.content.map((post) => (
