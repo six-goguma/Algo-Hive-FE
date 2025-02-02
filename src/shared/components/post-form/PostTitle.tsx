@@ -12,19 +12,18 @@ export const PostTitle = () => {
         value={title}
         onChange={titleChange}
         placeholder='제목을 입력하세요'
-        h={{ base: '44px', sm: '60px', md: '75px' }}
+        h={{ base: '50px', md: '75px' }}
+        w='full'
         pl='50px'
-        fontSize={{ base: '20px', sm: '24px', md: '28px' }}
+        fontSize={{ base: '20px', md: '30px' }}
         fontWeight='bold'
         bg='white'
         border='none'
-        borderRadius='none'
         _focusVisible={{
           border: 'none',
-          boxShadow: 'none',
         }}
         _placeholder={{
-          color: '#21259',
+          color: 'customGray.500',
         }}
       />
     </FormControl>

@@ -23,7 +23,7 @@ export const PostEditPage = () => {
     <Flex w='full' justifyContent='center'>
       <VStack w='full' py='40px' gap='0'>
         <PostTitle />
-        <Box w='full' h='14px' bg='white' py='3px'>
+        <Box w='full' h='14px' bg='white'>
           <Divider w='115px' h='8px' bg='black' ml='50px' />
         </Box>
         <PostTag />
