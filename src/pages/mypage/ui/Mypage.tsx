@@ -1,8 +1,9 @@
 import { Flex, Skeleton, VStack } from '@chakra-ui/react';
 
+import { POST_LIST_DUMMY_DATA } from '@pages/main/data';
+
 import { useGetMockData } from '@shared/hooks';
 
-import { POST_LIST_DUMMY_DATA } from '../../main/mock';
 import { MyPostSection, Tabs, UserProfileSection } from '../components';
 
 export const Mypage = () => {

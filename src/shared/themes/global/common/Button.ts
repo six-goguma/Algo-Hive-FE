@@ -15,24 +15,24 @@ export const Button = defineStyleConfig({
     default: {
       bg: 'custom.blue',
       color: 'white',
-      border: '1.5px solid',
+      border: '2px solid',
       borderColor: 'custom.blue',
       _hover: {
         bg: 'white',
         color: 'custom.blue',
-        border: '1.5px solid',
+        border: '2px solid',
         borderColor: 'custom.blue',
       },
     },
     outline: {
       bg: 'white',
       color: 'custom.blue',
-      border: '1.5px solid',
+      border: '2px solid',
       borderColor: 'custom.blue',
       _hover: {
         bg: 'custom.blue',
         color: 'white',
-        border: '1px solid',
+        border: '2px solid',
         borderColor: 'custom.blue',
       },
     },
