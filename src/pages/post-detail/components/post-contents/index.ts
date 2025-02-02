@@ -1,0 +1,1 @@
+export { PostContents } from './PostContents';
