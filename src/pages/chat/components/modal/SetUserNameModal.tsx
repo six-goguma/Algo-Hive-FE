@@ -29,13 +29,13 @@ export const SetUserNameModal = ({ onComplete }: SetUserNameModalProps) => {
 
   return (
     <>
-      <Button mt='15px' h='36px' w='100px' onClick={onOpen}>
+      <Button mt='15px' h='36px' w='120px' onClick={onOpen}>
         채팅방 입장하기
       </Button>
 
       <Modal size='sm' isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent p='20px'>
+        <ModalContent py='20px'>
           <ModalHeader fontSize='13px' fontWeight='Bold'>
             입장할 닉네임을 설정해 주세요.
           </ModalHeader>

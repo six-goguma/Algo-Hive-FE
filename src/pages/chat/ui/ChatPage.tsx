@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
 
+import { RouterPath } from '@shared/constants';
 import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
@@ -37,7 +38,7 @@ export const ChatPage = () => {
         variant='outline'
         alignSelf='flex-end'
         onClick={() => {
-          navigate('/');
+          navigate(RouterPath.MAIN);
         }}
       >
         게시글 보기

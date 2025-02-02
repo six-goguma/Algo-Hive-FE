@@ -12,7 +12,7 @@ export const ChatUserSection = ({ onGoBack }: ChatUserSectionProps) => {
         <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
           현재 접속자
         </Text>
-        <Button h='32px' w='140px' px={5} onClick={onGoBack}>
+        <Button h='30px' w='150px' fontSize='sm' onClick={onGoBack}>
           채팅방 목록 보기
         </Button>
       </Flex>
