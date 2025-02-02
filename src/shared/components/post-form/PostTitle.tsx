@@ -14,7 +14,7 @@ export const PostTitle = () => {
         placeholder='제목을 입력하세요'
         h={{ base: '50px', md: '75px' }}
         w='full'
-        pl='50px'
+        px='50px'
         fontSize={{ base: '20px', md: '30px' }}
         fontWeight='bold'
         bg='white'

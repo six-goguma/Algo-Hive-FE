@@ -11,7 +11,7 @@ export const PostWritePage = () => {
 
   return (
     <Flex w='full' justifyContent='center'>
-      <VStack w='full' py='40px' gap='0'>
+      <VStack w='full' py='20px' gap='0'>
         <PostTitle />
         <Box w='full' h='14px' bg='white'>
           <Divider w='115px' h='8px' bg='black' ml='50px' />
