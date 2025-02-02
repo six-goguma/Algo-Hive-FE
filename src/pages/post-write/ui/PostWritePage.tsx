@@ -14,7 +14,12 @@ export const PostWritePage = () => {
       <VStack w='full' py='20px' gap='0'>
         <PostTitle />
         <Box w='full' h='14px' bg='white'>
-          <Divider w='115px' h='8px' bg='black' ml='50px' />
+          <Divider
+            w={{ base: '145px', md: '215px' }}
+            h='8px'
+            bg='black'
+            ml={{ base: '10px', md: '50px' }}
+          />
         </Box>
         <PostTag />
         <PostContent />
