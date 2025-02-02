@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 
-import { content } from '@pages/main/apis';
-
 import { getDynamicPath } from '@shared/utils';
 
 import { Grid } from '@widgets/grid';
 import { SkeletonPostCards, PostCards } from '@widgets/post-cards';
 
+import { PostContent } from '../../apis';
+
 type PostListProps = {
-  postData?: content[];
+  postData?: PostContent[];
   isPending: boolean;
 };
 export const PostList = ({ postData, isPending }: PostListProps) => {
