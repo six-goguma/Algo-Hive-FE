@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/react';
+import { Box, useBreakpointValue } from '@chakra-ui/react';
 
+import { BlockNoteStyles } from './BlockNoteStyles';
 // import { uploadFile } from '../utils';
 import { locales } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
@@ -10,6 +11,7 @@ import { useCreateBlockNote } from '@blocknote/react';
 const locale = locales['en'];
 
 export const PostContent = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const editor = useCreateBlockNote({
     dictionary: {
       ...locale,
@@ -22,8 +24,20 @@ export const PostContent = () => {
   });
 
   return (
-    <Box w='full' h='600px' overflow='auto' background='white'>
-      <BlockNoteView editor={editor} />
+    <Box
+      w='full'
+      h={isMobile ? '400px' : '600px'}
+      overflow='auto'
+      background='white'
+      textAlign='left'
+    >
+      <BlockNoteStyles />
+      <BlockNoteView
+        editor={editor}
+        sideMenu={isMobile ? false : true}
+        formattingToolbar={isMobile ? false : true}
+        slashMenu={isMobile ? false : true}
+      />
     </Box>
   );
 };

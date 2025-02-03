@@ -1,18 +1,18 @@
-import { useDisclosure, Button } from '@chakra-ui/react';
+import { useDisclosure, VStack } from '@chakra-ui/react';
+
+import { PostTitle, PostTag, PostContent, PostButtons } from '@shared/components';
 
 import { PostModal } from '@widgets/modals';
 
 export const PostWritePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  //TODO: 작성완료 버튼 클릭 시 Modal 열기
-  const onClick = () => {
-    onOpen();
-  };
-
   return (
-    <div>
-      <Button onClick={onClick}>작성완료</Button>
+    <VStack w='full' py='20px' gap='0'>
+      <PostTitle />
+      <PostTag />
+      <PostContent />
+      <PostButtons buttonText='작성완료' onClick={onOpen} />
       <PostModal
         title='백준 1004번 풀이'
         isOpen={isOpen}
@@ -20,6 +20,6 @@ export const PostWritePage = () => {
         buttonTitle='출간하기'
         postType='create'
       />
-    </div>
+    </VStack>
   );
 };

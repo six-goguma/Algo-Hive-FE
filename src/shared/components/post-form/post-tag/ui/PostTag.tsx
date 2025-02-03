@@ -1,4 +1,4 @@
-import { Text, VStack, HStack, Tag, TagLabel } from '@chakra-ui/react';
+import { Text, VStack, HStack, Button } from '@chakra-ui/react';
 
 import { TAG_DATA } from '../data';
 import { useTagSelection } from '../hooks';
@@ -7,29 +7,32 @@ export const PostTag = () => {
   const { selectedTag, onClickTag } = useTagSelection();
 
   return (
-    <VStack w='full' h='70px' bg='white' pt='2' pl='50px' align='start'>
-      <Text fontSize='sm' fontWeight='bold' color='customGray.500'>
+    <VStack w='full' h='70px' bg='white' py='5px' px={{ base: '10px', md: '50px' }} align='start'>
+      <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight='bold' color='customGray.500'>
         ※ 태그를 선택하세요
       </Text>
-      <HStack spacing={4}>
+      <HStack gap={{ base: '2', md: '4' }}>
         {TAG_DATA.map((tag) => (
-          <Tag
+          <Button
             key={tag.label}
             size='md'
             borderRadius='md'
             variant={selectedTag === tag.label ? 'solid' : 'outline'}
             colorScheme={tag.colorScheme}
-            bg={selectedTag === tag.label ? `${tag.colorScheme}.300` : undefined}
-            color={selectedTag === tag.label ? 'black' : undefined}
+            bg={selectedTag === tag.label ? `${tag.colorScheme}.300` : 'transparent'}
+            color={selectedTag === tag.label ? 'black' : `${tag.colorScheme}.500`}
             _hover={{
               bg: `${tag.colorScheme}.300`,
               color: 'black',
             }}
-            cursor='pointer'
-            onClick={() => onClickTag(tag.label)} // 선택 상태 변경
+            border='1px solid'
+            borderColor={
+              selectedTag === tag.label ? `${tag.colorScheme}.400` : `${tag.colorScheme}.500`
+            }
+            onClick={() => onClickTag(tag.label)}
           >
-            <TagLabel>{tag.label}</TagLabel>
-          </Tag>
+            {tag.label}
+          </Button>
         ))}
       </HStack>
     </VStack>
