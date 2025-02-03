@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Flex, Input, Text, VStack, Button, FormErrorMessage } from '@chakra-ui/react';
+import { Flex, Input, Text, VStack, Button } from '@chakra-ui/react';
 
-import { CircleXIcon } from 'lucide-react';
-
+import { ErrorMessage } from '@shared/components/error';
+import { ApiError, UnknownApiError } from '@shared/config';
 import { useCustomToast } from '@shared/hooks';
 import { authStorage } from '@shared/utils';
 
-import { loginApi } from '../../apis';
+import { loginApi, ResponseLoginApi } from '../../apis';
 import { LOGIN_DATA } from '../../data';
 import { Login, LoginSchema } from '../../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,21 +25,18 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      setIsLogin(true);
-      authStorage.isLogin.set(true);
-      authStorage.nickName.set(data.nickName);
-      onSuccess(data.message);
-      onClose();
+      onSuccess(data);
     },
 
     onError: (error) => {
       console.error('로그인 실패: ', error);
+      onErrorLogin(error);
     },
   });
 
   const form = useForm<Login>({
     resolver: zodResolver(LoginSchema),
-    // mode: 'onSubmit',
+    mode: 'onSubmit',
     defaultValues: {
       email: '',
       password: '',
@@ -59,13 +56,43 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
 
   const toast = useCustomToast();
 
-  const onSuccess = (message?: string) => {
+  const onSuccess = (data: ResponseLoginApi) => {
+    setIsLogin(true);
+
+    authStorage.isLogin.set(true);
+    authStorage.nickName.set(data.nickName);
+
     toast({
       toastStatus: 'success',
       toastTitle: '로그인',
-      toastDescription: message || '로그인에 성공했습니다.',
+      toastDescription: '로그인에 성공했습니다.',
+    });
+
+    onClose();
+  };
+
+  const onErrorLogin = (error: Error) => {
+    console.log(error.name);
+    if (error instanceof ApiError) {
+      const { code, message } = error;
+      if (code === 400 || code === 401) {
+        setMessage(message);
+
+        return;
+      }
+    }
+
+    if (error instanceof UnknownApiError) {
+      setMessage('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+    }
+
+    toast({
+      toastStatus: 'error',
+      toastTitle: '로그인 실패',
+      toastDescription: message || error.message,
     });
   };
+
   return (
     <form onSubmit={onSubmit}>
       <Flex mb={4}>
@@ -97,13 +124,7 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
         >
           로그인
         </Button>
-        <FormErrorMessage>
-          <CircleXIcon size='20px' color='#E53E3E' />
-          <Text fontSize='sm' fontWeight='600' color='red.500'>
-            {message}
-          </Text>
-        </FormErrorMessage>
-        {/* <ErrorMessage message={message} /> */}
+        <ErrorMessage message={message} />
       </VStack>
     </form>
   );
