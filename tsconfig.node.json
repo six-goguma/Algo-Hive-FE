@@ -3,11 +3,11 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
-    "module": "ESNext",
+    "module": "ESNext", //프로젝트가 최신 Node.js 환경을 대상으로 하기에 ESNext를 유지함.
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "bundler", //브라우저에서도 동작해야함으로 bunler 해석 방식을 유지함.
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",

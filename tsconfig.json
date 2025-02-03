@@ -1,7 +1,7 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.app.json" }, // 웹 애플리케이션용 설정
+    { "path": "./tsconfig.node.json" } // Node.js 환경용 설정
   ]
 }
