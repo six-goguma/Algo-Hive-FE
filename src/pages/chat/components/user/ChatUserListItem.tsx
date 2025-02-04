@@ -5,9 +5,9 @@ type ChatUserListItemProps = {
 };
 export const ChatUserListItem = ({ nickName }: ChatUserListItemProps) => {
   return (
-    <Flex w='full' h='44px' align='center' pl='20px' gap='10px'>
+    <Flex w='full' h='60px' align='center' pl='20px' gap='10px'>
       <Avatar boxSize='24px' />
-      <Text fontSize='12px' fontWeight='medium'>
+      <Text fontSize='14px' fontWeight='medium'>
         {nickName}
       </Text>
     </Flex>

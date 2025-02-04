@@ -29,7 +29,7 @@ export const ChatPage = () => {
   if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (
-    <Flex flexDir='column' alignItems='center' w='full' h='100vh'>
+    <Flex flexDir='column' alignItems='center' w='full' h='full'>
       <Button
         mt='40px'
         mb='10px'
@@ -45,16 +45,8 @@ export const ChatPage = () => {
       </Button>
       <Flex w='full' gap='35px' h='full'>
         {(isMobileView && !selectedRoom) || !isMobileView ? (
-          <Box w={isMobileView ? '100%' : '30%'} bg='#F7F9FB'>
-            {isEntered ? (
-              <ChatUserSection
-                onGoBack={() => {
-                  goBack();
-                }}
-              />
-            ) : (
-              <ChatRoomSection onSelectRoom={setSelectedRoom} />
-            )}
+          <Box w={isMobileView ? '100%' : '40%'} bg='#F7F9FB'>
+            <ChatRoomSection onSelectRoom={setSelectedRoom} />
           </Box>
         ) : null}
 
@@ -78,6 +70,9 @@ export const ChatPage = () => {
             )}
           </Box>
         ) : null}
+        <Box w={isMobileView ? '100%' : '30%'} bg='#F7F9FB'>
+          <ChatUserSection />
+        </Box>
       </Flex>
     </Flex>
   );

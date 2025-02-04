@@ -21,7 +21,7 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
   return (
     <InputGroup border='1.5px solid custom.blue' h='36px' alignItems='center' w='full'>
       <Input
-        size='sm'
+        size='md'
         type='text'
         variant='ghost'
         colorScheme='blue'

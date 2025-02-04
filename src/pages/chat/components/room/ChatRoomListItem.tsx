@@ -15,7 +15,7 @@ export const ChatRoomListItem = ({
   return (
     <Flex
       w='full'
-      h='44px'
+      h='60px'
       align='center'
       p='0 20px 0 20px'
       bg={isSelected ? '#E8EFFC' : 'transparent'}

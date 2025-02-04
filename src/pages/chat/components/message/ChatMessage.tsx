@@ -8,7 +8,7 @@ export const ChatMessage = ({ message, userNickname }: ChatMessageProps) => {
   const isCurrentUser = message.sender === userNickname; // sender와 닉네임 비교
 
   return (
-    <Box w='full' h='60px' mt='18px' position='relative'>
+    <Box w='full' h={!isCurrentUser ? '72px' : '44px'} mt='10px' position='relative'>
       <Flex
         h='full'
         gap='7px'
@@ -21,23 +21,27 @@ export const ChatMessage = ({ message, userNickname }: ChatMessageProps) => {
         justifyContent={isCurrentUser ? 'flex-end' : 'flex-start'}
       >
         {/* 유저 아이콘 */}
-        {!isCurrentUser && <Avatar boxSize='30px' />}
-        <Flex flexDir='column' align={isCurrentUser ? 'flex-end' : 'flex-start'}>
-          <Text
-            w='full'
-            textAlign={isCurrentUser ? 'right' : 'left'}
-            fontSize='12px'
-            fontWeight='semibold'
-          >
-            {message.sender}
-          </Text>
+        {!isCurrentUser && <Avatar boxSize='36px' />}
+        <Flex w='full' h='full' flexDir='column' align={isCurrentUser ? 'flex-end' : 'flex-start'}>
+          {!isCurrentUser && (
+            <Text
+              w='full'
+              textAlign={isCurrentUser ? 'right' : 'left'}
+              fontSize='12px'
+              fontWeight='semibold'
+              mb='2px'
+            >
+              {message.sender}
+            </Text>
+          )}
           <Box
             w='auto'
-            h='38px'
+            h='44px'
             p='10px'
             bg={isCurrentUser ? '#9BD9FF' : 'white'}
-            fontSize='12px'
+            fontSize='14px'
             borderRadius='5px'
+            alignContent='center'
           >
             {message.content}
           </Box>

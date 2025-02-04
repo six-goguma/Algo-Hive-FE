@@ -7,7 +7,7 @@ type ChatMessageListProps = {
 
 export const ChatMessageList = ({ messages, userNickname }: ChatMessageListProps) => {
   return (
-    <div>
+    <div style={{ paddingTop: '8px' }}>
       {messages.map((message, index) => (
         <ChatMessage key={index} message={message} userNickname={userNickname} />
       ))}

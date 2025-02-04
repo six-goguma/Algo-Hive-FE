@@ -43,7 +43,7 @@ export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSe
         </Text>
       </Box>
       <Box bg='custom.blue' h='3px' w='full' />
-      <Box w='full' h='409px' overflowY='auto'>
+      <Box w='full' h='549px' overflowY='auto'>
         <ChatMessageList messages={messages} userNickname={userNickname} /> {/* 닉네임 전달 */}
       </Box>
       {isEntered ? (

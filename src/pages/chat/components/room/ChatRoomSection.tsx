@@ -8,7 +8,7 @@ type ChatRoomSectionProps = {
 export const ChatRoomSection = ({ onSelectRoom }: ChatRoomSectionProps) => {
   return (
     <>
-      <Flex w='full' h='36px' justify='center'>
+      <Flex w='full' justify='center'>
         <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
           채팅방 목록
         </Text>
@@ -17,7 +17,7 @@ export const ChatRoomSection = ({ onSelectRoom }: ChatRoomSectionProps) => {
         </Button>
       </Flex>
       <Box bg='custom.blue' h='3px' w='full' />
-      <Box w='full' h='460px' bg='white' overflowY='auto'>
+      <Box w='full' h='600px' bg='white' overflowY='auto'>
         <ChatRoomList onSelectRoom={onSelectRoom} />
       </Box>
     </>
