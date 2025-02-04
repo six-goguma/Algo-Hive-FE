@@ -21,6 +21,7 @@ export const ChatRoomList = ({ onSelectRoom }: ChatRoomListProps) => {
         <ChatRoomListItem
           key={index}
           roomName={room.roomName}
+          currentUsers={room.currentUsers}
           onClick={() => handleSelect(room.roomName)}
           isSelected={selectedRoom === room.roomName}
         />
