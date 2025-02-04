@@ -1,7 +1,6 @@
 import { Box, useBreakpointValue } from '@chakra-ui/react';
 
 import { BlockNoteStyles } from './BlockNoteStyles';
-// import { uploadFile } from '../utils';
 import { locales } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
@@ -12,6 +11,29 @@ const locale = locales['en'];
 
 export const PostContent = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('https://tmpfiles.org/api/v1/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('파일 업로드 실패');
+      }
+
+      const data = await response.json();
+      return data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      return '';
+    }
+  };
+
   const editor = useCreateBlockNote({
     dictionary: {
       ...locale,
@@ -20,7 +42,7 @@ export const PostContent = () => {
         default: '글을 작성해주세요...',
       },
     },
-    // uploadFile,
+    uploadFile,
   });
 
   return (
