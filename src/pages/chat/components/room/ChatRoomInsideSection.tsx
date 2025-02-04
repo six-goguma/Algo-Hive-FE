@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
 
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Button } from '@chakra-ui/react';
 
 import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
-import { SetUserNameModal } from '../modal';
 
 type ChatRoomInsideSectionProps = {
   roomName: string;
-  onComplete: () => void;
 };
 
-export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSectionProps) => {
+export const ChatRoomInsideSection = ({ roomName }: ChatRoomInsideSectionProps) => {
   const [messages, setMessages] = useState(
     mockChatMessageList.filter((message) => message.roomName === roomName),
   );
@@ -23,11 +21,6 @@ export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSe
   const handleSendMessage = (content: string) => {
     const newMessage = { sender: userNickname, content, roomName };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-  };
-
-  const completeCallback = () => {
-    setIsEntered(true);
-    onComplete();
   };
 
   useEffect(() => {
@@ -49,7 +42,9 @@ export const ChatRoomInsideSection = ({ roomName, onComplete }: ChatRoomInsideSe
       {isEntered ? (
         <ChatInputBox onSendMessage={handleSendMessage} />
       ) : (
-        <SetUserNameModal onComplete={completeCallback} />
+        <Button mt='15px' h='36px' w='120px' onClick={() => setIsEntered(true)}>
+          채팅방 입장하기
+        </Button>
       )}
     </>
   );

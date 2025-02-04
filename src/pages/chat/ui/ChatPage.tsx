@@ -8,11 +8,12 @@ import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 import { useGetChatRooms } from '../hooks';
+import { useChatContext } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
+  const { setIsEntered } = useChatContext();
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-  const [isEntered, setIsEntered] = useState(false);
 
   //휴대폰 뷰
   const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
@@ -54,10 +55,7 @@ export const ChatPage = () => {
           <Box w={isMobileView ? '100%' : '70%'} bg='#F7F9FB'>
             {selectedRoom && (
               <>
-                <ChatRoomInsideSection
-                  roomName={selectedRoom}
-                  onComplete={() => setIsEntered(true)}
-                />
+                <ChatRoomInsideSection roomName={selectedRoom} />
 
                 {isMobileView && (
                   <Flex justifyContent='center' mt='20px'>

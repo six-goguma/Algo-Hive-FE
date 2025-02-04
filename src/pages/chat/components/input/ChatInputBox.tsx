@@ -19,7 +19,7 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
   };
 
   return (
-    <InputGroup border='1.5px solid custom.blue' h='36px' alignItems='center' w='full'>
+    <InputGroup border='1.5px solid custom.blue' h='36px' mt='8px' alignItems='center' w='full'>
       <Input
         size='md'
         type='text'
