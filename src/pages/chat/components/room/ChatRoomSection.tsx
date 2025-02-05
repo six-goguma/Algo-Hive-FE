@@ -12,7 +12,7 @@ export const ChatRoomSection = () => {
   const sort = 'createdAt,desc';
 
   // 채팅방 목록 가져오기
-  const { data: chatRooms, isLoading, error } = useGetChatRooms(page, size, sort);
+  const { data: chatRooms } = useGetChatRooms(page, size, sort);
 
   return (
     <>

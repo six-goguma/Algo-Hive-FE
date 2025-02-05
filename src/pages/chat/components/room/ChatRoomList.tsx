@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Flex, Box, Text } from '@chakra-ui/react';
 
 import { SubscribeRoomUsers } from '../../apis';

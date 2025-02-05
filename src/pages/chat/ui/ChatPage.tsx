@@ -1,24 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
+import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { RouterPath } from '@shared/constants';
-import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 import { useChatRoomContext } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
-  const { setIsEntered, selectedRoom, setSelectedRoom } = useChatRoomContext();
-
-  //휴대폰 뷰
-  const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
-
-  const goBack = () => {
-    setIsEntered(false);
-    setSelectedRoom(null);
-  };
+  const { selectedRoom } = useChatRoomContext();
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='full'>
@@ -29,37 +20,24 @@ export const ChatPage = () => {
         colorScheme='blue'
         variant='outline'
         alignSelf='flex-end'
-        onClick={() => {
-          navigate(RouterPath.MAIN);
-        }}
+        onClick={() => navigate(RouterPath.MAIN)}
       >
         게시글 보기
       </Button>
+
       <Flex w='full' gap='35px' h='full'>
-        {(isMobileView && !selectedRoom) || !isMobileView ? (
-          <Box w={isMobileView ? '100%' : '40%'} bg='#F7F9FB'>
-            <ChatRoomSection />
-          </Box>
-        ) : null}
+        {/* 채팅방 목록 */}
+        <Box w='40%' bg='#F7F9FB'>
+          <ChatRoomSection />
+        </Box>
 
-        {(isMobileView && selectedRoom) || !isMobileView ? (
-          <Box w={isMobileView ? '100%' : '70%'} bg='#F7F9FB'>
-            {selectedRoom && (
-              <>
-                <ChatRoomInsideSection />
+        {/* 채팅방 내부 (선택된 방이 있는 경우만 표시) */}
+        <Box w='70%' bg='#F7F9FB'>
+          {selectedRoom && <ChatRoomInsideSection />}
+        </Box>
 
-                {isMobileView && (
-                  <Flex justifyContent='center' mt='20px'>
-                    <Button colorScheme='blue' variant='outline' onClick={goBack}>
-                      채팅방 목록 보기
-                    </Button>
-                  </Flex>
-                )}
-              </>
-            )}
-          </Box>
-        ) : null}
-        <Box w={isMobileView ? '100%' : '30%'} bg='#F7F9FB'>
+        {/* 채팅 참여자 목록 */}
+        <Box w='30%' bg='#F7F9FB'>
           <ChatUserSection />
         </Box>
       </Flex>
