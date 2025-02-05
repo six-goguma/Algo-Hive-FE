@@ -1,20 +1,12 @@
-import { useState } from 'react';
-
 import { Flex } from '@chakra-ui/react';
 
 import { useChatRoomContext } from '../../hooks';
 import { MOCK_ROOMS } from '../../mock';
 import { ChatRoomListItem } from './ChatRoomListItem';
 
-type ChatRoomListProps = {
-  onSelectRoom: (roomName: string) => void;
-};
-
-export const ChatRoomList = ({ onSelectRoom }: ChatRoomListProps) => {
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-  const { setIsEntered } = useChatRoomContext();
+export const ChatRoomList = () => {
+  const { setIsEntered, selectedRoom, setSelectedRoom } = useChatRoomContext();
   const handleSelect = (roomName: string) => {
-    onSelectRoom(roomName);
     setSelectedRoom(roomName);
     setIsEntered(false);
   };

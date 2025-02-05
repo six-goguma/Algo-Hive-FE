@@ -7,20 +7,21 @@ import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 
-type ChatRoomInsideSectionProps = {
-  roomName: string;
-};
-
-export const ChatRoomInsideSection = ({ roomName }: ChatRoomInsideSectionProps) => {
+export const ChatRoomInsideSection = () => {
+  const { isEntered, setIsEntered, selectedRoom } = useChatRoomContext();
   const [messages, setMessages] = useState(
-    mockChatMessageList.filter((message) => message.roomName === roomName),
+    mockChatMessageList.filter((message) => message.roomName === selectedRoom),
   );
-  const { isEntered, setIsEntered } = useChatRoomContext();
+
   const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
 
   // 메시지 추가 함수
   const handleSendMessage = (content: string) => {
-    const newMessage = { sender: userNickname, content, roomName };
+    if (!selectedRoom) {
+      console.error('No room selected');
+      return;
+    }
+    const newMessage = { sender: userNickname, content, roomName: selectedRoom };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
@@ -33,7 +34,7 @@ export const ChatRoomInsideSection = ({ roomName }: ChatRoomInsideSectionProps) 
     <>
       <Box w='full' h='36px'>
         <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
-          {roomName || ''}
+          {selectedRoom || ''}
         </Text>
       </Box>
       <Box bg='custom.blue' h='3px' w='full' />

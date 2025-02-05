@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Flex, Button, useMediaQuery } from '@chakra-ui/react';
@@ -12,8 +11,7 @@ import { useChatRoomContext } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
-  const { setIsEntered } = useChatRoomContext();
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const { setIsEntered, selectedRoom, setSelectedRoom } = useChatRoomContext();
 
   //휴대폰 뷰
   const [isMobileView] = useMediaQuery(`(max-width: ${breakPoints.sm})`);
@@ -47,7 +45,7 @@ export const ChatPage = () => {
       <Flex w='full' gap='35px' h='full'>
         {(isMobileView && !selectedRoom) || !isMobileView ? (
           <Box w={isMobileView ? '100%' : '40%'} bg='#F7F9FB'>
-            <ChatRoomSection onSelectRoom={setSelectedRoom} />
+            <ChatRoomSection />
           </Box>
         ) : null}
 
@@ -55,7 +53,7 @@ export const ChatPage = () => {
           <Box w={isMobileView ? '100%' : '70%'} bg='#F7F9FB'>
             {selectedRoom && (
               <>
-                <ChatRoomInsideSection roomName={selectedRoom} />
+                <ChatRoomInsideSection />
 
                 {isMobileView && (
                   <Flex justifyContent='center' mt='20px'>
