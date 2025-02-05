@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Flex, Input, Text, VStack, Button } from '@chakra-ui/react';
+import { Flex, Input, Text, VStack, Button, InputGroup, InputRightElement } from '@chakra-ui/react';
+
+import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 
 import { ErrorMessage } from '@shared/components/error';
 import { ApiError, UnknownApiError } from '@shared/config';
@@ -21,6 +23,7 @@ type LoginSectionProps = {
 
 export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
   const [message, setMessage] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginApi,
@@ -33,6 +36,8 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
       onErrorLogin(error);
     },
   });
+
+  const toast = useCustomToast();
 
   const form = useForm<Login>({
     resolver: zodResolver(LoginSchema),
@@ -54,8 +59,6 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
     },
   );
 
-  const toast = useCustomToast();
-
   const onSuccess = (data: ResponseLoginApi) => {
     setIsLogin(true);
 
@@ -72,7 +75,6 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
   };
 
   const onErrorLogin = (error: Error) => {
-    console.log(error.name);
     if (error instanceof ApiError) {
       const { code, message } = error;
       if (code === 400 || code === 401) {
@@ -107,13 +109,25 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
           fontSize='sm'
           placeholder={LOGIN_DATA.EMAIL_PLACEHOLDER}
         />
-        <Input
-          {...form.register('password')}
-          id='password'
-          type='password'
-          fontSize='sm'
-          placeholder={LOGIN_DATA.PASSWORD_PLACEHOLDER}
-        />
+        <InputGroup>
+          <Input
+            {...form.register('password')}
+            id='password'
+            type={showPassword ? 'text' : 'password'}
+            fontSize='sm'
+            placeholder={LOGIN_DATA.PASSWORD_PLACEHOLDER}
+          />
+          <InputRightElement>
+            <Button
+              bg='none'
+              border='none'
+              _hover={{}}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {!showPassword ? <EyeIcon color='gray' /> : <EyeClosedIcon color='gray' />}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
         <Button
           disabled={isPending}
           type='submit'
