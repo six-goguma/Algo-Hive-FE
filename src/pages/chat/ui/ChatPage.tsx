@@ -6,7 +6,6 @@ import { RouterPath } from '@shared/constants';
 import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
-import { useGetChatRooms } from '../hooks';
 import { useChatRoomContext } from '../hooks';
 
 export const ChatPage = () => {
@@ -20,12 +19,6 @@ export const ChatPage = () => {
     setIsEntered(false);
     setSelectedRoom(null);
   };
-
-  const { data, isError } = useGetChatRooms();
-
-  console.log(data);
-
-  if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='full'>
