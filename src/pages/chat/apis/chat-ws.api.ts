@@ -11,16 +11,19 @@ export const sendChatMessage = (roomName: string, sender: string, content: strin
 };
 
 // 사용자 목록 구독
-export const subscribeUsers = (callback: (users: any[]) => void) => {
+export const subscribeUsers = (
+  callback: (users: { userName: string; roomName: string }[]) => void,
+) => {
   subscribe('/topic/users', callback);
 };
-
 // 채팅방별 접속인원 목록 구독
-export const subscribeRoomUsers = (callback: (roomUsers: { [key: string]: number }) => void) => {
+export const subscribeRoomUsers = (callback: (roomUsers: Record<string, number>) => void) => {
   subscribe('/topic/room-users', callback);
 };
-
 // 특정 채팅방 메시지 구독
-export const subscribeRoomMessages = (roomName: string, callback: (message: any) => void) => {
+export const subscribeRoomMessages = (
+  roomName: string,
+  callback: (message: { sender: string; content: string; roomName: string }) => void,
+) => {
   subscribe(`/topic/${roomName}`, callback);
 };
