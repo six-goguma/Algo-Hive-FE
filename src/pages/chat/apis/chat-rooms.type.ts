@@ -11,7 +11,7 @@ export interface ResponseChatRooms {
   numberOfElements: number;
   empty: boolean;
   sort: SortInfo;
-  pageable: ChatRoomsPagination;
+  pageable: PaginationInfo;
   content: ChatRoom[]; // 실제 채팅방 목록
 }
 
@@ -19,7 +19,7 @@ export type RequestChatRooms = {
   roomName: string;
 };
 
-export interface ChatRoomsPagination {
+export interface PaginationInfo {
   offset: number;
   pageNumber: number;
   pageSize: number;
