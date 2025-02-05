@@ -33,9 +33,11 @@ export const disconnectWebSocket = () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const subscribe = (destination: string, callback: (message: any) => void) => {
   if (stompClient) {
-    stompClient.subscribe(destination, (message) => {
+    const subscription = stompClient.subscribe(destination, (message) => {
       callback(JSON.parse(message.body));
     });
+
+    return subscription;
   }
 };
 

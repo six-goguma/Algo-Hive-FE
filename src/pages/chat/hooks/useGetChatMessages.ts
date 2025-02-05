@@ -10,6 +10,6 @@ export const useGetChatMessages = (roomName: string) => {
       const messages = await getChatMessages(roomName);
       return messages;
     },
-    enabled: !!roomName, // roomName이 있을 때만 쿼리 실행
+    enabled: !!roomName,
   });
 };

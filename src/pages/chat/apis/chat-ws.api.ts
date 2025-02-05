@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import { subscribe, sendMessage } from '@shared/service';
 
 // 사용자 입장 알림
@@ -16,9 +18,24 @@ export const subscribeUsers = (
 ) => {
   subscribe('/topic/users', callback);
 };
+
 // 채팅방별 접속인원 목록 구독
-export const subscribeRoomUsers = (callback: (roomUsers: Record<string, number>) => void) => {
-  subscribe('/topic/room-users', callback);
+export const SubscribeRoomUsers = () => {
+  const [roomUsers, setRoomUsers] = useState<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    const subscription = subscribe('/topic/room-users', (data) => {
+      setRoomUsers(data);
+    });
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, []);
+
+  return roomUsers;
 };
 // 특정 채팅방 메시지 구독
 export const subscribeRoomMessages = (
