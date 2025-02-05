@@ -1,6 +1,13 @@
 export type ChatRoom = {
   roomName: string;
 };
+
+export type ChatMessage = {
+  sender: string;
+  content: string;
+  roomName: string;
+};
+
 export interface ResponseChatRooms {
   totalElements: number;
   totalPages: number;
@@ -34,8 +41,16 @@ export interface SortInfo {
   unsorted: boolean;
 }
 
-export type ResponseChatMessage = {
-  sender: string;
-  content: string;
-  roomName: string;
-};
+export interface ResponseChatMessages {
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+  size: number;
+  number: number;
+  numberOfElements: number;
+  empty: boolean;
+  sort: SortInfo;
+  pageable: PaginationInfo;
+  content: ChatMessage[];
+}

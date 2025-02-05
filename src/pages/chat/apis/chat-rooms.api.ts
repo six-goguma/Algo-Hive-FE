@@ -1,6 +1,6 @@
 import { fetchInstance } from '@shared/service';
 
-import { ResponseChatRooms, ResponseChatMessage } from './chat-rooms.type';
+import { ResponseChatRooms, ResponseChatMessages } from './chat-rooms.type';
 
 export const getChatRoomsPath = '/chat/rooms';
 export const createChatRoomPath = '/chat/rooms';
@@ -12,15 +12,10 @@ export const getChatRooms = async (
   size: number = 10,
   sort: string = 'createdAt,desc',
 ): Promise<ResponseChatRooms> => {
-  try {
-    const response = await fetchInstance.get<ResponseChatRooms>(
-      `${getChatRoomsPath}?page=${page}&size=${size}&sort=${sort}`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const response = await fetchInstance.get<ResponseChatRooms>(
+    `${getChatRoomsPath}?page=${page}&size=${size}&sort=${sort}`,
+  );
+  return response.data;
 };
 //채팅방 생성
 export const createChatRoom = async (roomName: string): Promise<ResponseChatRooms> => {
@@ -31,9 +26,14 @@ export const createChatRoom = async (roomName: string): Promise<ResponseChatRoom
 };
 
 //채팅 불러오기
-export const getChatMessages = async (roomName: string): Promise<ResponseChatMessage[]> => {
-  const response = await fetchInstance.get<ResponseChatMessage[]>(
-    `${getChatMessagesPath}/${roomName}`,
+export const getChatMessages = async (
+  roomName: string,
+  page: number = 0,
+  size: number = 10,
+  sort: string = 'chatTime,desc',
+): Promise<ResponseChatMessages> => {
+  const response = await fetchInstance.get<ResponseChatMessages>(
+    `${getChatMessagesPath}/${roomName}?page=${page}&size=${size}&sort=${sort}`,
   );
   return response.data;
 };

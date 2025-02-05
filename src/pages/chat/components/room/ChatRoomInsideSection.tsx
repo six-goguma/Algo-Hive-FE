@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { Box, Text, Button } from '@chakra-ui/react';
 
-import { useChatRoomContext } from '../../hooks';
+import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
@@ -12,9 +12,16 @@ export const ChatRoomInsideSection = () => {
   const [messages, setMessages] = useState(
     mockChatMessageList.filter((message) => message.roomName === selectedRoom),
   );
+  const [page, setPage] = useState(0);
+  const size = 10;
+  const sort = 'chatTime,desc';
 
   const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
-
+  const {
+    data: chatMessages,
+    isLoading,
+    error,
+  } = useGetChatMessages(selectedRoom, page, size, sort);
   // 메시지 추가 함수
   const handleSendMessage = (content: string) => {
     if (!selectedRoom) {
@@ -39,7 +46,7 @@ export const ChatRoomInsideSection = () => {
       </Box>
       <Box bg='custom.blue' h='3px' w='full' />
       <Box w='full' h='549px' overflowY='auto'>
-        <ChatMessageList messages={messages} userNickname={userNickname} /> {/* 닉네임 전달 */}
+        <ChatMessageList messages={chatMessages} userNickname={userNickname} /> {/* 닉네임 전달 */}
       </Box>
       {isEntered ? (
         <ChatInputBox onSendMessage={handleSendMessage} />
