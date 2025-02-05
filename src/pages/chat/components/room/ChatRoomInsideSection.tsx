@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { Box, Text, Button } from '@chakra-ui/react';
 
+import { useChatRoomContext } from '../../hooks';
 import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
@@ -14,7 +15,7 @@ export const ChatRoomInsideSection = ({ roomName }: ChatRoomInsideSectionProps) 
   const [messages, setMessages] = useState(
     mockChatMessageList.filter((message) => message.roomName === roomName),
   );
-  const [isEntered, setIsEntered] = useState(false);
+  const { isEntered, setIsEntered } = useChatRoomContext();
   const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
 
   // 메시지 추가 함수

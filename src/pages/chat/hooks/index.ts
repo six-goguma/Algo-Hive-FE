@@ -1,2 +1,2 @@
 export * from './useGetChatRooms';
-export * from './useChatContext';
+export * from './useChatRoomContext';

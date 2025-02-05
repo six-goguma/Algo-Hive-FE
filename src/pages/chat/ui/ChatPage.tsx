@@ -8,11 +8,11 @@ import { breakPoints } from '@shared/styles';
 
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 import { useGetChatRooms } from '../hooks';
-import { useChatContext } from '../hooks';
+import { useChatRoomContext } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
-  const { setIsEntered } = useChatContext();
+  const { setIsEntered } = useChatRoomContext();
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   //휴대폰 뷰
