@@ -3,7 +3,7 @@ import { fetchInstance } from '@shared/service';
 import { ResponseChatRooms, ResponseChatMessage } from './chat-rooms.type';
 
 export const getChatRoomsPath = '/chat/rooms';
-export const createChatRoomPath = 'chat/rooms';
+export const createChatRoomPath = '/chat/rooms';
 export const getChatMessagesPath = '/chat/messages';
 
 // 모든 채팅방 불러오기

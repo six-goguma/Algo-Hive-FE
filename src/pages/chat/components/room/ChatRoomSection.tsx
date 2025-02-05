@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, Input } from '@chakra-ui/react';
 
-import { useGetChatRooms } from '../../hooks';
+import { useGetChatRooms, useCreateChatRoom } from '../../hooks';
 import { ChatRoomList } from './ChatRoomList';
 
 export const ChatRoomSection = () => {
@@ -11,18 +11,35 @@ export const ChatRoomSection = () => {
   const size = 10;
   const sort = 'createdAt,desc';
 
+  const [roomName, setRoomName] = useState('');
+  const { mutate: createRoom, isLoading } = useCreateChatRoom();
   // 채팅방 목록 가져오기
   const { data: chatRooms } = useGetChatRooms(page, size, sort);
-
+  // 채팅방 생성 요청 함수
+  const handleCreateRoom = () => {
+    if (!roomName.trim()) return;
+    createRoom({ roomName });
+    setRoomName('');
+  };
   return (
     <>
       <Flex w='full' justify='center'>
         <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
           채팅방 목록
         </Text>
-        <Button h='32px' w='120px'>
-          채팅방 생성
-        </Button>
+        {/* 채팅방 생성 입력 필드 및 버튼 */}
+        <Flex gap='8px'>
+          <Input
+            placeholder='채팅방 이름 입력'
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+            size='sm'
+            w='180px'
+          />
+          <Button h='32px' w='120px' onClick={handleCreateRoom} isLoading={isLoading}>
+            채팅방 생성
+          </Button>
+        </Flex>
       </Flex>
       <Box bg='custom.blue' h='3px' w='full' />
       <Box w='full' h='600px' bg='white' position='relative'>
