@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { Flex, VStack } from '@chakra-ui/react';
 
-import { NavigateButton, Pagination, PostList, Tabs } from '../components';
+import { Pagination } from '@shared/components';
+
+import { NavigateButton, PostList, Tabs } from '../components';
 import { useGetPosts } from '../hooks';
 
 export const MainPage = () => {
