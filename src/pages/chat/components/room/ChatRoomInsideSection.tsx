@@ -1,35 +1,78 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
-import { mockChatMessageList } from '../../mock';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 
 export const ChatRoomInsideSection = () => {
   const { isEntered, setIsEntered, selectedRoom } = useChatRoomContext();
-  const [messages, setMessages] = useState(
-    mockChatMessageList.filter((message) => message.roomName === selectedRoom),
-  );
-  const [page, setPage] = useState(0);
+  const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
+
   const size = 10;
   const sort = 'chatTime,desc';
 
-  const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
   const {
-    data: chatMessages,
+    messages: allMessages,
     isLoading,
-    error,
-  } = useGetChatMessages(selectedRoom, page, size, sort);
-  // 메시지 추가 함수
+    fetchNextPage,
+    hasNextPage,
+  } = useGetChatMessages(selectedRoom || '', size, sort);
+
+  // 스크롤 이벤트 핸들러
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
+  const [prevScrollHeight, setPrevScrollHeight] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    if (messagesEndRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesEndRef.current;
+      const isNearTop = scrollTop < 100;
+
+      if (isNearTop && hasNextPage && !isLoading) {
+        setPrevScrollHeight(scrollHeight);
+        fetchNextPage();
+      }
+
+      const isNearBottom = scrollHeight - (scrollTop + clientHeight) < 100;
+      setIsAutoScroll(isNearBottom);
+    }
+  }, [fetchNextPage, hasNextPage, isLoading]);
+
+  useEffect(() => {
+    const messagesContainer = messagesEndRef.current;
+    if (messagesContainer) {
+      messagesContainer.addEventListener('scroll', handleScroll);
+      return () => messagesContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
+
+  // 이전 메시지 로딩 후 스크롤 위치 유지
+  useEffect(() => {
+    if (messagesEndRef.current && prevScrollHeight) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight - prevScrollHeight;
+    }
+  }, [allMessages]);
+
+  // 새로운 메시지가 추가될 때 스크롤을 부드럽게 유지하면서 조금 아래로 이동
+  useEffect(() => {
+    if (messagesEndRef.current && isAutoScroll) {
+      messagesEndRef.current.scrollTo({
+        top: messagesEndRef.current.scrollHeight - 50,
+        behavior: 'smooth',
+      });
+    }
+  }, [allMessages, isAutoScroll]);
+
+  // 메시지 전송 함수
   const handleSendMessage = (content: string) => {
     if (!selectedRoom) {
       console.error('No room selected');
       return;
     }
     const newMessage = { sender: userNickname, content, roomName: selectedRoom };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    sendMessage(`/api/app/chat/${selectedRoom}`, newMessage);
   };
 
   useEffect(() => {
@@ -45,8 +88,13 @@ export const ChatRoomInsideSection = () => {
         </Text>
       </Box>
       <Box bg='custom.blue' h='3px' w='full' />
-      <Box w='full' h='549px' overflowY='auto'>
-        <ChatMessageList messages={chatMessages} userNickname={userNickname} /> {/* 닉네임 전달 */}
+      <Box w='full' h='549px' overflowY='auto' ref={messagesEndRef} className='relative'>
+        {isLoading && hasNextPage && (
+          <Box className='absolute top-0 left-0 right-0 flex items-center justify-center h-10'>
+            <Spinner size='sm' />
+          </Box>
+        )}
+        <ChatMessageList messages={allMessages} userNickname={userNickname} />
       </Box>
       {isEntered ? (
         <ChatInputBox onSendMessage={handleSendMessage} />

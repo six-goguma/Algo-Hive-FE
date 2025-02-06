@@ -12,23 +12,33 @@ export const useGetChatMessages = (
 ) => {
   const [page, setPage] = useState(0);
   const [allMessages, setAllMessages] = useState<ChatMessage[]>([]);
+  const [isFetching, setIsFetching] = useState(false); // 이전 메시지 불러오기 중인지 여부
 
+  // REST API로 이전 메시지 불러오기
   const { data, isLoading, error } = useQuery<ResponseChatMessages>({
     queryKey: [...chatMessagesQueryKey(roomName), page],
     queryFn: () => getChatMessages(roomName, page, size, sort),
     enabled: !!roomName,
   });
 
-  // data가 변경될 때마다 메시지 리스트 업데이트
   useEffect(() => {
     if (data) {
-      setAllMessages((prevMessages) => [...prevMessages, ...data.content]);
+      // 이전 메시지를 불러올 때는 배열의 맨 앞에 추가
+      setAllMessages((prevMessages) => [...data.content, ...prevMessages]);
+      setIsFetching(false); // 페칭 완료
     }
   }, [data]);
 
-  // 다음 페이지 불러오기
+  // 채팅방이 변경되면 메시지 초기화
+  useEffect(() => {
+    setAllMessages([]);
+    setPage(0);
+  }, [roomName]);
+
+  // 다음 페이지 불러오기 (이전 메시지)
   const fetchNextPage = () => {
-    if (data && !data.last) {
+    if (data && !data.last && !isFetching) {
+      setIsFetching(true); // 페칭 시작
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -39,5 +49,6 @@ export const useGetChatMessages = (
     error,
     fetchNextPage,
     hasNextPage: data ? !data.last : false,
+    isFetching,
   };
 };
