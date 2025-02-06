@@ -1,30 +1,33 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-import { Box, Text, Button, Spinner } from '@chakra-ui/react';
+import { Box, Text, Spinner } from '@chakra-ui/react';
 
+import { ChatMessage } from '../../apis';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 
 export const ChatRoomInsideSection = () => {
-  const { isEntered, setIsEntered, selectedRoom } = useChatRoomContext();
+  const { selectedRoom } = useChatRoomContext();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [userNickname] = useState(localStorage.getItem('userNickname') || '프테');
 
   const size = 10;
   const sort = 'chatTime,desc';
 
   const {
-    messages: allMessages,
+    messages: fetchedMessages,
     isLoading,
     fetchNextPage,
     hasNextPage,
   } = useGetChatMessages(selectedRoom || '', size, sort);
 
-  // 스크롤 이벤트 핸들러
+  // 스크롤 관련
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
   const [prevScrollHeight, setPrevScrollHeight] = useState(0);
 
+  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
   const handleScroll = useCallback(() => {
     if (messagesEndRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messagesEndRef.current;
@@ -48,14 +51,27 @@ export const ChatRoomInsideSection = () => {
     }
   }, [handleScroll]);
 
-  // 이전 메시지 로딩 후 스크롤 위치 유지
+  // 🚀 **REST API에서 가져온 메시지 적용**
+  useEffect(() => {
+    if (fetchedMessages.length > 0) {
+      setMessages((prevMessages) => {
+        // 중복 메시지 제거
+        const uniqueMessages = fetchedMessages.filter(
+          (newMsg) => !prevMessages.some((prevMsg) => prevMsg.content === newMsg.content),
+        );
+        return [...uniqueMessages, ...prevMessages]; // 새로운 메시지를 위에 추가
+      });
+    }
+  }, [fetchedMessages]);
+
+  // 🚀 **이전 메시지 로딩 후 스크롤 유지**
   useEffect(() => {
     if (messagesEndRef.current && prevScrollHeight) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight - prevScrollHeight;
     }
-  }, [allMessages]);
+  }, [messages]);
 
-  // 새로운 메시지가 추가될 때 스크롤을 부드럽게 유지하면서 조금 아래로 이동
+  // 🚀 **새 메시지 추가 시 자동 스크롤**
   useEffect(() => {
     if (messagesEndRef.current && isAutoScroll) {
       messagesEndRef.current.scrollTo({
@@ -63,7 +79,7 @@ export const ChatRoomInsideSection = () => {
         behavior: 'smooth',
       });
     }
-  }, [allMessages, isAutoScroll]);
+  }, [messages, isAutoScroll]);
 
   return (
     <>
@@ -79,15 +95,10 @@ export const ChatRoomInsideSection = () => {
             <Spinner size='sm' />
           </Box>
         )}
-        <ChatMessageList messages={allMessages} userNickname={userNickname} />
+        <ChatMessageList messages={messages} userNickname={userNickname} />
       </Box>
-      {isEntered ? (
-        <ChatInputBox />
-      ) : (
-        <Button mt='15px' h='36px' w='120px' onClick={() => setIsEntered(true)}>
-          채팅방 입장하기
-        </Button>
-      )}
+
+      <ChatInputBox />
     </>
   );
 };

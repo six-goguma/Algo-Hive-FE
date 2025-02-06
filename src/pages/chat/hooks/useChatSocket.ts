@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 import { connectWebSocket, disconnectWebSocket, subscribe, sendMessage } from '@shared/service';
 
@@ -6,14 +7,12 @@ import { ChatMessage } from '../apis';
 import { useChatRoomContext } from '../hooks';
 
 export const useChatSocket = () => {
-  const { selectedRoom, isEntered } = useChatRoomContext();
+  const { selectedRoom, onlineUsers, setOnlineUsers, roomUsers, setRoomUsers } =
+    useChatRoomContext();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [onlineUsers, setOnlineUsers] = useState<{ userName: string; roomName: string }[]>([]);
-  const [roomUsers, setRoomUsers] = useState<{ [key: string]: number }>({}); // 채팅방별 접속인원 목록
-
   // selectedRoom이 변경될 때마다 소켓 연결 및 구독
   useEffect(() => {
-    if (!selectedRoom || !isEntered) return;
+    if (!selectedRoom) return;
 
     // 기존 소켓 연결 해제
     disconnectWebSocket();
@@ -51,7 +50,7 @@ export const useChatSocket = () => {
     return () => {
       disconnectWebSocket();
     };
-  }, [selectedRoom, isEntered]);
+  }, [selectedRoom]);
 
   return { messages, onlineUsers, roomUsers };
 };

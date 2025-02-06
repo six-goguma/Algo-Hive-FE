@@ -12,14 +12,13 @@ type ChatRoomListProps = {
 };
 
 export const ChatRoomList = ({ page, size, sort }: ChatRoomListProps) => {
-  const { setIsEntered, selectedRoom, setSelectedRoom, roomUsers } = useChatRoomContext();
+  const { selectedRoom, setSelectedRoom, roomUsers } = useChatRoomContext();
 
   // 채팅방 목록 가져오기
   const { data: chatRooms, isLoading, error } = useGetChatRooms(page, size, sort);
 
   const handleSelect = (roomName: string) => {
     setSelectedRoom(roomName);
-    setIsEntered(false);
   };
 
   return (
