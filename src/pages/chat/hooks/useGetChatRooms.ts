@@ -1,7 +1,12 @@
 import { getChatRooms, getChatRoomsPath, ResponseChatRooms } from '../apis';
 import { useQuery } from '@tanstack/react-query';
 
-export const chatRoomsQueryKey = () => [getChatRoomsPath];
+export const chatRoomsQueryKey = (page: number, size: number, sort: string) => [
+  getChatRoomsPath,
+  page,
+  size,
+  sort,
+];
 
 export const useGetChatRooms = (
   page: number = 0,
@@ -9,7 +14,7 @@ export const useGetChatRooms = (
   sort: string = 'createdAt,desc',
 ) => {
   return useQuery<ResponseChatRooms>({
-    queryKey: chatRoomsQueryKey(),
+    queryKey: chatRoomsQueryKey(page, size, sort), // 페이지 값 추가
     queryFn: () => getChatRooms(page, size, sort),
   });
 };

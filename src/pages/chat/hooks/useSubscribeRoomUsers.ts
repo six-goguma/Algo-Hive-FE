@@ -10,6 +10,7 @@ export const useSubscribeRoomUsers = () => {
   useEffect(() => {
     const subscription = subscribe('/topic/room-users', (data) => {
       setRoomUsers(data);
+      console.log('채팅방별 사용자 수:', data);
     });
 
     return () => {
