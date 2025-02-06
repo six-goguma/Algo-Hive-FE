@@ -1,15 +1,42 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { RouterPath } from '@shared/constants';
+import { connectWebSocket, disconnectWebSocket } from '@shared/service';
 
+import { joinChatRoom, subscribeUsers, subscribeRoomMessages, SubscribeRoomUsers } from '../apis';
 import { ChatRoomSection, ChatRoomInsideSection, ChatUserSection } from '../components';
 import { useChatRoomContext } from '../hooks';
 
 export const ChatPage = () => {
   const navigate = useNavigate();
+  const userNickname = localStorage.getItem('userNickname') || 'Guest';
   const { selectedRoom } = useChatRoomContext();
+
+  // 웹소켓 연결 및 구독
+  useEffect(() => {
+    if (selectedRoom) {
+      connectWebSocket(
+        () => {
+          console.log('WebSocket 연결됨');
+          joinChatRoom(userNickname, selectedRoom);
+          SubscribeRoomUsers();
+          subscribeRoomMessages(selectedRoom, (message) => {
+            console.log('새 메시지:', message);
+          });
+        },
+        (error) => {
+          console.error('WebSocket 연결 오류:', error);
+        },
+      );
+    }
+
+    return () => {
+      disconnectWebSocket();
+    };
+  }, [selectedRoom, userNickname]);
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='full'>
