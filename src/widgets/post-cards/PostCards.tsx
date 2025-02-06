@@ -2,7 +2,7 @@ import { Avatar, Divider, Flex, HStack, Image, Text, VStack } from '@chakra-ui/r
 
 import { HeartIcon } from 'lucide-react';
 
-import { dateFormat } from '@shared/utils';
+import { dateFormat, TextOverFlow } from '@shared/utils';
 
 type PostCardsProps = {
   title: string;
@@ -26,6 +26,8 @@ export const PostCards = ({
 }: PostCardsProps) => {
   const date = dateFormat(createdAt);
 
+  const postSummary = TextOverFlow(summary);
+
   return (
     <Flex
       w='290px'
@@ -45,8 +47,17 @@ export const PostCards = ({
       </Flex>
       <Flex w='full' h='full' flexDir='column' p={3} justifyContent='space-between'>
         <VStack w='full' alignItems='start' spacing={1}>
-          <Text as='b'>{title}</Text>
-          <Text textAlign='left'>{summary}</Text>
+          <Text
+            w='full'
+            align='start'
+            as='b'
+            overflow='hidden'
+            textOverflow='ellipsis'
+            whiteSpace='nowrap'
+          >
+            {title}
+          </Text>
+          <Text textAlign='left'>{postSummary}</Text>
         </VStack>
         <HStack w='full' spacing={1} justifyContent='start' fontSize='sm' color='customGray.400'>
           <Text>{date}</Text>
