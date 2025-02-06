@@ -17,7 +17,7 @@ export const ChatPage = () => {
 
   useEffect(() => {
     if (!selectedRoom) {
-      setSelectedRoom('미접속');
+      setSelectedRoom('채팅방 미접속');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -27,7 +27,7 @@ export const ChatPage = () => {
     connectWebSocket(
       () => {
         console.log('WebSocket 연결됨');
-        joinChatRoom(userNickname, '미접속');
+        joinChatRoom(userNickname, '채팅방 미접속');
       },
       (error) => {
         console.error('WebSocket 연결 오류:', error);

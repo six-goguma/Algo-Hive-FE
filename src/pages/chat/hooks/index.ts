@@ -3,3 +3,4 @@ export * from './useChatRoomContext';
 export * from './useCreateChatRoom';
 export * from './useGetChatMessages';
 export * from './useSubscribeRoomUsers';
+export * from './useChatSocket';
