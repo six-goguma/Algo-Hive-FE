@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 
+import { connectWebSocket, disconnectWebSocket } from '@shared/service';
+
 import { joinChatRoom } from '../../apis';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { ChatInputBox } from '../input';
@@ -23,10 +25,23 @@ export const ChatRoomInsideSection = () => {
 
   useEffect(() => {
     if (isEntered && selectedRoom) {
-      joinChatRoom(userNickname, selectedRoom);
+      console.log(`🔄 채팅방 변경됨: ${selectedRoom}, 기존 소켓 연결 해제 후 재연결`);
+
+      // 1️⃣ 기존 연결 해제
+      disconnectWebSocket();
+
+      // 2️⃣ 새로운 웹소켓 연결 후 채팅방 입장
+      connectWebSocket(
+        () => {
+          console.log(`✅ WebSocket 재연결 완료, 채팅방 입장: ${selectedRoom}`);
+          joinChatRoom(userNickname, selectedRoom);
+        },
+        (error) => {
+          console.error('WebSocket 연결 오류:', error);
+        },
+      );
     }
   }, [isEntered, userNickname, selectedRoom]);
-
   // 스크롤 이벤트 핸들러
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
