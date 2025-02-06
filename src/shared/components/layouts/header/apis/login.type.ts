@@ -7,3 +7,7 @@ export type ResponseLoginApi = {
   message: string;
   nickName: string;
 };
+
+export type ResponseLogoutApi = {
+  message: string;
+};
