@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Box, Text, Spinner } from '@chakra-ui/react';
 
 import { ChatMessage } from '../../apis';
+import { userNickname } from '../../data';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
@@ -10,7 +11,6 @@ import { ChatMessageList } from '../message';
 export const ChatRoomInsideSection = () => {
   const { selectedRoom } = useChatRoomContext();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [userNickname] = useState(localStorage.getItem('userNickname') || '프테');
 
   const size = 10;
   const sort = 'chatTime,desc';

@@ -6,19 +6,13 @@ import { SendHorizontal } from 'lucide-react';
 
 import { sendMessage } from '@shared/service';
 
+import { userNickname } from '../../data';
 import { useChatRoomContext } from '../../hooks';
 
 export const ChatInputBox = () => {
   const [message, setMessage] = useState('');
   const { selectedRoom } = useChatRoomContext();
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
-  const [userNickname, setUserNickname] = useState('');
-
-  // 닉네임을 로컬 스토리지에서 가져오기
-  useEffect(() => {
-    const storedNickname = localStorage.getItem('userNickname') || '익명';
-    setUserNickname(storedNickname);
-  }, []);
 
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
