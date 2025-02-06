@@ -1,20 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { InputGroup, InputRightElement, Button, Input } from '@chakra-ui/react';
 
 import { SendHorizontal } from 'lucide-react';
 
-type ChatInputBoxProps = {
-  onSendMessage: (content: string) => void;
-};
-export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
+import { sendMessage } from '@shared/service';
+
+import { useChatRoomContext } from '../../hooks';
+
+export const ChatInputBox = () => {
   const [message, setMessage] = useState('');
+  const { selectedRoom } = useChatRoomContext();
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
+  const [userNickname, setUserNickname] = useState('');
+
+  // 닉네임을 로컬 스토리지에서 가져오기
+  useEffect(() => {
+    const storedNickname = localStorage.getItem('userNickname') || '익명';
+    setUserNickname(storedNickname);
+  }, []);
 
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
-    if (trimmedMessage === '') return;
-    onSendMessage(trimmedMessage);
+    if (!trimmedMessage || !selectedRoom) return;
+
+    // API 명세에 맞는 메시지 객체 생성
+    const messageObject = {
+      sender: userNickname, // 로컬에서 가져온 닉네임 사용
+      content: trimmedMessage,
+      roomName: selectedRoom,
+    };
+
+    // WebSocket을 통해 메시지 송신
+    sendMessage(`/api/app/chat/${selectedRoom}`, messageObject);
+
     setMessage('');
   };
 
@@ -32,7 +51,6 @@ export const ChatInputBox = ({ onSendMessage }: ChatInputBoxProps) => {
         onCompositionEnd={() => setIsComposing(false)} // IME 입력 종료
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !isComposing) {
-            // IME 입력 중이 아닐 때만 전송
             e.preventDefault(); // 엔터 키의 기본 동작 방지
             handleSendMessage();
           }

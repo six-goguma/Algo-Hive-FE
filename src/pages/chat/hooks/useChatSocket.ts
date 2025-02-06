@@ -9,6 +9,7 @@ export const useChatSocket = () => {
   const { selectedRoom, isEntered } = useChatRoomContext();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<{ userName: string; roomName: string }[]>([]);
+  const [roomUsers, setRoomUsers] = useState<{ [key: string]: number }>({}); // 채팅방별 접속인원 목록
 
   // selectedRoom이 변경될 때마다 소켓 연결 및 구독
   useEffect(() => {
@@ -34,6 +35,12 @@ export const useChatSocket = () => {
         subscribe('/topic/users', (users: { userName: string; roomName: string }[]) => {
           setOnlineUsers(users);
         });
+
+        // 채팅방별 접속인원 목록 구독
+        subscribe('/topic/room-users', (data: { [key: string]: number }) => {
+          setRoomUsers(data);
+          console.log('채팅방별 사용자 수:', data);
+        });
       },
       (error) => {
         console.error('WebSocket 연결 오류:', error);
@@ -46,5 +53,5 @@ export const useChatSocket = () => {
     };
   }, [selectedRoom, isEntered]);
 
-  return { messages, onlineUsers };
+  return { messages, onlineUsers, roomUsers };
 };

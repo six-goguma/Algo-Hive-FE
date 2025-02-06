@@ -1,6 +1,7 @@
+//electedRoom이 변경될 때마다 소켓 연결이 재설정되고, 채팅방별 접속인원 목록도 자동으로 구독하는 코드
 import { Flex, Box, Text } from '@chakra-ui/react';
 
-import { useGetChatRooms, useSubscribeRoomUsers } from '../../hooks';
+import { useGetChatRooms } from '../../hooks';
 import { useChatRoomContext } from '../../hooks';
 import { ChatRoomListItem } from './ChatRoomListItem';
 
@@ -9,10 +10,9 @@ type ChatRoomListProps = {
   size: number;
   sort: string;
 };
+
 export const ChatRoomList = ({ page, size, sort }: ChatRoomListProps) => {
-  const { setIsEntered, selectedRoom, setSelectedRoom } = useChatRoomContext();
-  //채팅방별 사용자 수
-  const roomUsers = useSubscribeRoomUsers();
+  const { setIsEntered, selectedRoom, setSelectedRoom, roomUsers } = useChatRoomContext();
 
   // 채팅방 목록 가져오기
   const { data: chatRooms, isLoading, error } = useGetChatRooms(page, size, sort);
@@ -32,7 +32,7 @@ export const ChatRoomList = ({ page, size, sort }: ChatRoomListProps) => {
           <ChatRoomListItem
             key={index}
             roomName={room.roomName}
-            currentUsers={roomUsers[room.roomName] || 0}
+            currentUsers={roomUsers[room.roomName] || 0} // 채팅방별 접속인원 표시
             onClick={() => handleSelect(room.roomName)}
             isSelected={selectedRoom === room.roomName}
           />

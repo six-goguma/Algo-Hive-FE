@@ -2,16 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 
-import { connectWebSocket, disconnectWebSocket } from '@shared/service';
-
-import { joinChatRoom } from '../../apis';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 
 export const ChatRoomInsideSection = () => {
   const { isEntered, setIsEntered, selectedRoom } = useChatRoomContext();
-  const [userNickname, setUserNickname] = useState(localStorage.getItem('userNickname') || '');
+  const [userNickname] = useState(localStorage.getItem('userNickname') || '프테');
 
   const size = 10;
   const sort = 'chatTime,desc';
@@ -23,25 +20,6 @@ export const ChatRoomInsideSection = () => {
     hasNextPage,
   } = useGetChatMessages(selectedRoom || '', size, sort);
 
-  useEffect(() => {
-    if (isEntered && selectedRoom) {
-      console.log(`🔄 채팅방 변경됨: ${selectedRoom}, 기존 소켓 연결 해제 후 재연결`);
-
-      // 1️⃣ 기존 연결 해제
-      disconnectWebSocket();
-
-      // 2️⃣ 새로운 웹소켓 연결 후 채팅방 입장
-      connectWebSocket(
-        () => {
-          console.log(`✅ WebSocket 재연결 완료, 채팅방 입장: ${selectedRoom}`);
-          joinChatRoom(userNickname, selectedRoom);
-        },
-        (error) => {
-          console.error('WebSocket 연결 오류:', error);
-        },
-      );
-    }
-  }, [isEntered, userNickname, selectedRoom]);
   // 스크롤 이벤트 핸들러
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
@@ -87,21 +65,6 @@ export const ChatRoomInsideSection = () => {
     }
   }, [allMessages, isAutoScroll]);
 
-  // 메시지 전송 함수
-  const handleSendMessage = (content: string) => {
-    if (!selectedRoom) {
-      console.error('No room selected');
-      return;
-    }
-    const newMessage = { sender: userNickname, content, roomName: selectedRoom };
-    sendMessage(`/api/app/chat/${selectedRoom}`, newMessage);
-  };
-
-  useEffect(() => {
-    const storedNickname = localStorage.getItem('userNickname') || '';
-    setUserNickname(storedNickname);
-  }, []);
-
   return (
     <>
       <Box w='full' h='36px'>
@@ -119,7 +82,7 @@ export const ChatRoomInsideSection = () => {
         <ChatMessageList messages={allMessages} userNickname={userNickname} />
       </Box>
       {isEntered ? (
-        <ChatInputBox onSendMessage={handleSendMessage} />
+        <ChatInputBox />
       ) : (
         <Button mt='15px' h='36px' w='120px' onClick={() => setIsEntered(true)}>
           채팅방 입장하기
