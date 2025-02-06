@@ -48,6 +48,10 @@ export const Pagination = ({
         h={10}
         aria-label='Previous group'
         onClick={onClickPrevGroup}
+        variant='outline'
+        border='none'
+        bg='none'
+        _hover={{ bg: 'custom.blue', color: 'white' }}
         isDisabled={first || startPage === 1}
       />
 
@@ -56,6 +60,11 @@ export const Pagination = ({
           <Button
             key={startPage + i}
             h={10}
+            border='none'
+            borderRadius='full'
+            color={currentPage === startPage + i ? 'white' : 'customGray.400'}
+            bg={currentPage === startPage + i ? 'custom.blue' : 'none'}
+            _hover={{ bg: 'custom.blue', color: 'white' }}
             onClick={() => onClickPageNumber(startPage + i)}
             colorScheme={currentPage === startPage + i ? 'blue' : 'gray'}
             variant={currentPage === startPage + i ? 'solid' : 'outline'}
@@ -68,6 +77,10 @@ export const Pagination = ({
       <IconButton
         icon={<ChevronRightIcon />}
         h={10}
+        variant='outline'
+        border='none'
+        bg='none'
+        _hover={{ bg: 'custom.blue', color: 'white' }}
         aria-label='Next group'
         onClick={onClickNextGroup}
         isDisabled={last || endPage === totalPages}
