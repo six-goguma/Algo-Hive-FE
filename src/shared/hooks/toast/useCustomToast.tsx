@@ -23,7 +23,7 @@ export const useCustomToast = () => {
     toastStatus,
     toastTitle,
     toastDescription,
-    duration = 5000,
+    duration = 2000,
   }: UseCustomToastProps) => {
     toast({
       title: toastTitle,
@@ -31,6 +31,9 @@ export const useCustomToast = () => {
       status: toastStatus,
       duration,
       variant: 'subtle',
+      containerStyle: {
+        fontSize: 'sm',
+      },
     });
   };
 
