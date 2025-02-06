@@ -1,7 +1,6 @@
 import { Flex, Box, Text } from '@chakra-ui/react';
 
-import { SubscribeRoomUsers } from '../../apis';
-import { useGetChatRooms } from '../../hooks';
+import { useGetChatRooms, useSubscribeRoomUsers } from '../../hooks';
 import { useChatRoomContext } from '../../hooks';
 import { ChatRoomListItem } from './ChatRoomListItem';
 
@@ -12,12 +11,11 @@ type ChatRoomListProps = {
 };
 export const ChatRoomList = ({ page, size, sort }: ChatRoomListProps) => {
   const { setIsEntered, selectedRoom, setSelectedRoom } = useChatRoomContext();
+  //채팅방별 사용자 수
+  const roomUsers = useSubscribeRoomUsers();
 
   // 채팅방 목록 가져오기
   const { data: chatRooms, isLoading, error } = useGetChatRooms(page, size, sort);
-
-  // 채팅방별 접속자 수 구독
-  const roomUsers = SubscribeRoomUsers();
 
   const handleSelect = (roomName: string) => {
     setSelectedRoom(roomName);

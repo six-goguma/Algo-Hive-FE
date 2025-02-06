@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 
+import { joinChatRoom } from '../../apis';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
@@ -19,6 +20,12 @@ export const ChatRoomInsideSection = () => {
     fetchNextPage,
     hasNextPage,
   } = useGetChatMessages(selectedRoom || '', size, sort);
+
+  useEffect(() => {
+    if (isEntered && selectedRoom) {
+      joinChatRoom(userNickname, selectedRoom);
+    }
+  }, [isEntered, userNickname, selectedRoom]);
 
   // 스크롤 이벤트 핸들러
   const messagesEndRef = useRef<HTMLDivElement>(null);
