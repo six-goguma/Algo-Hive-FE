@@ -6,6 +6,7 @@ import { Flex, Image, HStack, Button, useDisclosure } from '@chakra-ui/react';
 import { Bell } from 'lucide-react';
 
 import { RouterPath } from '@shared/constants';
+import { authStorage } from '@shared/utils';
 
 import { Container } from '@widgets/container';
 
@@ -20,6 +21,14 @@ export const Header = () => {
 
   const onClick = () => {
     setIsLogin(!isLogin);
+
+    authStorage.isLogin.set(false);
+    authStorage.nickName.set('');
+  };
+
+  const onClickLogin = () => {
+    setModalType('login');
+    onOpen();
   };
 
   return (
@@ -36,7 +45,13 @@ export const Header = () => {
         <HStack spacing='20px'>
           <Bell cursor='pointer' width={30} height={30} />
           {!isLogin ? (
-            <Button w='80px' h='35px' border='1.5px solid' borderRadius='full' onClick={onOpen}>
+            <Button
+              w='80px'
+              h='35px'
+              border='1.5px solid'
+              borderRadius='full'
+              onClick={onClickLogin}
+            >
               로그인
             </Button>
           ) : (
