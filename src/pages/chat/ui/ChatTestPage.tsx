@@ -35,7 +35,8 @@ export const ChatTestPage = () => {
   const username = '고양이는 멍멍'; // 사용자 이름
   const [roomName, setRoomName] = useState(''); // 현재 접속 중인 채팅방 이름
   const [newRoomName, setNewRoomName] = useState(''); // 새 채팅방 이름 입력 상태
-  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지
+  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지 <- 총 메세지(rest + 소켓)
+  const [socketMessages, setSocketMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지
   const [newMessage, setNewMessage] = useState(''); // 새로 작성 중인 메시지 상태
   const [stompClient, setStompClient] = useState<Client | null>(null); // WebSocket 연결 객체
 
@@ -83,11 +84,8 @@ export const ChatTestPage = () => {
 
   // **REST API에서 가져온 메시지 적용**
   useEffect(() => {
-    if (fetchedMessages.length > 0) {
-      setMessages((prevMessages) => {
-        // 중복 제거 없이 새로운 메시지를 아래에 추가
-        return [...fetchedMessages, ...prevMessages];
-      });
+    if (fetchedMessages) {
+      setMessages(fetchedMessages);
     }
   }, [fetchedMessages]);
 
@@ -96,7 +94,7 @@ export const ChatTestPage = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [socketMessages]);
 
   const handleCreateRoom = () => {
     if (!newRoomName.trim()) return;
@@ -112,6 +110,10 @@ export const ChatTestPage = () => {
     // 🚀 채팅방 생성 후 즉시 데이터 새로고침
     setTimeout(() => refetch(), 500);
   };
+
+  useEffect(() => {
+    connectToWebSocket();
+  }, []);
 
   // WebSocket 연결 설정 및 사용자 이름 등록
   const connectToWebSocket = () => {
@@ -177,6 +179,7 @@ export const ChatTestPage = () => {
           message.content = message.content + ' ';
 
           // 메시지를 상태에 저장
+          setSocketMessages((prevMessages) => [message, ...prevMessages]);
           setMessages((prevMessages) => [message, ...prevMessages]);
         });
 
@@ -210,6 +213,7 @@ export const ChatTestPage = () => {
   useEffect(() => {
     if (roomName) {
       setMessages([]); // 메시지 목록 초기화
+      setSocketMessages([]); // 소켓 메시지 목록 초기화
       connectToChatRoom();
     }
   }, [roomName]);
@@ -367,7 +371,14 @@ export const ChatTestPage = () => {
                 </Text>
               </Box>
               <Box bg='custom.blue' h='3px' w='full' />
-              <Box w='full' h='549px' overflowY='auto' className='relative'>
+              <Box
+                w='full'
+                h='549px'
+                overflowY='auto'
+                className='relative'
+                ref={messageListRef}
+                onScroll={handleScroll}
+              >
                 {messages
                   .slice()
                   .reverse()

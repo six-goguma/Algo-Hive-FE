@@ -23,8 +23,8 @@ export const useGetChatMessages = (
 
   useEffect(() => {
     if (data) {
-      // 이전 메시지를 불러올 때는 배열의 맨 앞에 추가
-      setAllMessages((prevMessages) => [...data.content, ...prevMessages]);
+      // 이전 메시지를 불러올 때는 배열의 맨 뒤에 추가
+      setAllMessages((prevMessages) => [...prevMessages, ...data.content]);
       setIsFetching(false); // 페칭 완료
     }
   }, [data]);
