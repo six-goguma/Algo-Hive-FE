@@ -5,6 +5,8 @@ import { Box, Text, Spinner } from '@chakra-ui/react';
 import { ChatMessage } from '../../apis';
 import { userNickname } from '../../data';
 import { useChatRoomContext, useGetChatMessages } from '../../hooks';
+import { useChatSocket } from '../../hooks/useChatSocket';
+// ✅ WebSocket 메시지 추가
 import { ChatInputBox } from '../input';
 import { ChatMessageList } from '../message';
 
@@ -13,7 +15,7 @@ export const ChatRoomInsideSection = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const size = 10;
-  const sort = 'chatTime,desc';
+  const sort = 'chatTime,asc'; // ✅ 최신 메시지가 아래로 정렬되도록 변경
 
   const {
     messages: fetchedMessages,
@@ -21,6 +23,8 @@ export const ChatRoomInsideSection = () => {
     fetchNextPage,
     hasNextPage,
   } = useGetChatMessages(selectedRoom || '', size, sort);
+
+  const { messages: socketMessages } = useChatSocket(); // ✅ WebSocket 메시지 추가
 
   // 스크롤 관련
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -55,14 +59,31 @@ export const ChatRoomInsideSection = () => {
   useEffect(() => {
     if (fetchedMessages.length > 0) {
       setMessages((prevMessages) => {
-        // 중복 메시지 제거
         const uniqueMessages = fetchedMessages.filter(
-          (newMsg) => !prevMessages.some((prevMsg) => prevMsg.content === newMsg.content),
+          (newMsg) =>
+            !prevMessages.some(
+              (prevMsg) => prevMsg.content === newMsg.content && prevMsg.sender === newMsg.sender,
+            ),
         );
-        return [...uniqueMessages, ...prevMessages]; // 새로운 메시지를 위에 추가
+        return [...prevMessages, ...uniqueMessages]; // 새로운 메시지를 아래에 추가
       });
     }
   }, [fetchedMessages]);
+
+  // 🚀 **WebSocket 메시지 추가**
+  useEffect(() => {
+    if (socketMessages.length > 0) {
+      setMessages((prevMessages) => {
+        const uniqueMessages = socketMessages.filter(
+          (newMsg) =>
+            !prevMessages.some(
+              (prevMsg) => prevMsg.content === newMsg.content && prevMsg.sender === newMsg.sender,
+            ),
+        );
+        return [...prevMessages, ...uniqueMessages]; // 새로운 메시지를 아래에 추가
+      });
+    }
+  }, [socketMessages]);
 
   // 🚀 **이전 메시지 로딩 후 스크롤 유지**
   useEffect(() => {

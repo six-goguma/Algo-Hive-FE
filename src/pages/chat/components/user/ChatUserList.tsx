@@ -1,10 +1,11 @@
 import { Flex } from '@chakra-ui/react';
 
-import { useChatRoomContext } from '../../hooks';
+import { useChatRoomContext, useChatSocket } from '../../hooks';
 import { ChatUserListItem } from '../user';
 
 export const ChatUserList = () => {
-  const { selectedRoom, onlineUsers } = useChatRoomContext();
+  const { selectedRoom } = useChatRoomContext();
+  const { onlineUsers } = useChatSocket();
 
   const filteredUsers = onlineUsers.filter((user) => user.roomName === selectedRoom);
 
