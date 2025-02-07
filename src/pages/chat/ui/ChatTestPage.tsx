@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -26,7 +26,6 @@ import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 
 import { useGetChatRooms, useCreateChatRoom } from '../hooks';
-import { useGetChatMessages } from '../hooks/useGetChatMessages';
 import { Client } from '@stomp/stompjs';
 
 const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
@@ -49,64 +48,18 @@ export const ChatTestPage = () => {
   const [usersInRooms, setUsersInRooms] = useState<{ userName: string; roomName: string }[]>([]); // 채팅방 사용자 목록
   const [roomUserList, setRoomUserList] = useState<{ [key: string]: number }>({}); // 각 방의 접속자 목록
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
-  const [messagePage, setMessagePage] = useState(0); // 채팅 메시지 페이지
-  const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
-  const [lastScrollTop, setLastScrollTop] = useState(0);
 
   const messagesEndRef = useRef<HTMLDivElement>(null); // 채팅 메시지 스크롤 조작을 위한 Ref
-  const messageListRef = useRef(null); // 채팅 메시지 스크롤 조작을 위한 Ref
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { mutate: createRoom } = useCreateChatRoom();
   const customToast = useCustomToast();
 
-  // 🚀 **useGetChatMessages 훅 사용**
-  const {
-    messages: fetchedMessages,
-    isLoading: isMessagesLoading,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetChatMessages(roomName, 10, 'chatTime,desc');
-
-  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
-  const handleScroll = useCallback(() => {
-    if (messageListRef.current) {
-      const { scrollTop } = messageListRef.current;
-      if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
-        fetchNextPage(); // 이전 메시지 불러오기
-      }
-    }
-  }, [fetchNextPage, hasNextPage, isMessagesLoading]);
-
-  useEffect(() => {
-    const messagesContainer = messageListRef.current;
-    if (messagesContainer) {
-      (messagesContainer as HTMLElement).addEventListener('scroll', handleScroll);
-      return () => (messagesContainer as HTMLElement).removeEventListener('scroll', handleScroll);
-    }
-  }, [handleScroll]);
-
-  // 🚀 **REST API에서 가져온 메시지 적용**
-  useEffect(() => {
-    if (fetchedMessages.length > 0) {
-      setMessages((prevMessages) => {
-        // 중복 메시지 제거
-        const uniqueMessages = fetchedMessages.filter(
-          (newMsg) =>
-            !prevMessages.some(
-              (prevMsg) => prevMsg.content === newMsg.content && prevMsg.sender === newMsg.sender,
-            ),
-        );
-        return [...uniqueMessages, ...prevMessages]; // 새로운 메시지를 아래에 추가
-      });
-    }
-  }, [fetchedMessages]);
-
   // 🚀 **새 메시지 추가 시 자동 스크롤**
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
@@ -218,52 +171,13 @@ export const ChatTestPage = () => {
     setStompClient(client);
   };
 
-  // 특정 채팅방의 최근 메시지 가져오기
-  const fetchRecentMessages = async (roomName: string | number | boolean, pageNumber: number) => {
-    try {
-      const encodedRoomName = encodeURIComponent(roomName);
-      const response = await fetch(
-        `${BASE_API_URL}/api/v1/chat/messages/${encodedRoomName}?page=${pageNumber}&size=10&sort=chatTime,asc`,
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setMessages((prevMessages) => [...prevMessages, ...data.content]);
-        setHasMoreMessages(!data.last);
-      } else {
-        console.error('최근 메시지 가져오기 실패');
-      }
-    } catch (error) {
-      console.error('최근 메시지 가져오는 중 오류 발생:', error);
-    }
-  };
-
-  // 채팅 메시지 스크롤 이벤트 핸들러
-  const handleMessageListScroll = useCallback(() => {
-    if (messageListRef.current) {
-      const { scrollTop } = messageListRef.current;
-      setLastScrollTop(scrollTop);
-      if (scrollTop === 0 && hasMoreMessages) {
-        setMessagePage((prevPage) => prevPage + 1);
-      }
-    }
-  }, [hasMoreMessages]);
-
   // 채팅방 이름 변경 시 메시지와 연결 초기화
   useEffect(() => {
     if (roomName) {
-      setMessagePage(0); // 메시지 페이지 초기화
       setMessages([]); // 메시지 목록 초기화
-      fetchRecentMessages(roomName, 0);
       connectToChatRoom();
     }
   }, [roomName]);
-
-  // 메시지 페이지 변경 시 추가 메시지 불러오기
-  useEffect(() => {
-    if (roomName && messagePage > 0) {
-      fetchRecentMessages(roomName, messagePage);
-    }
-  }, [messagePage]);
 
   // 사용자 이름 설정 시 WebSocket 연결 초기화
   useEffect(() => {
@@ -271,13 +185,6 @@ export const ChatTestPage = () => {
       connectToWebSocket();
     }
   }, [username]);
-
-  // 메시지를 추가할 때만 스크롤 조정
-  useEffect(() => {
-    if (messagesEndRef.current && messages.length > 0 && lastScrollTop > 0) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
 
   // 메시지 전송
   const handleSendMessage = () => {
@@ -316,18 +223,6 @@ export const ChatTestPage = () => {
         게시글 보기
       </Button>
       <Flex w='full' gap='35px' h='full'>
-        {/* <div className="chat-room-creation">
-        <input
-          type="text"
-          placeholder="채팅방 이름"
-          value={newRoomName}
-          onChange={(e) => setNewRoomName(e.target.value)}
-          className="room-name-input"
-        />
-        <button onClick={createRoom} className="create-room-button">
-          채팅방 생성
-        </button>
-      </div> */}
         {/* 채팅방 목록 */}
         <Box w='40%' bg='#F7F9FB'>
           <Flex w='full' justify='center'>
@@ -356,7 +251,6 @@ export const ChatTestPage = () => {
                   cursor='pointer'
                   onClick={() => {
                     setRoomName(room.roomName);
-
                     setMessages([]);
                   }}
                   justify='space-between'
@@ -430,16 +324,6 @@ export const ChatTestPage = () => {
         </Box>
 
         {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-        {/* 채팅방 */}
-
         <Box w='70%' bg='#F7F9FB'>
           {roomName && (
             <>
@@ -455,14 +339,7 @@ export const ChatTestPage = () => {
                 </Text>
               </Box>
               <Box bg='custom.blue' h='3px' w='full' />
-              <Box
-                w='full'
-                h='549px'
-                overflowY='auto'
-                ref={messagesEndRef}
-                className='relative'
-                onScroll={handleMessageListScroll}
-              >
+              <Box w='full' h='549px' overflowY='auto' className='relative'>
                 {messages
                   .slice()
                   .reverse()
@@ -563,14 +440,6 @@ export const ChatTestPage = () => {
           )}
         </Box>
 
-        {/* 현재 채팅방 사용자 목록 */}
-        {/* 현재 채팅방 사용자 목록 */}
-        {/* 현재 채팅방 사용자 목록 */}
-        {/* 현재 채팅방 사용자 목록 */}
-        {/* 현재 채팅방 사용자 목록 */}
-
-        {/* 현재 채팅방 사용자 목록 */}
-        {/* 현재 채팅방 사용자 목록 */}
         {/* 현재 채팅방 사용자 목록 */}
         <Box w='36%' bg='#F7F9FB'>
           <Flex w='full' h='36px' justify='center'>
