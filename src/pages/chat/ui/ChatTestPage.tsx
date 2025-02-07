@@ -68,8 +68,17 @@ export const ChatTestPage = () => {
   const handleScroll = useCallback(() => {
     if (messageListRef.current) {
       const { scrollTop } = messageListRef.current;
+
+      // 스크롤이 맨 위에 닿았을 때 이전 메시지 페칭
       if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
-        fetchNextPage(); // 이전 메시지 불러오기
+        fetchNextPage();
+
+        // 페칭 후 스크롤 위치를 약간 아래로 내림
+        setTimeout(() => {
+          if (messageListRef.current) {
+            messageListRef.current.scrollTop = 50; // 예: 50px만큼 아래로 내림
+          }
+        }, 0);
       }
     }
   }, [fetchNextPage, hasNextPage, isMessagesLoading]);
