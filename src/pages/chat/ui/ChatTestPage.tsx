@@ -26,7 +26,7 @@ import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 
 import { useGetChatRooms, useCreateChatRoom } from '../hooks';
-import './ChatTestPage.css';
+import { useGetChatMessages } from '../hooks/useGetChatMessages';
 import { Client } from '@stomp/stompjs';
 
 const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
@@ -49,21 +49,66 @@ export const ChatTestPage = () => {
   const [usersInRooms, setUsersInRooms] = useState<{ userName: string; roomName: string }[]>([]); // 채팅방 사용자 목록
   const [roomUserList, setRoomUserList] = useState<{ [key: string]: number }>({}); // 각 방의 접속자 목록
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
-  const [roomPage, setRoomPage] = useState(0); // 채팅방 목록 페이지
-  const [hasMoreRooms, setHasMoreRooms] = useState(true); // 더 불러올 채팅방이 있는지 여부
   const [messagePage, setMessagePage] = useState(0); // 채팅 메시지 페이지
   const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   const messagesEndRef = useRef<HTMLDivElement>(null); // 채팅 메시지 스크롤 조작을 위한 Ref
-  const roomListRef = useRef(null); // 채팅방 목록 스크롤 조작을 위한 Ref
   const messageListRef = useRef(null); // 채팅 메시지 스크롤 조작을 위한 Ref
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { mutate: createRoom } = useCreateChatRoom();
   const customToast = useCustomToast();
-  // 새 채팅방 생성 요청
+
+  // 🚀 **useGetChatMessages 훅 사용**
+  const {
+    messages: fetchedMessages,
+    isLoading: isMessagesLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetChatMessages(roomName, 10, 'chatTime,desc');
+
+  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
+  const handleScroll = useCallback(() => {
+    if (messageListRef.current) {
+      const { scrollTop } = messageListRef.current;
+      if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
+        fetchNextPage(); // 이전 메시지 불러오기
+      }
+    }
+  }, [fetchNextPage, hasNextPage, isMessagesLoading]);
+
+  useEffect(() => {
+    const messagesContainer = messageListRef.current;
+    if (messagesContainer) {
+      (messagesContainer as HTMLElement).addEventListener('scroll', handleScroll);
+      return () => (messagesContainer as HTMLElement).removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
+
+  // 🚀 **REST API에서 가져온 메시지 적용**
+  useEffect(() => {
+    if (fetchedMessages.length > 0) {
+      setMessages((prevMessages) => {
+        // 중복 메시지 제거
+        const uniqueMessages = fetchedMessages.filter(
+          (newMsg) =>
+            !prevMessages.some(
+              (prevMsg) => prevMsg.content === newMsg.content && prevMsg.sender === newMsg.sender,
+            ),
+        );
+        return [...uniqueMessages, ...prevMessages]; // 새로운 메시지를 아래에 추가
+      });
+    }
+  }, [fetchedMessages]);
+
+  // 🚀 **새 메시지 추가 시 자동 스크롤**
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleCreateRoom = () => {
     if (!newRoomName.trim()) return;
@@ -192,16 +237,6 @@ export const ChatTestPage = () => {
     }
   };
 
-  // 채팅방 목록 스크롤 이벤트 핸들러
-  const handleRoomListScroll = useCallback(() => {
-    if (roomListRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = roomListRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10 && hasMoreRooms) {
-        setRoomPage((prevPage) => prevPage + 1);
-      }
-    }
-  }, [hasMoreRooms]);
-
   // 채팅 메시지 스크롤 이벤트 핸들러
   const handleMessageListScroll = useCallback(() => {
     if (messageListRef.current) {
@@ -308,57 +343,55 @@ export const ChatTestPage = () => {
           <Box bg='custom.blue' h='3px' w='full' />
           <Box w='full' h='600px' bg='white' position='relative'>
             <Flex flexDir='column' w='full' h='full' pt='10px'>
-              <div ref={roomListRef} onScroll={handleRoomListScroll}>
-                {chatRooms?.content.map((room, index) => (
-                  <Flex
-                    key={index}
-                    w='full'
-                    gap='20px'
-                    h='60px'
-                    align='center'
-                    p='0 20px 0 20px'
-                    bg={roomName === room.roomName ? '#E8EFFC' : 'transparent'}
-                    _hover={{ bg: '#E8EFFC' }}
-                    cursor='pointer'
-                    onClick={() => {
-                      setRoomName(room.roomName);
+              {chatRooms?.content.map((room, index) => (
+                <Flex
+                  key={index}
+                  w='full'
+                  gap='20px'
+                  h='60px'
+                  align='center'
+                  p='0 20px 0 20px'
+                  bg={roomName === room.roomName ? '#E8EFFC' : 'transparent'}
+                  _hover={{ bg: '#E8EFFC' }}
+                  cursor='pointer'
+                  onClick={() => {
+                    setRoomName(room.roomName);
 
-                      setMessages([]);
-                    }}
-                    justify='space-between'
+                    setMessages([]);
+                  }}
+                  justify='space-between'
+                >
+                  <Text
+                    fontSize='14px'
+                    fontWeight='bold'
+                    noOfLines={2} // ✅ 2줄까지 표시
+                    overflow='hidden'
+                    textOverflow='ellipsis'
+                    wordBreak='break-word'
                   >
-                    <Text
-                      fontSize='14px'
-                      fontWeight='bold'
-                      noOfLines={2} // ✅ 2줄까지 표시
-                      overflow='hidden'
-                      textOverflow='ellipsis'
-                      wordBreak='break-word'
-                    >
-                      {room.roomName}
-                    </Text>
+                    {room.roomName}
+                  </Text>
 
-                    {roomUserList[room.roomName] ? (
-                      <Box boxSize='24px' bg='custom.blue' borderRadius='5px' alignContent='center'>
-                        <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
-                          {roomUserList[room.roomName]}
-                        </Text>
-                      </Box>
-                    ) : (
-                      <Box
-                        boxSize='24px'
-                        bg='customGray.400'
-                        borderRadius='5px'
-                        alignContent='center'
-                      >
-                        <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
-                          0
-                        </Text>
-                      </Box>
-                    )}
-                  </Flex>
-                ))}
-              </div>
+                  {roomUserList[room.roomName] ? (
+                    <Box boxSize='24px' bg='custom.blue' borderRadius='5px' alignContent='center'>
+                      <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
+                        {roomUserList[room.roomName]}
+                      </Text>
+                    </Box>
+                  ) : (
+                    <Box
+                      boxSize='24px'
+                      bg='customGray.400'
+                      borderRadius='5px'
+                      alignContent='center'
+                    >
+                      <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
+                        0
+                      </Text>
+                    </Box>
+                  )}
+                </Flex>
+              ))}
             </Flex>
           </Box>
 
