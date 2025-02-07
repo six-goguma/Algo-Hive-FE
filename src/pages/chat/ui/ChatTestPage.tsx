@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -25,7 +25,7 @@ import { SendHorizontal } from 'lucide-react';
 import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 
-import { useGetChatRooms, useCreateChatRoom } from '../hooks';
+import { useGetChatRooms, useCreateChatRoom, useGetChatMessages } from '../hooks';
 import { Client } from '@stomp/stompjs';
 
 const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
@@ -35,10 +35,16 @@ export const ChatTestPage = () => {
   const username = '고양이는 멍멍'; // 사용자 이름
   const [roomName, setRoomName] = useState(''); // 현재 접속 중인 채팅방 이름
   const [newRoomName, setNewRoomName] = useState(''); // 새 채팅방 이름 입력 상태
-  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]); // 채팅 메시지 리스트
+  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지
   const [newMessage, setNewMessage] = useState(''); // 새로 작성 중인 메시지 상태
   const [stompClient, setStompClient] = useState<Client | null>(null); // WebSocket 연결 객체
 
+  const {
+    messages: fetchedMessages,
+    isLoading: isMessagesLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetChatMessages(roomName, 10, 'chatTime,desc');
   // 채팅방 목록 가져오기
   const [page, setPage] = useState(0);
   const size = 10;
@@ -50,13 +56,42 @@ export const ChatTestPage = () => {
   const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
 
   const messagesEndRef = useRef<HTMLDivElement>(null); // 채팅 메시지 스크롤 조작을 위한 Ref
+  const messageListRef = useRef<HTMLDivElement>(null); // 메시지 목록 스크롤 조작을 위한 Ref
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { mutate: createRoom } = useCreateChatRoom();
   const customToast = useCustomToast();
 
-  // 🚀 **새 메시지 추가 시 자동 스크롤**
+  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
+  const handleScroll = useCallback(() => {
+    if (messageListRef.current) {
+      const { scrollTop } = messageListRef.current;
+      if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
+        fetchNextPage(); // 이전 메시지 불러오기
+      }
+    }
+  }, [fetchNextPage, hasNextPage, isMessagesLoading]);
+
+  useEffect(() => {
+    const messagesContainer = messageListRef.current;
+    if (messagesContainer) {
+      (messagesContainer as HTMLElement).addEventListener('scroll', handleScroll);
+      return () => (messagesContainer as HTMLElement).removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
+
+  // **REST API에서 가져온 메시지 적용**
+  useEffect(() => {
+    if (fetchedMessages.length > 0) {
+      setMessages((prevMessages) => {
+        // 중복 제거 없이 새로운 메시지를 아래에 추가
+        return [...fetchedMessages, ...prevMessages];
+      });
+    }
+  }, [fetchedMessages]);
+
+  // **새 메시지 추가 시 자동 스크롤**
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -178,13 +213,6 @@ export const ChatTestPage = () => {
       connectToChatRoom();
     }
   }, [roomName]);
-
-  // 사용자 이름 설정 시 WebSocket 연결 초기화
-  useEffect(() => {
-    if (username) {
-      connectToWebSocket();
-    }
-  }, [username]);
 
   // 메시지 전송
   const handleSendMessage = () => {
