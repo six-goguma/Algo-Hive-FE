@@ -17,7 +17,7 @@ export const CodeInputBox = () => {
       ...locale,
       placeholders: {
         ...locale.placeholders,
-        default: '글을 작성해주세요...',
+        default: '코드 블락(검정 박스) 안에 작성해 주세요',
       },
     },
     initialContent: [
@@ -44,7 +44,7 @@ export const CodeInputBox = () => {
       ...content.slice(1), // 나머지 블록 유지
     ];
     const parseDataToSend = {
-      code: JSON.stringify(nameAddedContent),
+      code: JSON.stringify(nameAddedContent[0].content),
     };
 
     // 코드 리뷰 요청
