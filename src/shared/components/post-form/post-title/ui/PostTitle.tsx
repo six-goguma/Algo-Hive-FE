@@ -14,9 +14,9 @@ export const PostTitle = () => {
       rules={{ required: '제목을 입력해주세요' }}
       render={({ field }) => (
         <FormItem style={{ width: '100%' }}>
-          <VStack gap={0} w='full'>
-            <Box w='full' h={{ base: '5px', md: '15px' }} bg='white' />
-            <FormControl>
+          <FormControl>
+            <VStack gap={0} w='full'>
+              <Box w='full' h={{ base: '5px', md: '15px' }} bg='white' />
               <Textarea
                 {...field}
                 placeholder='제목을 입력하세요'
@@ -43,17 +43,17 @@ export const PostTitle = () => {
                   color: 'customGray.500',
                 }}
               />
-              <FormMessage />
-            </FormControl>
-            <Box w='full' h='14px' bg='white'>
-              <Divider
-                w={{ base: '145px', md: '215px' }}
-                h='8px'
-                bg='black'
-                ml={{ base: '10px', md: '50px' }}
-              />
-            </Box>
-          </VStack>
+              <Box w='full' h='14px' bg='white'>
+                <Divider
+                  w={{ base: '145px', md: '215px' }}
+                  h='8px'
+                  bg='black'
+                  ml={{ base: '10px', md: '50px' }}
+                />
+              </Box>
+            </VStack>
+            <FormMessage />
+          </FormControl>
         </FormItem>
       )}
     />
