@@ -1,20 +1,36 @@
 import { Link } from 'react-router-dom';
 
-import { useGetMockData } from '@shared/hooks';
+import { Flex, Text } from '@chakra-ui/react';
+
 import { getDynamicPath } from '@shared/utils';
 
 import { Grid } from '@widgets/grid';
 import { SkeletonPostCards, PostCards } from '@widgets/post-cards';
 
-import { MOCK_MY_POST_LIST } from '../../data';
+import { PostUserContent } from '../../apis';
+import { Tabs } from '../tabs';
 
-export const MyPostSection = () => {
-  const { data, isPending } = useGetMockData(MOCK_MY_POST_LIST);
+type MyPostSectionProps = {
+  postUserData?: PostUserContent[];
+  isPending: boolean;
+};
+
+export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) => {
+  if (!postUserData || postUserData.length === 0) {
+    return (
+      <Flex w='full' justifyContent='center' alignItems='center' h='200px'>
+        <Text fontSize='lg' fontWeight='700' color='gray.400'>
+          작성한 게시글이 없습니다.
+        </Text>
+      </Flex>
+    );
+  }
   return (
     <Grid columns={{ base: 1, md: 2, lg: 3 }} gap={20}>
-      {isPending
+      <Tabs />
+      {isPending || postUserData === undefined
         ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
-        : data.content.map((post) => (
+        : postUserData.map((post) => (
             <Link key={post.id} to={getDynamicPath.postDetail(String(post.id))}>
               <PostCards
                 title={post.title}
