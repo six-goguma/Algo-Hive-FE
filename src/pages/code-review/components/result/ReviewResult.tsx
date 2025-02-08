@@ -8,7 +8,7 @@ export const ReviewResult = () => {
       <Text w='full' textAlign='left' color='custom.blue' fontSize='24px' fontWeight='Bold'>
         코드 리뷰 결과
       </Text>
-      <Flex>
+      <Flex mt='20px'>
         <Text w='full' textAlign='left' fontSize='16px' mb='5px'>
           게시물로 작성하거나 복사해서 코드 리뷰를 활용해보세요!
         </Text>
