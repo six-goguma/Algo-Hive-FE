@@ -17,3 +17,10 @@ export interface ResponseCodeReview {
     avgLogprobs: number;
   }>;
 }
+
+export interface RequestUploadReviewResult {
+  title: string;
+  contents: string;
+  thumbnail: null;
+  summary: string;
+}

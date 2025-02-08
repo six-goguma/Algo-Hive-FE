@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Flex, Text, Button, Input, Box, IconButton, Spinner } from '@chakra-ui/react';
 
@@ -6,11 +7,13 @@ import { ExternalLink, Copy } from 'lucide-react';
 
 import { useCustomToast } from '@shared/hooks';
 
-import { ResponseCodeReview } from '../../apis';
+import { ResponseCodeReview, uploadReviewResult } from '../../apis';
 import { useCodeReview } from '../../hooks';
 import { locales } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import { useCreateBlockNote } from '@blocknote/react';
+
+// uploadReviewResult 함수 import
 
 export const CodeInputBox = () => {
   const locale = locales['en'];
@@ -33,7 +36,8 @@ export const CodeInputBox = () => {
   const [problemName, setProblemName] = useState<string>(''); // 문제 번호
   const [codeReviewResult, setCodeReviewResult] = useState<ResponseCodeReview | null>(null);
 
-  const { mutate, isLoading, isError, error } = useCodeReview(); // react-query 훅 사용
+  const { mutate, isPending, isError, error } = useCodeReview(); // react-query 훅 사용
+  const customToast = useCustomToast(); // 커스텀 토스트 훅
 
   const handleSubmit = () => {
     const content = editor.document; // 현재 편집기의 내용을 JSON 형식으로 가져옴
@@ -60,8 +64,6 @@ export const CodeInputBox = () => {
     });
   };
 
-  const customToast = useCustomToast();
-
   // 클립보드 복사 함수
   const handleCopyToClipboard = () => {
     if (codeReviewResult) {
@@ -82,6 +84,43 @@ export const CodeInputBox = () => {
             toastDescription: '클립보드 복사에 실패했습니다',
           });
         });
+    }
+  };
+
+  const navigate = useNavigate();
+  // 게시글로 올리기 함수
+  const handleUploadReviewResult = async () => {
+    if (!codeReviewResult || !problemName) {
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '에러 발생',
+        toastDescription: '코드 리뷰 결과나 문제 번호가 없습니다.',
+      });
+      return;
+    }
+
+    const data = {
+      title: problemName, // 문제 번호를 title로 사용
+      contents: codeReviewResult.candidates[0].content.parts[0].text, // 코드 리뷰 결과를 contents로 사용
+      thumbnail: null, // thumbnail은 null
+      summary: `${problemName} 풀이`, // summary는 {문제 번호} 풀이
+    };
+
+    try {
+      await uploadReviewResult(data); // uploadReviewResult 함수 호출
+      customToast({
+        toastStatus: 'success',
+        toastTitle: '성공!',
+        toastDescription: '게시글이 성공적으로 업로드되었습니다.',
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Upload failed:', error);
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '업로드 실패',
+        toastDescription: '게시글 업로드에 실패했습니다.',
+      });
     }
   };
 
@@ -124,9 +163,9 @@ export const CodeInputBox = () => {
         fontSize='14px'
         alignSelf='flex-end'
         onClick={handleSubmit}
-        disabled={isLoading} // 로딩 중 버튼 비활성화
+        disabled={isPending} // 로딩 중 버튼 비활성화
       >
-        {isLoading ? <Spinner size='sm' /> : 'AI 코드리뷰'}
+        {isPending ? <Spinner size='sm' /> : 'AI 코드리뷰'}
       </Button>
 
       <Flex direction='column' w='full' mt='28px' gap='5px'>
@@ -155,6 +194,7 @@ export const CodeInputBox = () => {
           mt='10px'
           fontSize='14px'
           alignSelf='flex-end'
+          onClick={handleUploadReviewResult} // 게시글로 올리기 함수 연결
         >
           게시글로 올리기
         </Button>
