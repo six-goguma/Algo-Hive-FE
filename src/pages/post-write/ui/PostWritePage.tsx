@@ -31,7 +31,7 @@ export const PostWritePage = () => {
     onOpen();
   };
 
-  const onConfirmButton = async () => {
+  const onConfirmButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
       const data = methods.getValues();
       console.log('게시글 데이터 제출:', data);
@@ -39,8 +39,8 @@ export const PostWritePage = () => {
       const createdPost = await createPost({
         title: data.title,
         contents: data.content,
-        thumbnail: '',
-        summary: '',
+        thumbnail: modalData.thumbnail,
+        summary: modalData.summary,
       });
 
       console.log('게시글 생성 성공:', createdPost);
