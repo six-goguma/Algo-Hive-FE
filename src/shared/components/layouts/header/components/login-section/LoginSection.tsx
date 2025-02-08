@@ -64,6 +64,7 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
 
     authStorage.isLogin.set(true);
     authStorage.nickName.set(data.nickName);
+    authStorage.email.set(form.getValues('email'));
 
     toast({
       toastStatus: 'success',
