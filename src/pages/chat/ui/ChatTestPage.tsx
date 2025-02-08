@@ -301,9 +301,12 @@ export const ChatTestPage = () => {
       >
         게시글 보기
       </Button>
-      <Flex w='full' gap='35px' h='full'>
+      <Flex flexDir={{ base: 'column', sm: 'row' }} w='full' gap='35px' h='full'>
+        <Text display={{ base: 'block', sm: 'none' }} mt='10px' fontSize='sm' color='gray.600'>
+          밑으로 스크롤하면 채팅과 현재 접속자 목록을 볼 수 있어요
+        </Text>
         {/* 채팅방 목록 */}
-        <Box w='40%' bg='#F7F9FB'>
+        <Box w={{ base: 'full', sm: '40%' }} bg='#F7F9FB'>
           <Flex w='full' justify='center'>
             <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
               채팅방 목록
@@ -403,7 +406,7 @@ export const ChatTestPage = () => {
         </Box>
 
         {/* 채팅방 */}
-        <Box w='70%' bg='#F7F9FB'>
+        <Box w={{ base: 'full', sm: '70%' }} bg='#F7F9FB'>
           {roomName && (
             <>
               <Box w='full' h='36px'>
@@ -527,7 +530,7 @@ export const ChatTestPage = () => {
         </Box>
 
         {/* 현재 채팅방 사용자 목록 */}
-        <Box w='36%' bg='#F7F9FB'>
+        <Box w={{ base: 'full', sm: '36%' }} bg='#F7F9FB'>
           <Flex w='full' h='36px' justify='center'>
             <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
               현재 접속자
