@@ -26,24 +26,26 @@ export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) =
     );
   }
   return (
-    <Grid columns={{ base: 1, md: 2, lg: 3 }} gap={20}>
+    <>
       <Tabs />
-      {isPending || postUserData === undefined
-        ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
-        : postUserData.map((post) => (
-            <Link key={post.id} to={getDynamicPath.postDetail(String(post.id))}>
-              <PostCards
-                title={post.title}
-                postId={post.id}
-                thumbnail={post.thumbnail}
-                summary={post.summary}
-                createdAt={post.createdAt}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                author={post.author}
-              />
-            </Link>
-          ))}
-    </Grid>
+      <Grid columns={{ base: 1, md: 2, lg: 3 }} gap={20}>
+        {isPending || postUserData === undefined
+          ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostCards key={index} />)
+          : postUserData.map((post) => (
+              <Link key={post.id} to={getDynamicPath.postDetail(String(post.id))}>
+                <PostCards
+                  title={post.title}
+                  postId={post.id}
+                  thumbnail={post.thumbnail}
+                  summary={post.summary}
+                  createdAt={post.createdAt}
+                  likeCount={post.likeCount}
+                  commentCount={post.commentCount}
+                  author={post.author}
+                />
+              </Link>
+            ))}
+      </Grid>
+    </>
   );
 };

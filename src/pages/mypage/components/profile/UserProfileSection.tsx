@@ -199,6 +199,7 @@ export const UserProfileSection = ({ isPending }: { isPending: boolean }) => {
                               </Text>
                               <Box alignItems='center' mb={3}>
                                 <Button
+                                  display={{ base: 'flex', md: 'none' }}
                                   variant='outline'
                                   color='customGray.500'
                                   borderColor='customGray.500'
@@ -218,7 +219,7 @@ export const UserProfileSection = ({ isPending }: { isPending: boolean }) => {
                     </VStack>
                     <Box alignItems='center' mb={3}>
                       <Button
-                        display={{ base: 'none', sm: 'flex' }}
+                        display={{ base: 'none', md: 'flex' }}
                         variant='outline'
                         color='customGray.500'
                         borderColor='customGray.500'

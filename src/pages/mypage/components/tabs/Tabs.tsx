@@ -2,7 +2,7 @@ import { HStack, Text } from '@chakra-ui/react';
 
 export const Tabs = () => {
   return (
-    <HStack w='290px' spacing={0} pt={8} pb={2} color='custom.blue'>
+    <HStack w='full' spacing={1} pt={8} pb={10} color='custom.blue'>
       <HStack
         align='start'
         cursor='pointer'
