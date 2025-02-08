@@ -1,5 +1,8 @@
+import { useFormContext } from 'react-hook-form';
+
 import { Box, useBreakpointValue } from '@chakra-ui/react';
 
+import { FormField, FormControl, FormMessage, FormItem } from '@shared/components';
 import { BASE_URI } from '@shared/service';
 
 import { BlockNoteStyles } from './BlockNoteStyles';
@@ -12,6 +15,7 @@ import { useCreateBlockNote } from '@blocknote/react';
 const locale = locales['en'];
 
 export const PostContent = () => {
+  const { control } = useFormContext();
   const SERVER_URL = 'http://algo.knu-soft.site';
   const isMobile = useBreakpointValue({ base: true, md: false });
 
@@ -49,20 +53,33 @@ export const PostContent = () => {
   });
 
   return (
-    <Box
-      w='full'
-      h={isMobile ? '400px' : '600px'}
-      overflow='auto'
-      background='white'
-      textAlign='left'
-    >
-      <BlockNoteStyles />
-      <BlockNoteView
-        editor={editor}
-        sideMenu={isMobile ? false : true}
-        formattingToolbar={isMobile ? false : true}
-        slashMenu={isMobile ? false : true}
-      />
-    </Box>
+    <FormField
+      name='content'
+      control={control}
+      rules={{ required: '글을 작성해주세요' }}
+      render={({ field }) => (
+        <FormItem style={{ width: '100%' }}>
+          <FormControl>
+            <Box
+              w='full'
+              h={isMobile ? '400px' : '600px'}
+              overflow='auto'
+              background='white'
+              textAlign='left'
+            >
+              <BlockNoteStyles />
+              <BlockNoteView
+                editor={editor}
+                onChange={() => field.onChange(JSON.stringify(editor.document))}
+                sideMenu={!isMobile}
+                formattingToolbar={!isMobile}
+                slashMenu={!isMobile}
+              />
+            </Box>
+            <FormMessage />
+          </FormControl>
+        </FormItem>
+      )}
+    />
   );
 };
