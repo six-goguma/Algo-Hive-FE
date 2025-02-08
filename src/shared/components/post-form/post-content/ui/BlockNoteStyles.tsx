@@ -1,16 +1,18 @@
+import { Global } from '@emotion/react';
+
 export const BlockNoteStyles = () => {
   return (
-    <style>
-      {`
+    <Global
+      styles={`
+        .bn-editor {
+          padding-inline: 50px;
+        }
+        @media (max-width: 768px) {
           .bn-editor {
-              padding-inline: 50px;
+            padding-inline: 10px;
           }
-          @media (max-width: 768px) {
-              .bn-editor {
-                  padding-inline: 10px;
-              }
-          }
-        `}
-    </style>
+        }
+      `}
+    />
   );
 };

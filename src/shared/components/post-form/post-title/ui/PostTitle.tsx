@@ -8,7 +8,7 @@ export const PostTitle = () => {
 
   return (
     <VStack gap={0} w='full'>
-      <Box w='full' h='15px' bg='white'></Box>
+      <Box w='full' h={{ base: '5px', md: '15px' }} bg='white'></Box>
       <FormControl isRequired={true}>
         <Textarea
           value={title}

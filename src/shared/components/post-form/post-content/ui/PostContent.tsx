@@ -1,5 +1,7 @@
 import { Box, useBreakpointValue } from '@chakra-ui/react';
 
+import { BASE_URI } from '@shared/service';
+
 import { BlockNoteStyles } from './BlockNoteStyles';
 import { locales } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
@@ -10,6 +12,7 @@ import { useCreateBlockNote } from '@blocknote/react';
 const locale = locales['en'];
 
 export const PostContent = () => {
+  const SERVER_URL = 'http://algo.knu-soft.site';
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const uploadFile = async (file: File): Promise<string> => {
@@ -17,7 +20,7 @@ export const PostContent = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('https://tmpfiles.org/api/v1/upload', {
+      const response = await fetch(`${BASE_URI}/images/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -27,9 +30,9 @@ export const PostContent = () => {
       }
 
       const data = await response.json();
-      return data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+      return `${SERVER_URL}${data.url}`;
     } catch (error) {
-      console.error('이미지 업로드 실패:', error);
+      console.error('파일일 업로드 실패:', error);
       return '';
     }
   };
