@@ -6,7 +6,7 @@ import { FormField, FormItem } from '@shared/components';
 import { BASE_URI } from '@shared/service';
 
 import { BlockNoteStyles } from './BlockNoteStyles';
-import { locales } from '@blocknote/core';
+import { locales, PartialBlock } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/mantine/style.css';
@@ -14,7 +14,11 @@ import { useCreateBlockNote } from '@blocknote/react';
 
 const locale = locales['en'];
 
-export const PostContent = () => {
+type PostContentFieldEditorProps = {
+  contents?: string;
+};
+
+export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
   const { control } = useFormContext();
   const SERVER_URL = 'http://algo.knu-soft.site';
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -36,10 +40,12 @@ export const PostContent = () => {
       const data = await response.json();
       return `${SERVER_URL}${data.url}`;
     } catch (error) {
-      console.error('파일일 업로드 실패:', error);
+      console.error('파일 업로드 실패:', error);
       return '';
     }
   };
+
+  const initialContent: PartialBlock[] | undefined = contents ? JSON.parse(contents) : undefined;
 
   const editor = useCreateBlockNote({
     dictionary: {
@@ -49,6 +55,7 @@ export const PostContent = () => {
         default: '글을 작성해주세요...',
       },
     },
+    initialContent,
     uploadFile,
   });
 
