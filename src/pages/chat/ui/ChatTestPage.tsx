@@ -32,20 +32,17 @@ const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
 const BASE_WS_URL = 'ws://algo.knu-soft.site'; // WebSocket 기본 URL
 
 export const ChatTestPage = () => {
-  const username = '고양이는 멍멍'; // 사용자 이름
+  const username = 'changedNickName'; // 사용자 이름
+  const email = 'test1@email.com';
   const [roomName, setRoomName] = useState(''); // 현재 접속 중인 채팅방 이름
   const [newRoomName, setNewRoomName] = useState(''); // 새 채팅방 이름 입력 상태
-  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지 <- 총 메세지(rest + 소켓)
+  const [messages, setMessages] = useState<{ sender: string; content: string; email: string }[]>(
+    [],
+  ); // 메세지 <- 총 메세지(rest + 소켓)
   const [socketMessages, setSocketMessages] = useState<{ sender: string; content: string }[]>([]); // 메세지
   const [newMessage, setNewMessage] = useState(''); // 새로 작성 중인 메시지 상태
   const [stompClient, setStompClient] = useState<Client | null>(null); // WebSocket 연결 객체
 
-  const {
-    messages: fetchedMessages,
-    isLoading: isMessagesLoading,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetChatMessages(roomName, 10, 'chatTime,desc');
   // 채팅방 목록 가져오기
   const [page, setPage] = useState(0);
   const size = 10;
@@ -64,16 +61,36 @@ export const ChatTestPage = () => {
   const { mutate: createRoom } = useCreateChatRoom();
   const customToast = useCustomToast();
 
-  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
-  const handleScroll = useCallback(() => {
+  const [messagePage, setMessagePage] = useState(0); // 채팅 메시지 페이지
+  const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
+
+  // 특정 채팅방의 최근 메시지 가져오기
+  const fetchRecentMessages = async (roomName, pageNumber) => {
+    try {
+      const encodedRoomName = encodeURIComponent(roomName);
+      const response = await fetch(
+        `${BASE_API_URL}/api/v1/chat/messages/${encodedRoomName}?page=${pageNumber}&size=10&sort=chatTime,asc`,
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setMessages((prevMessages) => [...prevMessages, ...data.content]);
+        setHasMoreMessages(!data.last);
+      } else {
+        console.error('최근 메시지 가져오기 실패');
+      }
+    } catch (error) {
+      console.error('최근 메시지 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  // 채팅 메시지 스크롤 이벤트 핸들러
+  const handleMessageListScroll = useCallback(() => {
     if (messageListRef.current) {
       const { scrollTop } = messageListRef.current;
 
-      // 스크롤이 맨 위에 닿았을 때 이전 메시지 페칭
-      if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
-        fetchNextPage();
+      if (scrollTop === 0 && hasMoreMessages) {
+        setMessagePage((prevPage) => prevPage + 1);
 
-        // 페칭 후 스크롤 위치를 약간 아래로 내림
         setTimeout(() => {
           if (messageListRef.current) {
             messageListRef.current.scrollTop = 50; // 예: 50px만큼 아래로 내림
@@ -81,23 +98,42 @@ export const ChatTestPage = () => {
         }, 0);
       }
     }
-  }, [fetchNextPage, hasNextPage, isMessagesLoading]);
+  }, [hasMoreMessages]);
+
+  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
+  //   const handleScroll = useCallback(() => {
+  //     if (messageListRef.current) {
+  //       const { scrollTop } = messageListRef.current;
+
+  //       // 스크롤이 맨 위에 닿았을 때 이전 메시지 페칭
+  //       if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
+  //         fetchNextPage();
+
+  //         // 페칭 후 스크롤 위치를 약간 아래로 내림
+  //         setTimeout(() => {
+  //           if (messageListRef.current) {
+  //             messageListRef.current.scrollTop = 50; // 예: 50px만큼 아래로 내림
+  //           }
+  //         }, 0);
+  //       }
+  //     }
+  //   }, [fetchNextPage, hasNextPage, isMessagesLoading]);
 
   useEffect(() => {
     const messagesContainer = messageListRef.current;
     if (messagesContainer) {
-      (messagesContainer as HTMLElement).addEventListener('scroll', handleScroll);
-      return () => (messagesContainer as HTMLElement).removeEventListener('scroll', handleScroll);
+      (messagesContainer as HTMLElement).addEventListener('scroll', handleMessageListScroll);
+      return () =>
+        (messagesContainer as HTMLElement).removeEventListener('scroll', handleMessageListScroll);
     }
-  }, [handleScroll]);
+  }, [handleMessageListScroll]);
 
-  // **REST API에서 가져온 메시지 적용**
+  // 메시지 페이지 변경 시 추가 메시지 불러오기
   useEffect(() => {
-    if (fetchedMessages) {
-      setMessages(fetchedMessages);
+    if (roomName && messagePage > 0) {
+      fetchRecentMessages(roomName, messagePage);
     }
-  }, [fetchedMessages]);
-
+  }, [messagePage]);
   // **새 메시지 추가 시 자동 스크롤**
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -221,8 +257,9 @@ export const ChatTestPage = () => {
   // 채팅방 이름 변경 시 메시지와 연결 초기화
   useEffect(() => {
     if (roomName) {
+      setMessagePage(0); // 메시지 페이지 초기화
       setMessages([]); // 메시지 목록 초기화
-      setSocketMessages([]); // 소켓 메시지 목록 초기화
+      fetchRecentMessages(roomName, 0);
       connectToChatRoom();
     }
   }, [roomName]);
@@ -237,6 +274,7 @@ export const ChatTestPage = () => {
     if (newMessage.trim()) {
       const messageRequest = {
         sender: username,
+        email,
         content: newMessage,
         roomName,
       };
@@ -386,7 +424,7 @@ export const ChatTestPage = () => {
                 overflowY='auto'
                 className='relative'
                 ref={messageListRef}
-                onScroll={handleScroll}
+                onScroll={handleMessageListScroll}
               >
                 {messages
                   .slice()
@@ -394,7 +432,7 @@ export const ChatTestPage = () => {
                   .map((message, index) => (
                     <Box
                       w='full'
-                      h={!(message.sender == username) ? '72px' : '44px'}
+                      h={!(message.email == email) ? '72px' : '44px'}
                       mt='10px'
                       position='relative'
                       key={index}
@@ -402,26 +440,26 @@ export const ChatTestPage = () => {
                       <Flex
                         h='full'
                         gap='7px'
-                        pl={!(message.sender == username) ? '8px' : undefined} // 타인 메세지
-                        pr={message.sender == username ? '8px' : undefined}
+                        pl={!(message.email == email) ? '8px' : undefined} // 타인 메세지
+                        pr={message.email == email ? '8px' : undefined}
                         position='absolute'
                         top='0'
-                        left={!(message.sender == username) ? '0' : undefined} // 타인 메세지일 경우 왼쪽
-                        right={message.sender == username ? '0' : undefined} // 본인 메세지일 경우 오른쪽
-                        justifyContent={message.sender == username ? 'flex-end' : 'flex-start'}
+                        left={!(message.email == email) ? '0' : undefined} // 타인 메세지일 경우 왼쪽
+                        right={message.email == email ? '0' : undefined} // 본인 메세지일 경우 오른쪽
+                        justifyContent={message.email == email ? 'flex-end' : 'flex-start'}
                       >
                         {/* 유저 아이콘 */}
-                        {!(message.sender == username) && <Avatar boxSize='36px' />}
+                        {!(message.email == email) && <Avatar boxSize='36px' />}
                         <Flex
                           w='full'
                           h='full'
                           flexDir='column'
-                          align={message.sender == username ? 'flex-end' : 'flex-start'}
+                          align={message.email == email ? 'flex-end' : 'flex-start'}
                         >
-                          {!(message.sender == username) && (
+                          {!(message.email == email) && (
                             <Text
                               w='full'
-                              textAlign={message.sender == username ? 'right' : 'left'}
+                              textAlign={message.email == email ? 'right' : 'left'}
                               fontSize='12px'
                               fontWeight='semibold'
                               mb='2px'
@@ -433,7 +471,7 @@ export const ChatTestPage = () => {
                             w='auto'
                             h='44px'
                             p='10px'
-                            bg={message.sender == username ? '#9BD9FF' : 'white'}
+                            bg={message.email == email ? '#9BD9FF' : 'white'}
                             fontSize='14px'
                             borderRadius='5px'
                             alignContent='center'

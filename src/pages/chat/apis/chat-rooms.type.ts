@@ -4,6 +4,7 @@ export type ChatRoom = {
 
 export type ChatMessage = {
   sender: string;
+  email: string;
   content: string;
   roomName: string;
 };
