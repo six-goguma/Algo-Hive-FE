@@ -11,7 +11,7 @@ import { createPost, savePostTags } from '../apis';
 
 type PostFormData = {
   title: string;
-  tag: number;
+  tag: number | null;
   content: string;
 };
 
@@ -19,7 +19,7 @@ export const PostWritePage = () => {
   const methods = useForm<PostFormData>({
     defaultValues: {
       title: '',
-      tag: 0,
+      tag: null,
       content: '',
     },
   });

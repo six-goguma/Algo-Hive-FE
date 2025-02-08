@@ -31,23 +31,23 @@ export const PostTag = () => {
             <HStack gap={{ base: '2', md: '4' }}>
               {TAG_DATA.map((tag) => (
                 <Button
-                  key={tag.label}
+                  key={tag.id}
                   size='md'
                   borderRadius='md'
-                  variant={selectedTag === tag.label ? 'solid' : 'outline'}
+                  variant={selectedTag === tag.id ? 'solid' : 'outline'}
                   colorScheme={tag.colorScheme}
-                  bg={selectedTag === tag.label ? `${tag.colorScheme}.300` : 'transparent'}
-                  color={selectedTag === tag.label ? 'black' : `${tag.colorScheme}.500`}
+                  bg={selectedTag === tag.id ? `${tag.colorScheme}.300` : 'transparent'}
+                  color={selectedTag === tag.id ? 'black' : `${tag.colorScheme}.500`}
                   _hover={{
                     bg: `${tag.colorScheme}.300`,
                     color: 'black',
                   }}
                   border='1px solid'
                   borderColor={
-                    selectedTag === tag.label ? `${tag.colorScheme}.400` : `${tag.colorScheme}.500`
+                    selectedTag === tag.id ? `${tag.colorScheme}.400` : `${tag.colorScheme}.500`
                   }
                   onClick={() => {
-                    setValue('tag', tag.label);
+                    setValue('tag', tag.id); // 태그를 숫자로 저장
                   }}
                 >
                   {tag.label}
