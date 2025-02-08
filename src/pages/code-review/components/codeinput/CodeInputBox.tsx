@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
-import { Flex, Text, Button, Input, Box, IconButton } from '@chakra-ui/react';
+import { Flex, Text, Button, Input, Box, IconButton, Spinner } from '@chakra-ui/react';
 
 import { ExternalLink, Copy } from 'lucide-react';
+
+import { useCustomToast } from '@shared/hooks';
 
 import { ResponseCodeReview } from '../../apis';
 import { useCodeReview } from '../../hooks';
@@ -58,6 +60,31 @@ export const CodeInputBox = () => {
     });
   };
 
+  const customToast = useCustomToast();
+
+  // 클립보드 복사 함수
+  const handleCopyToClipboard = () => {
+    if (codeReviewResult) {
+      const textToCopy = codeReviewResult.candidates[0].content.parts[0].text;
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          customToast({
+            toastStatus: 'success',
+            toastTitle: '성공!',
+            toastDescription: '작업이 성공적으로 완료되었습니다.',
+          });
+        })
+        .catch(() => {
+          customToast({
+            toastStatus: 'error',
+            toastTitle: '복사 실패',
+            toastDescription: '클립보드 복사에 실패했습니다',
+          });
+        });
+    }
+  };
+
   return (
     <Flex direction='column' w='full' mt='60px' gap='5px'>
       <Text w='full' textAlign='left' color='custom.blue' fontSize='24px' fontWeight='Bold'>
@@ -97,8 +124,9 @@ export const CodeInputBox = () => {
         fontSize='14px'
         alignSelf='flex-end'
         onClick={handleSubmit}
+        disabled={isLoading} // 로딩 중 버튼 비활성화
       >
-        AI 코드리뷰
+        {isLoading ? <Spinner size='sm' /> : 'AI 코드리뷰'}
       </Button>
 
       <Flex direction='column' w='full' mt='28px' gap='5px'>
@@ -109,7 +137,12 @@ export const CodeInputBox = () => {
           <Text w='full' textAlign='left' fontSize='16px' mb='5px'>
             게시물로 작성하거나 복사해서 코드 리뷰를 활용해보세요!
           </Text>
-          <IconButton aria-label='copy' boxSize='24px' icon={<Copy size={16} />}></IconButton>
+          <IconButton
+            aria-label='copy'
+            boxSize='24px'
+            icon={<Copy size={16} />}
+            onClick={handleCopyToClipboard}
+          ></IconButton>
         </Flex>
         <Box bg='white' color='black' w='full' h='600px' overflow='auto'>
           {codeReviewResult && <pre>{codeReviewResult.candidates[0].content.parts[0].text}</pre>}
