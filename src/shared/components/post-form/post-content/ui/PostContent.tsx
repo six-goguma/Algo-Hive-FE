@@ -59,12 +59,18 @@ export const PostContent = () => {
       rules={{ required: '글을 작성해주세요' }}
       render={({ field }) => (
         <FormItem style={{ width: '100%' }}>
+          <Box w='full' h={{ base: '4px', md: '8px' }} bg='white' />
           <Box
             w='full'
             h={isMobile ? '400px' : '600px'}
             overflow='auto'
             background='white'
             textAlign='left'
+            sx={{
+              '::-webkit-scrollbar': { display: 'none' },
+              '-ms-overflow-style': 'none',
+              'scrollbar-width': 'none',
+            }}
           >
             <BlockNoteStyles />
             <BlockNoteView

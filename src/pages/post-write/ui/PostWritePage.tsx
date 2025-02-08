@@ -7,9 +7,11 @@ import { useCustomToast } from '@shared/hooks';
 
 import { PostModal } from '@widgets/modals';
 
+import { createPost, savePostTags } from '../apis';
+
 type PostFormData = {
   title: string;
-  tag: string;
+  tag: number;
   content: string;
 };
 
@@ -17,7 +19,7 @@ export const PostWritePage = () => {
   const methods = useForm<PostFormData>({
     defaultValues: {
       title: '',
-      tag: '',
+      tag: 0,
       content: '',
     },
   });
@@ -25,9 +27,44 @@ export const PostWritePage = () => {
   const customToast = useCustomToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const onSubmit = (data: PostFormData) => {
-    console.log('폼 데이터 제출:', data);
+  const onSubmit = () => {
     onOpen();
+  };
+
+  const onConfirmButton = async () => {
+    try {
+      const data = methods.getValues();
+      console.log('게시글 데이터 제출:', data);
+
+      const createdPost = await createPost({
+        title: data.title,
+        contents: data.content,
+        thumbnail: '',
+        summary: '',
+      });
+
+      console.log('게시글 생성 성공:', createdPost);
+
+      if (createdPost?.id) {
+        await savePostTags(createdPost.id, data.tag);
+        console.log('태그 저장 성공');
+      }
+
+      customToast({
+        toastStatus: 'success',
+        toastTitle: '게시글 출간 완료',
+        toastDescription: '게시글이 성공적으로 출간되었습니다!',
+      });
+
+      onClose();
+    } catch (error) {
+      console.error('게시글 출간 실패:', error);
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '출간 실패',
+        toastDescription: '게시글 출간 중 오류가 발생했습니다.',
+      });
+    }
   };
 
   const onInvalid = (errors: FieldErrors<PostFormData>) => {
@@ -65,6 +102,9 @@ export const PostWritePage = () => {
           onClose={onClose}
           buttonTitle='출간하기'
           postType='create'
+          postContent={methods.watch('content')}
+          postSummary=''
+          onConfirmButton={onConfirmButton}
         />
       </VStack>
     </Form>

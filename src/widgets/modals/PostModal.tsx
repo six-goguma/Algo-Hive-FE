@@ -24,10 +24,17 @@ type PostModalProps = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  postContent: string;
+  postSummary: string;
   buttonTitle: string;
+  onConfirmButton: (data: {
+    title: string;
+    contents: string;
+    thumbnail: string;
+    summary: string;
+  }) => void;
   postType: 'create' | 'edit';
   imageUrl?: string;
-  postContent?: string;
 };
 
 export const PostModal = ({
@@ -38,12 +45,16 @@ export const PostModal = ({
   imageUrl,
   postType,
   postContent,
+  postSummary,
+  onConfirmButton,
 }: PostModalProps) => {
   const [inputCount, setInputCount] = useState<number>(0);
   const [imgFile, setImgFile] = useState<File>();
   const [imgPath, setImgPath] = useState('');
-  const [contents, setContents] = useState<string>(postContent || '');
+  const [contents, setContents] = useState<string>(postContent);
   const [showControls, setShowControls] = useState<boolean>(false);
+  const [thumbnail, setThumbnail] = useState<string>('');
+  const [summary, setSummary] = useState<string>(postSummary);
 
   const imgRef = useRef<HTMLInputElement | null>(null);
 
@@ -51,7 +62,7 @@ export const PostModal = ({
 
   const onCountText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputCount(e.target.value.length);
-    setContents(e.target.value);
+    setSummary(e.target.value);
   };
 
   const onClick = () => {
@@ -71,6 +82,7 @@ export const PostModal = ({
     reader.onload = () => {
       setImgFile(file);
       setImgPath(reader.result as string);
+      setThumbnail(reader.result as string);
     };
     reader.readAsDataURL(file);
     setShowControls(true);
@@ -86,9 +98,10 @@ export const PostModal = ({
     if (postType === 'edit') {
       setImgPath(imageUrl || '');
       setContents(postContent || '');
+      setSummary(postSummary || '');
       setShowControls(!!imageUrl);
     }
-  }, [imageUrl, postType, postContent]);
+  }, [imageUrl, postType, postSummary, postContent]);
 
   return (
     <Modal size='sm' isOpen={isOpen} onClose={onClose} isCentered>
@@ -169,7 +182,7 @@ export const PostModal = ({
                   placeholder='나의 포스트를 짧게 소개해보아요.'
                   fontSize='sm'
                   onChange={onCountText}
-                  value={contents}
+                  value={summary}
                 />
                 <Flex w='full' justify='flex-end' mt='2px'>
                   <Text as='b' fontSize='sm' color='customGray.500'>
@@ -201,6 +214,9 @@ export const PostModal = ({
               borderRadius='3px'
               colorScheme='custom.blue'
               _hover={{}}
+              onClick={() => {
+                onConfirmButton({ title, contents, thumbnail, summary });
+              }}
             >
               {buttonTitle}
             </Button>
