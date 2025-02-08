@@ -55,7 +55,12 @@ export const NavigateMenu = ({ onClick }: NavigateMenuProps) => {
           <MenuList minW='0' w='full'>
             {isMobile && (
               <>
-                <MenuItem fontSize='sm' icon={<SquarePenIcon />} as={Link} to={RouterPath.MYPAGE}>
+                <MenuItem
+                  fontSize='sm'
+                  icon={<SquarePenIcon />}
+                  as={Link}
+                  to={RouterPath.POST_WRITE}
+                >
                   새 글 쓰기
                 </MenuItem>
                 <MenuDivider />
