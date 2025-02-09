@@ -14,6 +14,6 @@ export const loginApi = async ({ email, password }: RequestLoginApi): Promise<Re
 export const logoutApiPath = `/mypage/logout`;
 
 export const logoutApi = async (): Promise<ResponseLogoutApi> => {
-  const response = await fetchInstance.post<ResponseLogoutApi>(logoutApiPath);
+  const response = await fetchInstance.get<ResponseLogoutApi>(logoutApiPath);
   return response.data;
 };
