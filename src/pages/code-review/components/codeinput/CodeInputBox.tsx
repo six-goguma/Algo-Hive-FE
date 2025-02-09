@@ -66,31 +66,45 @@ export const CodeInputBox = () => {
 
   // 클립보드 복사 함수
   const handleCopyToClipboard = async () => {
-    if (codeReviewResult && codeReviewResult.candidates?.[0]?.content?.parts?.[0]?.text) {
-      try {
-        const textToCopy = codeReviewResult.candidates[0].content.parts[0].text;
-        await navigator.clipboard.writeText(textToCopy);
-        customToast({
-          toastStatus: 'success',
-          toastTitle: '성공!',
-          toastDescription: '작업이 성공적으로 완료되었습니다.',
-        });
-      } catch (error) {
-        console.error('클립보드 복사 오류:', error);
-        customToast({
-          toastStatus: 'error',
-          toastTitle: '복사 실패',
-          toastDescription: '클립보드 복사에 실패했습니다',
-        });
-      }
-    } else {
-      console.error('codeReviewResult 데이터가 올바르지 않습니다:', codeReviewResult);
+    const textToCopy = codeReviewResult?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    if (!textToCopy) {
       customToast({
         toastStatus: 'error',
         toastTitle: '복사 실패',
         toastDescription: '복사할 내용이 없습니다.',
       });
+      return;
     }
+
+    // 클립보드 API가 지원되는 경우
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        customToast({
+          toastStatus: 'success',
+          toastTitle: '성공!',
+          toastDescription: '클립보드에 복사되었습니다.',
+        });
+        return;
+      } catch (error) {
+        console.error('클립보드 복사 실패:', error);
+      }
+    }
+
+    // 📌 HTTP 환경에서는 예전 방식 사용 (document.execCommand)
+    const textArea = document.createElement('textarea');
+    textArea.value = textToCopy;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+
+    customToast({
+      toastStatus: 'success',
+      toastTitle: '성공!',
+      toastDescription: '클립보드에 복사되었습니다.',
+    });
   };
 
   const navigate = useNavigate();
@@ -189,7 +203,7 @@ export const CodeInputBox = () => {
             onClick={handleCopyToClipboard}
           ></IconButton>
         </Flex>
-        <Box bg='white' color='black' w='full' h='600px' overflow='auto'>
+        <Box bg='white' color='black' w='calc(100% - 40px)' h='600px' overflow='auto'>
           {codeReviewResult && <pre>{codeReviewResult.candidates[0].content.parts[0].text}</pre>}
         </Box>
         <Button
