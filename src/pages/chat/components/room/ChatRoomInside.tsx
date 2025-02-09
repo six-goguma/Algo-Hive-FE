@@ -22,8 +22,8 @@ interface ChatRoomInsideProps {
   handleSendMessage: () => void; // 메시지 전송 함수
   isComposing: boolean; // IME 입력 상태
   setIsComposing: (isComposing: boolean) => void; // IME 입력 상태 업데이트 함수
-  messagesEndRef?: React.RefObject<HTMLDivElement | null>;
-  messageListRef?: React.RefObject<HTMLDivElement | null>; // 메시지 목록 스크롤을 위한 Ref
+  messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  messageListRef: React.RefObject<HTMLDivElement | null>; // 메시지 목록 스크롤을 위한 Ref
   handleMessageListScroll: () => void; // 스크롤 이벤트 핸들러
   email: string; // 현재 사용자 이메일
 }

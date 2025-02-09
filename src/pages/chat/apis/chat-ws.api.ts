@@ -3,7 +3,6 @@ import { subscribe, sendMessage } from '@shared/service';
 // 사용자 입장 알림
 export const joinChatRoom = (userName: string, roomName: string) => {
   sendMessage('/api/app/chat/join', { userName, roomName });
-  console.log(`[${userName}] 님이 [${roomName}] 채팅방에 입장했습니다.`);
 };
 
 // 메시지 전송

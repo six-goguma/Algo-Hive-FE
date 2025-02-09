@@ -22,7 +22,7 @@ export const ChatPage = () => {
     [],
   ); // 메세지 <- 총 메세지(rest + 소켓)
   const [socketMessages, setSocketMessages] = useState<
-    { sender: string; email: string; content: string }[]
+    { sender: string; content: string; email: string }[]
   >([]); // 메세지
   const [newMessage, setNewMessage] = useState(''); // 새로 작성 중인 메시지 상태
   const [stompClient, setStompClient] = useState<Client | null>(null); // WebSocket 연결 객체
@@ -49,7 +49,7 @@ export const ChatPage = () => {
   const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
 
   // 특정 채팅방의 최근 메시지 가져오기
-  const fetchRecentMessages = async (roomName, pageNumber) => {
+  const fetchRecentMessages = async (roomName: string, pageNumber: number) => {
     try {
       const encodedRoomName = encodeURIComponent(roomName);
       const response = await fetch(
@@ -77,31 +77,12 @@ export const ChatPage = () => {
 
         setTimeout(() => {
           if (messageListRef.current) {
-            messageListRef.current.scrollTop = 50; // 예: 50px만큼 아래로 내림
+            messageListRef.current.scrollTop = 50;
           }
         }, 0);
       }
     }
   }, [hasMoreMessages]);
-
-  // 🚀 **스크롤 이벤트 핸들러 (무한 스크롤)**
-  //   const handleScroll = useCallback(() => {
-  //     if (messageListRef.current) {
-  //       const { scrollTop } = messageListRef.current;
-
-  //       // 스크롤이 맨 위에 닿았을 때 이전 메시지 페칭
-  //       if (scrollTop === 0 && hasNextPage && !isMessagesLoading) {
-  //         fetchNextPage();
-
-  //         // 페칭 후 스크롤 위치를 약간 아래로 내림
-  //         setTimeout(() => {
-  //           if (messageListRef.current) {
-  //             messageListRef.current.scrollTop = 50; // 예: 50px만큼 아래로 내림
-  //           }
-  //         }, 0);
-  //       }
-  //     }
-  //   }, [fetchNextPage, hasNextPage, isMessagesLoading]);
 
   useEffect(() => {
     const messagesContainer = messageListRef.current;
@@ -117,7 +98,9 @@ export const ChatPage = () => {
     if (roomName && messagePage > 0) {
       fetchRecentMessages(roomName, messagePage);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messagePage]);
+
   // **새 메시지 추가 시 자동 스크롤**
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -142,6 +125,7 @@ export const ChatPage = () => {
 
   useEffect(() => {
     connectToWebSocket();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // WebSocket 연결 설정 및 사용자 이름 등록
@@ -215,7 +199,7 @@ export const ChatPage = () => {
         // 사용자 목록 구독
         client.subscribe('/topic/users', (messageOutput) => {
           const userList = JSON.parse(messageOutput.body);
-          setUsersInRooms(userList); // 사용자와 방 정보 업데이트
+          setUsersInRooms(userList);
         });
 
         client.subscribe('/topic/room-users', (messageOutput) => {
@@ -243,6 +227,7 @@ export const ChatPage = () => {
     if (roomName) {
       setMessagePage(0); // 메시지 페이지 초기화
       setMessages([]); // 메시지 목록 초기화
+      setSocketMessages([]); // 소켓 메시지 목록 초기화
       fetchRecentMessages(roomName, 0);
       connectToChatRoom();
     }
@@ -268,7 +253,7 @@ export const ChatPage = () => {
         body: JSON.stringify(messageRequest),
       });
 
-      setNewMessage(''); // 입력 필드 초기화
+      setNewMessage('');
     }
   };
 
