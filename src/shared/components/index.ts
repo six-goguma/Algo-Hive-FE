@@ -5,3 +5,4 @@ export * from './error';
 export * from './buttons';
 export * from './form';
 export * from './input';
+export * from './buttons';
