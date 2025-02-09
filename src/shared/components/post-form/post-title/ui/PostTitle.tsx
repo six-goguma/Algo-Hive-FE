@@ -1,11 +1,20 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { VStack, Box, Divider, Textarea } from '@chakra-ui/react';
 
 import { FormField, FormItem } from '@shared/components';
 
-export const PostTitle = () => {
-  const { control } = useFormContext();
+type PostTitleProps = {
+  title?: string;
+};
+
+export const PostTitle = ({ title }: PostTitleProps) => {
+  const { control, setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue('title', title ?? '');
+  }, [title, setValue]);
 
   return (
     <FormField

@@ -32,16 +32,16 @@ type PostModalProps = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  buttonTitle: string;
+  postType: 'create' | 'edit';
   postContent: string;
   postSummary: string;
-  buttonTitle: string;
   onConfirmButton: (data: {
     title: string;
     contents: string;
     thumbnail: string;
     summary: string;
   }) => void;
-  postType: 'create' | 'edit';
   imageUrl?: string;
 };
 
@@ -79,10 +79,12 @@ export const PostModal = ({
 
   useEffect(() => {
     if (postType === 'edit') {
-      setValue('thumbnail', imageUrl || '');
-      setValue('summary', postSummary || '');
+      form.reset({
+        thumbnail: imageUrl || '',
+        summary: postSummary || '',
+      });
     }
-  }, [imageUrl, postType, postSummary, setValue]);
+  }, [postType, imageUrl, postSummary, form]);
 
   const uploadFile = async (file: File): Promise<string> => {
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -96,17 +98,15 @@ export const PostModal = ({
 
     const formData = new FormData();
     formData.append('file', file);
-    setIsUploading(true);
 
     try {
+      setIsUploading(true);
       const response = await fetch(`${BASE_URI}/images/upload`, {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error('파일 업로드 실패');
-      }
+      if (!response.ok) throw new Error('파일 업로드 실패');
 
       const data = await response.json();
       return `${SERVER_URL}${data.url}`;

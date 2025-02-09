@@ -1,14 +1,8 @@
 import { fetchInstance } from '@shared/service';
 
-const POSTS_PATH = '/posts';
+import { CreatePostResponse } from './';
 
-type CreatePostResponse = {
-  id: number;
-  title: string;
-  contents: string;
-  thumbnail: string;
-  summary: string;
-};
+const POSTS_PATH = '/posts';
 
 export const createPost = async (postData: {
   title: string;

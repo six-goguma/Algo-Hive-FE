@@ -36,3 +36,11 @@ export type RequestPosts = {
 export type RequestPostParams = {
   postId: number;
 };
+
+export type PostFormData = {
+  title: string;
+  tag: number | null;
+  content: string;
+  thumbnail: string;
+  summary: string;
+};

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Text, VStack, HStack, Button } from '@chakra-ui/react';
@@ -6,9 +7,19 @@ import { FormField, FormItem } from '@shared/components';
 
 import { TAG_DATA } from '../data';
 
-export const PostTag = () => {
+type PostTagProps = {
+  tag?: number;
+};
+
+export const PostTag = ({ tag }: PostTagProps) => {
   const { control, setValue, watch } = useFormContext();
   const selectedTag = watch('tag');
+
+  useEffect(() => {
+    if (tag !== undefined) {
+      setValue('tag', tag);
+    }
+  }, [tag, setValue]);
 
   return (
     <FormField
@@ -47,7 +58,7 @@ export const PostTag = () => {
                     selectedTag === tag.id ? `${tag.colorScheme}.400` : `${tag.colorScheme}.500`
                   }
                   onClick={() => {
-                    setValue('tag', tag.id); // 태그를 숫자로 저장
+                    setValue('tag', tag.id);
                   }}
                 >
                   {tag.label}

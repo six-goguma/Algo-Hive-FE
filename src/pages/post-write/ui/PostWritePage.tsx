@@ -4,16 +4,11 @@ import { useDisclosure, VStack } from '@chakra-ui/react';
 
 import { Form, PostTitle, PostTag, PostContent, PostButtons } from '@shared/components';
 import { useCustomToast } from '@shared/hooks';
+import { PostFormData } from '@shared/types';
 
 import { PostModal } from '@widgets/modals';
 
 import { createPost, savePostTags } from '../apis';
-
-type PostFormData = {
-  title: string;
-  tag: number | null;
-  content: string;
-};
 
 export const PostWritePage = () => {
   const methods = useForm<PostFormData>({
@@ -21,6 +16,8 @@ export const PostWritePage = () => {
       title: '',
       tag: null,
       content: '',
+      thumbnail: '',
+      summary: '',
     },
   });
 
@@ -31,7 +28,7 @@ export const PostWritePage = () => {
     onOpen();
   };
 
-  const onConfirmButton = async (modalData: { thumbnail: string; summary: string }) => {
+  const onCreatePostButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
       const data = methods.getValues();
       console.log('게시글 데이터 제출:', data);
@@ -103,8 +100,9 @@ export const PostWritePage = () => {
           buttonTitle='출간하기'
           postType='create'
           postContent={methods.watch('content')}
-          postSummary=''
-          onConfirmButton={onConfirmButton}
+          imageUrl={methods.watch('thumbnail')}
+          postSummary={methods.watch('summary')}
+          onConfirmButton={onCreatePostButton}
         />
       </VStack>
     </Form>
