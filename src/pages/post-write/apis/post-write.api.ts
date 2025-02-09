@@ -24,7 +24,7 @@ export const createPost = async (postData: {
   return response.data;
 };
 
-export const savePostTags = async (postId: number, tagId: number | null) => {
+export const savePostTags = async (postId: number, tagId: number[] | null) => {
   const response = await fetchInstance.post(`${POSTS_PATH}/${postId}/tags`, {
     body: JSON.stringify({ tagId }),
     headers: {

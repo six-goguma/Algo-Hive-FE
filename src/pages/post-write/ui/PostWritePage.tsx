@@ -14,7 +14,7 @@ export const PostWritePage = () => {
   const methods = useForm<PostFormData>({
     defaultValues: {
       title: '',
-      tag: null,
+      tag: [],
       content: '',
       thumbnail: '',
       summary: '',
