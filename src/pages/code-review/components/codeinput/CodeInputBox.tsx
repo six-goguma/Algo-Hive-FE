@@ -203,8 +203,10 @@ export const CodeInputBox = () => {
             onClick={handleCopyToClipboard}
           ></IconButton>
         </Flex>
-        <Box bg='white' color='black' w='calc(100% - 40px)' h='600px' overflow='auto'>
-          {codeReviewResult && <pre>{codeReviewResult.candidates[0].content.parts[0].text}</pre>}
+        <Box bg='white' color='black' w='full' h='600px' overflow='auto'>
+          <Box h='full' p='0 10px 0 10px'>
+            {codeReviewResult && <pre>{codeReviewResult.candidates[0].content.parts[0].text}</pre>}
+          </Box>
         </Box>
         <Button
           leftIcon={<ExternalLink size={16} />}
