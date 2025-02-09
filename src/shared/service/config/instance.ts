@@ -9,6 +9,7 @@ export const fetchInstance = new Http(BASE_URI, {
   headers: {
     'Content-Type': 'application/json',
   },
+  credentials: 'include',
 });
 
 fetchInstance.registerInterceptor({
