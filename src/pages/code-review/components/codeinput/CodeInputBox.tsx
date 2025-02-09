@@ -36,7 +36,7 @@ export const CodeInputBox = () => {
   const [problemName, setProblemName] = useState<string>(''); // 문제 번호
   const [codeReviewResult, setCodeReviewResult] = useState<ResponseCodeReview | null>(null);
 
-  const { mutate, isPending, isError, error } = useCodeReview(); // react-query 훅 사용
+  const { mutate, isPending } = useCodeReview(); // react-query 훅 사용
   const customToast = useCustomToast(); // 커스텀 토스트 훅
 
   const handleSubmit = () => {
