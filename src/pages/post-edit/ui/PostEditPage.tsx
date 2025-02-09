@@ -141,9 +141,9 @@ export const PostEditPage = () => {
   return (
     <Form {...methods}>
       <VStack w='full' py='20px' gap='0'>
-        <PostTitle title={postDetail.title} />
-        <PostTag tag={postTag.tagIds} />
-        <PostContent contents={postDetail.contents} />
+        <PostTitle />
+        <PostTag />
+        <PostContent />
         <PostButtons buttonText='수정하기' onClick={methods.handleSubmit(onSubmit, onInvalid)} />
         <PostModal
           title={methods.watch('title')}
