@@ -1,14 +1,16 @@
-import { isApiErrorData, ApiError, UnknownApiError } from '@shared/config';
+import { ApiError, isApiErrorData, UnknownApiError } from '@shared/config';
 import { Http, HttpResponse } from '@shared/lib';
 
 const API_PREFIX = `/api/v1`;
 
-export const BASE_URI = `http://algo.knu-soft.site${API_PREFIX}`;
+//export const BASE_URI = `http://algo.knu-soft.site${API_PREFIX}`;
+export const BASE_URI = `http://localhost:8080${API_PREFIX}`;
 
 export const fetchInstance = new Http(BASE_URI, {
   headers: {
     'Content-Type': 'application/json',
   },
+  credentials: 'include',
 });
 
 fetchInstance.registerInterceptor({

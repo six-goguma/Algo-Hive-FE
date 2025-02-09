@@ -8,7 +8,7 @@ export const changeUserNickname = async ({
   nickName,
 }: RequestChangeUserNickName): Promise<ResponseChangeUserNickName> => {
   const response = await fetchInstance.put<ResponseChangeUserNickName>(UserNicknamePath, {
-    body: JSON.stringify(nickName),
+    body: JSON.stringify({ nickName: nickName }),
   });
   console.log(nickName);
   return response.data;
