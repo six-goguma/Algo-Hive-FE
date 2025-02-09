@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Box, Flex, useBreakpointValue } from '@chakra-ui/react';
 
 import { FormField, FormItem } from '@shared/components';
-import { BASE_URI } from '@shared/service';
+import { BASE_URI, SERVER_FILE_URI } from '@shared/service';
 import { BlockNoteStyles } from '@shared/styles';
 
 import { locales, PartialBlock } from '@blocknote/core';
@@ -20,7 +20,6 @@ type PostContentFieldEditorProps = {
 
 export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
   const { control } = useFormContext();
-  const SERVER_URL = 'http://algo.knu-soft.site';
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const uploadFile = async (file: File): Promise<string> => {
@@ -38,7 +37,7 @@ export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
       }
 
       const data = await response.json();
-      return `${SERVER_URL}${data.url}`;
+      return `${SERVER_FILE_URI}${data.url}`;
     } catch (error) {
       console.error('파일 업로드 실패:', error);
       return '';
