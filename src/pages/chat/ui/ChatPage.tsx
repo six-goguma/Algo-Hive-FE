@@ -64,7 +64,7 @@ export const ChatPage = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setMessages((prevMessages) => [...(prevMessages || []), ...(data.content || [])]);
+        setMessages((prevMessages) => [...prevMessages, ...data.content]);
         setHasMoreMessages(!data.last);
       } else {
         console.error('최근 메시지 가져오기 실패');
