@@ -39,7 +39,7 @@ export type RequestPostParams = {
 
 export type PostFormData = {
   title: string;
-  tag: number | null;
+  tag: number[];
   content: string;
   thumbnail: string;
   summary: string;

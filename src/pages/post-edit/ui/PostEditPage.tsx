@@ -20,7 +20,7 @@ export const PostEditPage = () => {
   const methods = useForm<PostFormData>({
     defaultValues: {
       title: '',
-      tag: null,
+      tag: [],
       content: '',
       thumbnail: '',
       summary: '',
@@ -69,8 +69,8 @@ export const PostEditPage = () => {
       setValue('summary', postDetail.summary);
     }
 
-    if (postTag) {
-      setValue('tag', postTag.tagIds[0]);
+    if (postTag && Array.isArray(postTag.tagIds)) {
+      setValue('tag', postTag.tagIds);
     }
   }, [postDetail, postTag, setValue]);
 

@@ -22,7 +22,7 @@ export const updatePost = async (
   return response.data;
 };
 
-export const updatePostTags = async (postId: number, tagId: number[] | null) => {
+export const updatePostTags = async (postId: number, tagId: number[]) => {
   const response = await fetchInstance.put(`${POSTS_PATH}/${postId}/tags`, {
     body: JSON.stringify({ tagId }),
     headers: {
