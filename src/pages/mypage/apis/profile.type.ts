@@ -1,5 +1,5 @@
 export type ResponseGetProfile = {
-  url: string;
+  url: string | null;
 };
 
 export type ResponseAddProfile = {
