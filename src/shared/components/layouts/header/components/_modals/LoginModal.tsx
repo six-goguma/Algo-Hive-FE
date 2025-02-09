@@ -24,16 +24,14 @@ export const LoginModal = ({
     <HeaderModal
       modalTitle={LOGIN_DATA.MODAL_TITLE}
       isOpen={isOpen}
-      buttonText={LOGIN_DATA.BUTTON_TEXT}
       navigateText={LOGIN_DATA.NAVIGATE_TEXT}
       navigateModal={LOGIN_DATA.NAVIGATE_MODAL}
       modalType={modalType}
       setModalType={setModalType}
       onClose={onClose}
-      setIsLogin={setIsLogin}
     >
       <FormControl>
-        <LoginSection />
+        <LoginSection onClose={onClose} setIsLogin={setIsLogin} />
       </FormControl>
     </HeaderModal>
   );

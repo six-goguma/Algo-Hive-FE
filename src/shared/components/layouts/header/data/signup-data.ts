@@ -20,7 +20,6 @@ export const SIGNUP_DATA = {
     PASSWORD_PLACEHOLDER: '비밀번호를 입력하세요.',
     PASSWORD_CONFIRM_PLACEHOLDER: '비밀번호를 한번 더 입력하세요.',
   },
-  BUTTON_TEXT: '회원가입',
   NAVIGATE_TEXT: '이미 회원이신가요?',
   NAVIGATE_MODAL: '로그인',
 };

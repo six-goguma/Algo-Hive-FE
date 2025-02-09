@@ -5,10 +5,13 @@ const API_PREFIX = `/api/v1`;
 
 export const BASE_URI = `http://algo.knu-soft.site${API_PREFIX}`;
 
+export const SERVER_FILE_URI = `http://algo.knu-soft.site`;
+
 export const fetchInstance = new Http(BASE_URI, {
   headers: {
     'Content-Type': 'application/json',
   },
+  credentials: 'include',
 });
 
 fetchInstance.registerInterceptor({
