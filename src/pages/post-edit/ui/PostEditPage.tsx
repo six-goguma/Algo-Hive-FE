@@ -138,22 +138,6 @@ export const PostEditPage = () => {
   if (!postDetail || !postTag) return <Box>데이터를 불러올 수 없습니다.</Box>;
 
   return (
-    <VStack w='full' py='20px' gap='0'>
-      <PostTitle />
-      <PostTag />
-      <PostContent />
-      <PostButtons buttonText='수정하기' onClick={onOpen} />
-      <PostModal
-        title={data.title}
-        isOpen={isOpen}
-        onClose={onClose}
-        buttonTitle='수정하기'
-        postType='edit'
-        postContent=''
-        postSummary=''
-        onConfirmButton={onClose}
-      />
-    </VStack>
     <Form {...form}>
       <VStack w='full' py='20px' gap='0'>
         <PostTitle />
