@@ -51,7 +51,7 @@ export const ChatPage = () => {
   const [email, setEmail] = useState(authStorage.email.get());
 
   useEffect(() => {
-    setUserName(authStorage.nickName.get);
+    setUserName(authStorage.nickName.get());
     setEmail(authStorage.email.get());
   }, []);
 
