@@ -115,8 +115,8 @@ export const UserProfileSection = ({ isPending }: { isPending: boolean }) => {
               render={({ field }) => (
                 <>
                   <Flex w={{ base: 'full', sm: '128px' }} flexDir='column' align='center'>
-                    {typeof userImgUrlData === 'string' ? (
-                      <Image src={userImgUrlData} boxSize={24} mb='16px' borderRadius='full' />
+                    {userImgUrlData?.url ? (
+                      <Image src={userImgUrlData.url} boxSize={24} mb='16px' borderRadius='full' />
                     ) : (
                       <Avatar boxSize={24} mb='16px' h='auto' src='https://bit.ly/broken-link' />
                     )}
