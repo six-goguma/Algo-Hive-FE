@@ -29,8 +29,9 @@ export const PostEditPage = () => {
         onClose={onClose}
         buttonTitle='수정하기'
         postType='edit'
-        imageUrl={data.thumbnail}
-        postContent={data.content}
+        postContent=''
+        postSummary=''
+        onConfirmButton={onClose}
       />
     </VStack>
   );
