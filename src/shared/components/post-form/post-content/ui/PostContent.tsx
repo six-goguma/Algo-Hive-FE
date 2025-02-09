@@ -22,6 +22,25 @@ export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
   const { control } = useFormContext();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
+  function generateStorageId(): string {
+    const lettersAndNumbers: string =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    let result: string = '';
+
+    for (let i = 0; i < 10; i++) {
+      result += lettersAndNumbers.charAt(Math.floor(Math.random() * lettersAndNumbers.length));
+    }
+
+    return result
+      .split('')
+      .sort(() => Math.random() - 0.5)
+      .join('');
+  }
+
+  const storageId: string = generateStorageId();
+  console.log(storageId);
+
   const uploadFile = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
