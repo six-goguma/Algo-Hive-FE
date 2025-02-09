@@ -1,33 +1,53 @@
+import { useEffect, useState } from 'react';
+
 import { Flex, VStack } from '@chakra-ui/react';
 
-import { ButtonSkeleton, NavigateButton, PostList, Tabs } from '../components';
+import { Pagination } from '@shared/components';
+
+import { NavigateButton, PostList, Tabs } from '../components';
 import { useGetPosts } from '../hooks';
 
 export const MainPage = () => {
-  //TODO: useState로 Tabs값 바꿔서 넣기
+  const [activeTab, setActiveTab] = useState<'createdAt' | 'likeCount'>('createdAt');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const {
     data: postData,
     isPending,
     isError,
+    refetch,
   } = useGetPosts({
-    page: 0,
-    size: 10,
-    sort: { key: 'createdAt', order: 'desc' },
+    page: currentPage - 1,
+    size: 12,
+    sort: { key: activeTab, order: 'desc' },
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    refetch();
+  }, [currentPage, activeTab, refetch]);
+
   if (isError) return <div>오류가 발생했습니다.</div>;
+
+  const totalPages = postData?.totalPages ?? 1;
+
   return (
     <Flex w='full' justifyContent='center'>
       <VStack spacing={10} pb={10}>
-        {isPending ? (
-          <ButtonSkeleton />
-        ) : (
-          <Flex w='full' justifyContent='space-between'>
-            <Tabs />
-            <NavigateButton />
-          </Flex>
-        )}
+        <Flex w='full' justifyContent='space-between'>
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <NavigateButton />
+        </Flex>
         <PostList postData={postData?.content} isPending={isPending} />
+        <Pagination
+          totalPages={totalPages}
+          totalElements={postData?.totalElements ?? 0}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          first={postData?.first ?? true}
+          last={postData?.last ?? true}
+          numberOfElements={postData?.numberOfElements ?? 0}
+        />
       </VStack>
     </Flex>
   );
