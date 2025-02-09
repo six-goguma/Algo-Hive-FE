@@ -47,11 +47,11 @@ export const ChatPage = () => {
   const [messagePage, setMessagePage] = useState(0); // 채팅 메시지 페이지
   const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
 
-  const [username, setUsername] = useState(authStorage.nickName.get());
+  const [userName, setUserName] = useState(authStorage.nickName.get());
   const [email, setEmail] = useState(authStorage.email.get());
 
   useEffect(() => {
-    setUsername(authStorage.nickName.get);
+    setUserName(authStorage.nickName.get);
     setEmail(authStorage.email.get());
   }, []);
 
@@ -105,6 +105,7 @@ export const ChatPage = () => {
     if (roomName && messagePage > 0) {
       fetchRecentMessages(roomName, messagePage);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messagePage]);
 
@@ -163,7 +164,7 @@ export const ChatPage = () => {
         client.publish({
           destination: '/api/app/chat/join',
           body: JSON.stringify({
-            userName: username,
+            userName: userName,
             roomName: '채팅방 미접속',
           }),
         });
@@ -179,7 +180,7 @@ export const ChatPage = () => {
 
   // 특정 채팅방에 연결
   const connectToChatRoom = () => {
-    if (!roomName || !username) return;
+    if (!roomName || !userName) return;
 
     if (stompClient) {
       stompClient.deactivate(); // 기존 연결 종료
@@ -217,7 +218,7 @@ export const ChatPage = () => {
         // 사용자 입장 정보 서버에 전송
         client.publish({
           destination: '/api/app/chat/join',
-          body: JSON.stringify({ userName: username, roomName }),
+          body: JSON.stringify({ userName: userName, roomName }),
         });
       },
       onStompError: (frame) => {
@@ -234,7 +235,6 @@ export const ChatPage = () => {
     if (roomName) {
       setMessagePage(0); // 메시지 페이지 초기화
       setMessages([]); // 메시지 목록 초기화
-      setSocketMessages([]); // 소켓 메시지 목록 초기화
       fetchRecentMessages(roomName, 0);
       connectToChatRoom();
     }
@@ -250,7 +250,7 @@ export const ChatPage = () => {
 
     if (newMessage.trim()) {
       const messageRequest = {
-        sender: username,
+        sender: userName,
         email,
         content: newMessage,
         roomName,
@@ -310,6 +310,7 @@ export const ChatPage = () => {
           messageListRef={messageListRef}
           socketMessages={socketMessages}
           email={email}
+          userName={userName}
           roomName={roomName}
           isComposing={isComposing}
           setIsComposing={setIsComposing}
