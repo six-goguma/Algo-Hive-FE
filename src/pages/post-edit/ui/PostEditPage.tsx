@@ -70,7 +70,7 @@ export const PostEditPage = () => {
     }
 
     if (postTag) {
-      setValue('tag', postTag.tagIds);
+      setValue('tag', postTag.tagIds[0]);
     }
   }, [postDetail, postTag, setValue]);
 
