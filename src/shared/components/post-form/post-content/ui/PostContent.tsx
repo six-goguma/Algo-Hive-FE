@@ -1,11 +1,11 @@
 import { useFormContext } from 'react-hook-form';
 
-import { Box, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, useBreakpointValue } from '@chakra-ui/react';
 
 import { FormField, FormItem } from '@shared/components';
 import { BASE_URI } from '@shared/service';
+import { BlockNoteStyles } from '@shared/styles';
 
-import { BlockNoteStyles } from './BlockNoteStyles';
 import { locales, PartialBlock } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
@@ -46,7 +46,6 @@ export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
   };
 
   const initialContent: PartialBlock[] | undefined = contents ? JSON.parse(contents) : undefined;
-
   const editor = useCreateBlockNote({
     dictionary: {
       ...locale,
@@ -65,7 +64,7 @@ export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
       control={control}
       rules={{ required: '글을 작성해주세요' }}
       render={({ field }) => (
-        <FormItem style={{ width: '100%' }}>
+        <Flex as={FormItem} w='full' flexDir='column'>
           <Box w='full' h={{ base: '4px', md: '8px' }} bg='white' />
           <Box
             w='full'
@@ -88,7 +87,7 @@ export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
               slashMenu={!isMobile}
             />
           </Box>
-        </FormItem>
+        </Flex>
       )}
     />
   );

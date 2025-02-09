@@ -17,16 +17,6 @@ import { updatePost, updatePostTags } from '../apis';
 import { useQuery } from '@tanstack/react-query';
 
 export const PostEditPage = () => {
-  const methods = useForm<PostFormData>({
-    defaultValues: {
-      title: '',
-      tag: [],
-      content: '',
-      thumbnail: '',
-      summary: '',
-    },
-  });
-  const { setValue } = methods;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { postId } = useParams<{ postId: string }>();
   const customToast = useCustomToast();
@@ -61,18 +51,27 @@ export const PostEditPage = () => {
     }
   }, [isPostError, isTagsError, customToast, hasErrorToastShown]);
 
-  useEffect(() => {
-    if (postDetail) {
-      setValue('title', postDetail.title);
-      setValue('content', postDetail.contents);
-      setValue('thumbnail', postDetail.thumbnail);
-      setValue('summary', postDetail.summary);
-    }
+  const form = useForm<PostFormData>({
+    defaultValues: {
+      title: '',
+      tag: [],
+      content: '',
+      thumbnail: '',
+      summary: '',
+    },
+  });
 
-    if (postTag && Array.isArray(postTag.tagIds)) {
-      setValue('tag', postTag.tagIds);
+  useEffect(() => {
+    if (postDetail && postTag) {
+      form.reset({
+        title: postDetail.title,
+        tag: postTag.tagIds,
+        content: postDetail.contents,
+        thumbnail: postDetail.thumbnail,
+        summary: postDetail.summary,
+      });
     }
-  }, [postDetail, postTag, setValue]);
+  }, [postDetail, postTag, form]);
 
   const onSubmit = () => {
     onOpen();
@@ -80,7 +79,7 @@ export const PostEditPage = () => {
 
   const onUpdatePostButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
-      const data = methods.getValues();
+      const data = form.getValues();
       console.log('게시글 데이터 제출:', data);
 
       const updatedPost = await updatePost(Number(postId), {
@@ -139,21 +138,21 @@ export const PostEditPage = () => {
   if (!postDetail || !postTag) return <Box>데이터를 불러올 수 없습니다.</Box>;
 
   return (
-    <Form {...methods}>
+    <Form {...form}>
       <VStack w='full' py='20px' gap='0'>
         <PostTitle />
         <PostTag />
-        <PostContent />
-        <PostButtons buttonText='수정하기' onClick={methods.handleSubmit(onSubmit, onInvalid)} />
+        <PostContent contents={postDetail.contents} />
+        <PostButtons buttonText='수정하기' onClick={form.handleSubmit(onSubmit, onInvalid)} />
         <PostModal
-          title={methods.watch('title')}
+          title={form.watch('title')}
           isOpen={isOpen}
           onClose={onClose}
           buttonTitle='수정하기'
           postType='edit'
-          postContent={methods.watch('content')}
-          imageUrl={methods.watch('thumbnail')}
-          postSummary={methods.watch('summary')}
+          postContent={form.watch('content')}
+          imageUrl={form.watch('thumbnail')}
+          postSummary={form.watch('summary')}
           onConfirmButton={onUpdatePostButton}
         />
       </VStack>

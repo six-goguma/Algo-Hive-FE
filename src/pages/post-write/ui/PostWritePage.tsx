@@ -68,7 +68,7 @@ export const PostWritePage = () => {
     if (errors.title) {
       customToast({
         toastStatus: 'error',
-        toastTitle: '제목 입력 필요',
+        toastTitle: '게시물 작성',
         toastDescription: '제목을 입력해주세요!',
       });
     } else if (errors.tag) {

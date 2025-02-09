@@ -12,5 +12,5 @@ export type ResponsePostDetail = {
 };
 
 export type ResponsePostTags = {
-  tagIds: number;
+  tagIds: number[];
 };
