@@ -65,25 +65,31 @@ export const CodeInputBox = () => {
   };
 
   // 클립보드 복사 함수
-  const handleCopyToClipboard = () => {
-    if (codeReviewResult) {
-      const textToCopy = codeReviewResult.candidates[0].content.parts[0].text;
-      navigator.clipboard
-        .writeText(textToCopy)
-        .then(() => {
-          customToast({
-            toastStatus: 'success',
-            toastTitle: '성공!',
-            toastDescription: '작업이 성공적으로 완료되었습니다.',
-          });
-        })
-        .catch(() => {
-          customToast({
-            toastStatus: 'error',
-            toastTitle: '복사 실패',
-            toastDescription: '클립보드 복사에 실패했습니다',
-          });
+  const handleCopyToClipboard = async () => {
+    if (codeReviewResult && codeReviewResult.candidates?.[0]?.content?.parts?.[0]?.text) {
+      try {
+        const textToCopy = codeReviewResult.candidates[0].content.parts[0].text;
+        await navigator.clipboard.writeText(textToCopy);
+        customToast({
+          toastStatus: 'success',
+          toastTitle: '성공!',
+          toastDescription: '작업이 성공적으로 완료되었습니다.',
         });
+      } catch (error) {
+        console.error('클립보드 복사 오류:', error);
+        customToast({
+          toastStatus: 'error',
+          toastTitle: '복사 실패',
+          toastDescription: '클립보드 복사에 실패했습니다',
+        });
+      }
+    } else {
+      console.error('codeReviewResult 데이터가 올바르지 않습니다:', codeReviewResult);
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '복사 실패',
+        toastDescription: '복사할 내용이 없습니다.',
+      });
     }
   };
 
