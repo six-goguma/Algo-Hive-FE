@@ -1,1 +1,1 @@
-export { PostEditPage } from './PostEditPage';
+export * from './PostEditPage';
