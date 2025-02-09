@@ -10,9 +10,6 @@ export const updatePost = async (
 ): Promise<UpdatePostResponse> => {
   const response = await fetchInstance.put<UpdatePostResponse>(`${POSTS_PATH}/${postId}`, {
     body: JSON.stringify(postData),
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   if (!response.data) {
@@ -25,9 +22,6 @@ export const updatePost = async (
 export const updatePostTags = async (postId: number, tagId: number[]) => {
   const response = await fetchInstance.put(`${POSTS_PATH}/${postId}/tags`, {
     body: JSON.stringify({ tagId }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   return response.data;
