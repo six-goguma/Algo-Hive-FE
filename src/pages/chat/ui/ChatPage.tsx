@@ -7,7 +7,7 @@ import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 
 import { ChatRoomList, ChatRoomInside, ChatUserList } from '../components';
-import { useGetChatRooms, useCreateChatRoom, useGetChatMessages } from '../hooks';
+import { useGetChatRooms, useCreateChatRoom } from '../hooks';
 import { Client } from '@stomp/stompjs';
 
 const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
