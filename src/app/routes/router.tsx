@@ -1,8 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { ChatPage } from '@pages/chat';
-import { ChatRoomContextProvider } from '@pages/chat';
-import { ChatTestPage } from '@pages/chat/ui/ChatTestPage';
 import { CodeReviewPage } from '@pages/code-review';
 import { ErrorPage } from '@pages/error';
 import { MainPage } from '@pages/main';
@@ -39,15 +37,7 @@ const router = createBrowserRouter(
         },
         {
           path: RouterPath.CHAT,
-          element: (
-            <ChatRoomContextProvider>
-              <ChatPage />
-            </ChatRoomContextProvider>
-          ),
-        },
-        {
-          path: '/chat-test',
-          element: <ChatTestPage />,
+          element: <ChatPage />,
         },
         {
           path: RouterPath.CODE_REVIEW,

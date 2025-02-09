@@ -1,42 +1,135 @@
-//electedRoom이 변경될 때마다 소켓 연결이 재설정되고, 채팅방별 접속인원 목록도 자동으로 구독하는 코드
-import { Flex, Box, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  Input,
+} from '@chakra-ui/react';
 
-import { useGetChatRooms, useChatSocket } from '../../hooks';
-import { useChatRoomContext } from '../../hooks';
-import { ChatRoomListItem } from './ChatRoomListItem';
+import { ResponseChatRooms } from '@pages/chat/apis';
 
-type ChatRoomListProps = {
-  page: number;
-  size: number;
-  sort: string;
-};
+interface ChatRoomListProps {
+  chatRooms?: ResponseChatRooms; // 채팅방 목록 데이터
+  roomName: string; // 현재 선택된 채팅방 이름
+  setRoomName: (name: string) => void; // 채팅방 선택 시 상태 업데이트 함수
+  onOpen: () => void; // 채팅방 생성 모달 열기 함수
+  roomUserList: { [key: string]: number }; // 각 방의 접속자 수
+  setPage: (page: number) => void; // 페이지 변경 함수
+  page: number; // 현재 페이지 번호
+  isFirstPage?: boolean; // 첫 번째 페이지 여부
+  isLastPage?: boolean; // 마지막 페이지 여부
+  handleCreateRoom: () => void; // 채팅방 생성 함수
+  newRoomName: string; // 새 채팅방 이름
+  setNewRoomName: (name: string) => void; // 새 채팅방 이름 상태 업데이트 함수
+  isOpen: boolean; // 모달 열림 상태
+  onClose: () => void; // 모달 닫기 함수
+}
 
-export const ChatRoomList = ({ page, size, sort }: ChatRoomListProps) => {
-  const { selectedRoom, setSelectedRoom } = useChatRoomContext();
-  const { roomUsers } = useChatSocket(); // 채팅방별 접속인원 목록
-  // 채팅방 목록 가져오기
-  const { data: chatRooms, isLoading, error } = useGetChatRooms(page, size, sort);
-
-  const handleSelect = (roomName: string) => {
-    setSelectedRoom(roomName);
-  };
-
+export const ChatRoomList = ({
+  chatRooms,
+  roomName,
+  setRoomName,
+  onOpen,
+  roomUserList,
+  setPage,
+  page,
+  isFirstPage,
+  isLastPage,
+  handleCreateRoom,
+  newRoomName,
+  setNewRoomName,
+  isOpen,
+  onClose,
+}: ChatRoomListProps) => {
   return (
-    <Flex flexDir='column' w='full' h='full'>
-      {/* 채팅방 목록 */}
-      <Box flex='1' overflowY='auto'>
-        {isLoading && <Text textAlign='center'>🔄 로딩 중...</Text>}
-        {error && <Text textAlign='center'>❌ 오류 발생: {error.message}</Text>}
-        {chatRooms?.content.map((room, index) => (
-          <ChatRoomListItem
-            key={index}
-            roomName={room.roomName}
-            currentUsers={roomUsers[room.roomName] || 0} // 채팅방별 접속인원 표시
-            onClick={() => handleSelect(room.roomName)}
-            isSelected={selectedRoom === room.roomName}
-          />
-        ))}
+    <Box w={{ base: 'full', sm: '40%' }} bg='#F7F9FB'>
+      <Flex w='full' justify='center'>
+        <Text w='full' textAlign='left' fontSize='24px' color='custom.blue' fontWeight={700}>
+          채팅방 목록
+        </Text>
+        <Button h='32px' w='120px' colorScheme='blue' onClick={onOpen}>
+          채팅방 생성
+        </Button>
+      </Flex>
+      <Box bg='custom.blue' h='3px' w='full' />
+      <Box w='full' h='600px' bg='white' position='relative'>
+        <Flex flexDir='column' w='full' h='full' pt='10px'>
+          {chatRooms?.content.map((room, index) => (
+            <Flex
+              key={index}
+              w='full'
+              gap='20px'
+              h='60px'
+              align='center'
+              p='0 20px 0 20px'
+              bg={roomName === room.roomName ? '#E8EFFC' : 'transparent'}
+              _hover={{ bg: '#E8EFFC' }}
+              cursor='pointer'
+              onClick={() => setRoomName(room.roomName)}
+              justify='space-between'
+            >
+              <Text
+                fontSize='14px'
+                fontWeight='bold'
+                noOfLines={2}
+                overflow='hidden'
+                textOverflow='ellipsis'
+                wordBreak='break-word'
+              >
+                {room.roomName}
+              </Text>
+              {roomUserList[room.roomName] ? (
+                <Box boxSize='24px' bg='custom.blue' borderRadius='5px' alignContent='center'>
+                  <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
+                    {roomUserList[room.roomName]}
+                  </Text>
+                </Box>
+              ) : (
+                <Box boxSize='24px' bg='customGray.400' borderRadius='5px' alignContent='center'>
+                  <Text fontSize='12px' fontWeight='bold' color='white' ml='auto'>
+                    0
+                  </Text>
+                </Box>
+              )}
+            </Flex>
+          ))}
+        </Flex>
       </Box>
-    </Flex>
+      <Flex justify='center' gap='12px' m={4} bottom='0'>
+        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 0))} isDisabled={isFirstPage}>
+          이전
+        </Button>
+        <Text>{page + 1}</Text>
+        <Button onClick={() => setPage((prev) => prev + 1)} isDisabled={isLastPage}>
+          다음
+        </Button>
+      </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>채팅방 생성</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input
+              placeholder='채팅방 이름 입력'
+              value={newRoomName}
+              onChange={(e) => setNewRoomName(e.target.value)}
+            />
+          </ModalBody>
+          <ModalFooter display='flex' justifyContent='center'>
+            <Button h='32px' w='100px' colorScheme='blue' onClick={handleCreateRoom}>
+              생성하기
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Box>
   );
 };
