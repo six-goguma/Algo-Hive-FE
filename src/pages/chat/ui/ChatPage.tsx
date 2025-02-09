@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
@@ -231,6 +231,7 @@ export const ChatPage = () => {
       fetchRecentMessages(roomName, 0);
       connectToChatRoom();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomName]);
 
   // 메시지 전송
