@@ -5,6 +5,7 @@ import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
 
 import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
+import { authStorage } from '@shared/utils';
 
 import { ChatRoomList, ChatRoomInside, ChatUserList } from '../components';
 import { useGetChatRooms, useCreateChatRoom } from '../hooks';
@@ -14,8 +15,6 @@ const BASE_API_URL = 'http://algo.knu-soft.site'; // REST API 기본 URL
 const BASE_WS_URL = 'ws://algo.knu-soft.site'; // WebSocket 기본 URL
 
 export const ChatPage = () => {
-  const username = 'changedNickName'; // 사용자 이름
-  const email = 'test1@email.com';
   const [roomName, setRoomName] = useState(''); // 현재 접속 중인 채팅방 이름
   const [newRoomName, setNewRoomName] = useState(''); // 새 채팅방 이름 입력 상태
   const [messages, setMessages] = useState<{ sender: string; content: string; email: string }[]>(
@@ -48,6 +47,14 @@ export const ChatPage = () => {
   const [messagePage, setMessagePage] = useState(0); // 채팅 메시지 페이지
   const [hasMoreMessages, setHasMoreMessages] = useState(true); // 더 불러올 메시지가 있는지 여부
 
+  const [username, setUsername] = useState(authStorage.nickName.get());
+  const [email, setEmail] = useState(authStorage.email.get());
+
+  useEffect(() => {
+    setUsername(authStorage.nickName.get);
+    setEmail(authStorage.email.get());
+  }, []);
+
   // 특정 채팅방의 최근 메시지 가져오기
   const fetchRecentMessages = async (roomName: string, pageNumber: number) => {
     try {
@@ -57,7 +64,7 @@ export const ChatPage = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setMessages((prevMessages) => [...prevMessages, ...data.content]);
+        setMessages((prevMessages) => [...(prevMessages || []), ...(data.content || [])]);
         setHasMoreMessages(!data.last);
       } else {
         console.error('최근 메시지 가져오기 실패');
