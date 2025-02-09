@@ -21,7 +21,7 @@ interface ChatRoomListProps {
   setRoomName: (name: string) => void; // 채팅방 선택 시 상태 업데이트 함수
   onOpen: () => void; // 채팅방 생성 모달 열기 함수
   roomUserList: { [key: string]: number }; // 각 방의 접속자 수
-  setPage: (page: number) => void; // 페이지 변경 함수
+  setPage: (page: number | ((prev: number) => number)) => void; // 페이지 변경 함수
   page: number; // 현재 페이지 번호
   isFirstPage?: boolean; // 첫 번째 페이지 여부
   isLastPage?: boolean; // 마지막 페이지 여부
@@ -103,11 +103,14 @@ export const ChatRoomList = ({
         </Flex>
       </Box>
       <Flex justify='center' gap='12px' m={4} bottom='0'>
-        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 0))} isDisabled={isFirstPage}>
+        <Button
+          onClick={() => setPage((prev: number) => Math.max(prev - 1, 0))}
+          isDisabled={isFirstPage}
+        >
           이전
         </Button>
         <Text>{page + 1}</Text>
-        <Button onClick={() => setPage((prev) => prev + 1)} isDisabled={isLastPage}>
+        <Button onClick={() => setPage((prev: number) => prev + 1)} isDisabled={isLastPage}>
           다음
         </Button>
       </Flex>
