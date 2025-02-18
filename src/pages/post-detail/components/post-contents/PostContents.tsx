@@ -5,6 +5,7 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 
 import { getPostDetail, ResponsePostDetail } from '@pages/post-detail/apis';
 
+import { BlockNoteDetailStyles } from '../../styles';
 import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/react/style.css';
@@ -58,6 +59,7 @@ export const PostContents = () => {
 
   return (
     <Flex w='full' my={10} textAlign='start'>
+      <BlockNoteDetailStyles />
       <BlockNoteView editor={editor} editable={false} />
     </Flex>
   );
