@@ -9,7 +9,7 @@ import { getPostDetail, getPostTags, getLikeStatus, putLikeStatus } from '@pages
 import { ResponsePostDetail, ResponsePostTags } from '@pages/post-detail/apis';
 
 import { TAG_DATA } from '@shared/components/post-form/post-tag/data';
-import { getDynamicPath } from '@shared/utils';
+import { authStorage, getDynamicPath } from '@shared/utils';
 
 export const PostInfo = () => {
   const { postId } = useParams();
@@ -17,6 +17,10 @@ export const PostInfo = () => {
   const [tags, setTags] = useState<ResponsePostTags | null>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const nickName = authStorage.nickName.get();
+  const isLogin = authStorage.isLogin.get();
+  const email = authStorage.email.get();
+  console.log(nickName, isLogin, email);
 
   useEffect(() => {
     if (!postId) return;
@@ -43,11 +47,13 @@ export const PostInfo = () => {
 
   const handleLikeClick = async () => {
     if (!postId) return;
+    setIsLiked((prev) => !prev);
     try {
       const newLikeStatus = await putLikeStatus({ postId: Number(postId) });
       setIsLiked(newLikeStatus);
     } catch (error) {
       console.error('좋아요 상태 변경에 실패했습니다.', error);
+      setIsLiked((prev) => !prev);
     }
   };
 
@@ -112,15 +118,15 @@ export const PostInfo = () => {
             variant='outline'
             px={3}
             bg='none'
-            color={!isLiked ? '#FF0000' : 'customGray.400'}
+            color={isLiked ? '#FF0000' : 'customGray.400'}
             border='1.5px solid'
             borderRadius='xl'
-            borderColor={!isLiked ? '#FF0000' : 'customGray.400'}
+            borderColor={isLiked ? '#FF0000' : 'customGray.400'}
             _hover={{}}
             onClick={handleLikeClick}
           >
             <HStack spacing={1}>
-              <HeartIcon size={20} fill={!isLiked ? '#FF0000' : '#8B939B'} />
+              <HeartIcon size={20} fill={isLiked ? '#FF0000' : '#8B939B'} />
               <Text as='b' fontSize='sm' ml={1}>
                 좋아요
               </Text>
