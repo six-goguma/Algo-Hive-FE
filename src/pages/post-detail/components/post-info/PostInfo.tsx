@@ -5,8 +5,14 @@ import { Button, Flex, HStack, Tag, Text, VStack, Spinner } from '@chakra-ui/rea
 
 import { HeartIcon } from 'lucide-react';
 
-import { getPostDetail, getPostTags, getLikeStatus, putLikeStatus } from '@pages/post-detail/apis';
-import { ResponsePostDetail, ResponsePostTags } from '@pages/post-detail/apis';
+import {
+  getPostDetail,
+  getPostTags,
+  getLikeStatus,
+  putLikeStatus,
+  ResponsePostDetail,
+  ResponsePostTags,
+} from '@pages/post-detail/apis';
 
 import { TAG_DATA } from '@shared/components/post-form/post-tag/data';
 import { authStorage, getDynamicPath } from '@shared/utils';
