@@ -23,10 +23,10 @@ export const PostInfo = () => {
   const [tags, setTags] = useState<ResponsePostTags | null>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isAuthor, setIsAuthor] = useState(false);
+
   const nickName = authStorage.nickName.get();
   const isLogin = authStorage.isLogin.get();
-  const email = authStorage.email.get();
-  console.log(nickName, isLogin, email);
 
   useEffect(() => {
     if (!postId) return;
@@ -36,11 +36,14 @@ export const PostInfo = () => {
         setLoading(true);
         const postDetail = await getPostDetail({ postId: Number(postId) });
         const postTags = await getPostTags({ postId: Number(postId) });
-        const likedStatus = await getLikeStatus({ postId: Number(postId) });
 
         setPost(postDetail);
         setTags(postTags);
-        setIsLiked(likedStatus);
+
+        if (isLogin) {
+          const likedStatus = await getLikeStatus({ postId: Number(postId) });
+          setIsLiked(likedStatus);
+        }
       } catch (error) {
         console.error('게시글 정보를 불러오는 데 실패했습니다.', error);
       } finally {
@@ -49,10 +52,14 @@ export const PostInfo = () => {
     };
 
     fetchPostData();
-  }, [postId]);
+  }, [postId, isLogin]);
+
+  useEffect(() => {
+    if (!post) return;
+    setIsAuthor(nickName === post.author);
+  }, [post, nickName]);
 
   const handleLikeClick = async () => {
-    if (!postId) return;
     setIsLiked((prev) => !prev);
     try {
       const newLikeStatus = await putLikeStatus({ postId: Number(postId) });
@@ -63,23 +70,22 @@ export const PostInfo = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !post) {
     return (
       <Flex justify='center' align='center' w='full' h='200px'>
-        <Spinner size='xl' />
+        {loading ? (
+          <Spinner size='xl' />
+        ) : (
+          <Text fontSize='lg' color='gray.500'>
+            게시글을 불러올 수 없습니다.
+          </Text>
+        )}
       </Flex>
     );
   }
 
-  if (!post) {
-    return (
-      <Flex justify='center' align='center' w='full' h='200px'>
-        <Text fontSize='lg' color='gray.500'>
-          게시글을 불러올 수 없습니다.
-        </Text>
-      </Flex>
-    );
-  }
+  const canEdit = isLogin && isAuthor;
+  const canLike = isLogin;
 
   return (
     <Flex w='full' mt={10}>
@@ -95,49 +101,53 @@ export const PostInfo = () => {
             <Text>·</Text>
             <Text>{new Date(post.createdAt).toLocaleDateString()}</Text>
           </HStack>
-          <HStack spacing={3} mr={2}>
-            <Link to={getDynamicPath.postEdit(String(postId))}>
+          {canEdit && (
+            <HStack spacing={3} mr={2}>
+              <Link to={getDynamicPath.postEdit(String(postId))}>
+                <Text as='button' fontWeight='700'>
+                  수정
+                </Text>
+              </Link>
               <Text as='button' fontWeight='700'>
-                수정
+                삭제
               </Text>
-            </Link>
-            <Text as='button' fontWeight='700'>
-              삭제
-            </Text>
-          </HStack>
+            </HStack>
+          )}
         </Flex>
         <HStack spacing={5} w='full' justify='space-between'>
           {tags?.tagIds.map((tagId) => (
             <Tag
               key={tagId}
               bg='none'
-              color={TAG_DATA[tagId - 1].color}
+              color={TAG_DATA[tagId - 1]?.color || 'gray'}
               borderRadius='20px'
               px={3}
               border='1.5px solid'
-              borderColor={TAG_DATA[tagId - 1].color}
+              borderColor={TAG_DATA[tagId - 1]?.color || 'gray'}
             >
-              <Text as='b'>{TAG_DATA[tagId - 1].label}</Text>
+              <Text as='b'>{TAG_DATA[tagId - 1]?.label || `태그 ${tagId}`}</Text>
             </Tag>
           ))}
-          <Button
-            variant='outline'
-            px={3}
-            bg='none'
-            color={isLiked ? '#FF0000' : 'customGray.400'}
-            border='1.5px solid'
-            borderRadius='xl'
-            borderColor={isLiked ? '#FF0000' : 'customGray.400'}
-            _hover={{}}
-            onClick={handleLikeClick}
-          >
-            <HStack spacing={1}>
-              <HeartIcon size={20} fill={isLiked ? '#FF0000' : '#8B939B'} />
-              <Text as='b' fontSize='sm' ml={1}>
-                좋아요
-              </Text>
-            </HStack>
-          </Button>
+          {canLike && (
+            <Button
+              variant='outline'
+              px={3}
+              bg='none'
+              color={isLiked ? '#FF0000' : 'customGray.400'}
+              border='1.5px solid'
+              borderRadius='xl'
+              borderColor={isLiked ? '#FF0000' : 'customGray.400'}
+              _hover={{}}
+              onClick={handleLikeClick}
+            >
+              <HStack spacing={1}>
+                <HeartIcon size={20} fill={isLiked ? '#FF0000' : '#8B939B'} />
+                <Text as='b' fontSize='sm' ml={1}>
+                  좋아요
+                </Text>
+              </HStack>
+            </Button>
+          )}
         </HStack>
       </VStack>
     </Flex>
