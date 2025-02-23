@@ -26,6 +26,7 @@ interface ChatRoomInsideProps {
   messageListRef: React.RefObject<HTMLDivElement | null>; // 메시지 목록 스크롤을 위한 Ref
   handleMessageListScroll: () => void; // 스크롤 이벤트 핸들러
   email: string; // 현재 사용자 이메일
+  userName: string; // 현재 사용자 이름
 }
 
 export const ChatRoomInside = ({

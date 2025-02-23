@@ -62,6 +62,7 @@ export const LoginSection = ({ setIsLogin, onClose }: LoginSectionProps) => {
   const onSuccess = (data: ResponseLoginApi) => {
     setIsLogin(true);
 
+    console.log(data.nickName);
     authStorage.isLogin.set(true);
     authStorage.nickName.set(data.nickName);
     authStorage.email.set(form.getValues('email'));
