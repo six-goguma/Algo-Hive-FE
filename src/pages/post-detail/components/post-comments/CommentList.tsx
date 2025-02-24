@@ -1,81 +1,65 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { Avatar, Flex, HStack, Text, VStack, Textarea, Button } from '@chakra-ui/react';
 
 import { useCustomToast } from '@shared/hooks';
-import { authStorage } from '@shared/utils';
 
-import {
-  deletePostsComments,
-  editPostsComments,
-  getPostsComments,
-  ResponsePostComments,
-  PostCommentsContent,
-} from '../../apis';
+import { deletePostsComments, editPostsComments } from '../../apis';
+import { PostCommentsContent } from '../../apis';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type CommentListProps = {
   comment: PostCommentsContent;
   isLast?: boolean;
-  setComments: React.Dispatch<React.SetStateAction<ResponsePostComments | null>>;
+  onDelete: () => void;
+  currentUser: string | null;
 };
 
-export const CommentList = ({ comment, isLast, setComments }: CommentListProps) => {
-  const { postId } = useParams();
+export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentListProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.contents);
   const customToast = useCustomToast();
+  const isAuthor = currentUser === comment.author;
+  const queryClient = useQueryClient();
 
-  const nickName = authStorage.nickName.get();
-  const isAuthor = nickName === comment.author;
-
-  const deleteComment = async () => {
-    if (!postId) return;
-
-    const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
-    if (!confirmDelete) return;
-
-    try {
-      await deletePostsComments({ commentId: comment.id });
-
-      const updatedComments = await getPostsComments({
-        postId: Number(postId),
-        page: 0,
-        size: 10,
-        sort: { key: 'createdAt', order: 'desc' },
+  const { mutate: deleteComment } = useMutation({
+    mutationFn: () => deletePostsComments({ commentId: comment.id }),
+    onSuccess: () => {
+      customToast({
+        toastStatus: 'success',
+        toastTitle: '댓글 삭제',
+        toastDescription: '댓글이 삭제되었습니다.',
       });
-      setComments(updatedComments);
-    } catch {
+      onDelete();
+    },
+    onError: () => {
       customToast({
         toastStatus: 'error',
-        toastTitle: '게시글 상세 페이지',
-        toastDescription: '댓글을 삭제하는 중 오류가 발생했습니다.',
+        toastTitle: '댓글 삭제 오류',
+        toastDescription: '댓글 삭제 중 오류가 발생했습니다.',
       });
-    }
-  };
+    },
+  });
 
-  const editComment = async () => {
-    if (!postId || !editContent.trim()) return;
-
-    try {
-      await editPostsComments({ commentId: comment.id, contents: editContent });
-
-      const updatedComments = await getPostsComments({
-        postId: Number(postId),
-        page: 0,
-        size: 10,
-        sort: { key: 'createdAt', order: 'desc' },
+  const { mutate: editComment } = useMutation({
+    mutationFn: () => editPostsComments({ commentId: comment.id, contents: editContent }),
+    onSuccess: () => {
+      customToast({
+        toastStatus: 'success',
+        toastTitle: '댓글 수정',
+        toastDescription: '댓글이 수정되었습니다.',
       });
-      setComments(updatedComments);
       setIsEditing(false);
-    } catch {
+      queryClient.invalidateQueries({ queryKey: ['postComments'] });
+    },
+    onError: () => {
       customToast({
         toastStatus: 'error',
-        toastTitle: '게시글 상세 페이지',
-        toastDescription: '댓글을 수정하는 중 오류가 발생했습니다.',
+        toastTitle: '댓글 수정 오류',
+        toastDescription: '댓글 수정 중 오류가 발생했습니다.',
       });
-    }
-  };
+    },
+  });
 
   return (
     <Flex w='full' py={3} borderBottom={isLast ? 'none' : '1px solid'} borderColor='customGray.300'>
@@ -90,7 +74,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
               </Text>
             </Flex>
           </HStack>
-          {isAuthor && ( // 현재 사용자가 댓글 작성자인 경우에만 수정/삭제 버튼 표시
+          {isAuthor && (
             <HStack spacing={2}>
               <Text
                 as='button'
@@ -100,7 +84,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
               >
                 수정
               </Text>
-              <Text as='button' fontWeight='700' color='red.500' onClick={deleteComment}>
+              <Text as='button' fontWeight='700' color='red.500' onClick={() => deleteComment()}>
                 삭제
               </Text>
             </HStack>
@@ -117,7 +101,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
         )}
         {isEditing && (
           <Flex w='full' justify='flex-end'>
-            <Button onClick={editComment}>수정 완료</Button>
+            <Button onClick={() => editComment()}>수정 완료</Button>
           </Flex>
         )}
       </VStack>
