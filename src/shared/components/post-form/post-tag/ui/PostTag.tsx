@@ -23,10 +23,10 @@ export const PostTag = ({ tag }: PostTagProps) => {
 
   const toggleTag = (tagId: number) => {
     const updatedTags = selectedTags.includes(tagId)
-      ? selectedTags.filter((id) => id !== tagId) // 이미 선택된 태그는 제거
-      : [...selectedTags, tagId]; // 새로운 태그 추가
+      ? selectedTags.filter((id) => id !== tagId)
+      : [...selectedTags, tagId];
 
-    setValue('tag', updatedTags); // ✅ 다중 선택된 태그 배열을 `setValue`에 저장
+    setValue('tag', updatedTags);
   };
 
   return (
@@ -64,7 +64,7 @@ export const PostTag = ({ tag }: PostTagProps) => {
                   borderColor={
                     selectedTags.includes(tag.id) ? `${tag.color}.400` : `${tag.color}.500`
                   }
-                  onClick={() => toggleTag(tag.id)} // ✅ 클릭 시 `toggleTag` 호출
+                  onClick={() => toggleTag(tag.id)}
                 >
                   {tag.label}
                 </Button>

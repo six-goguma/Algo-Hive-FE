@@ -1,8 +1,10 @@
 import { useForm, FieldErrors } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { useDisclosure, VStack } from '@chakra-ui/react';
 
 import { Form, PostTitle, PostTag, PostContent, PostButtons } from '@shared/components';
+import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 import { PostFormData } from '@shared/types';
 
@@ -20,7 +22,7 @@ export const PostWritePage = () => {
       summary: '',
     },
   });
-
+  const navigate = useNavigate();
   const customToast = useCustomToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -31,29 +33,21 @@ export const PostWritePage = () => {
   const onCreatePostButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
       const data = methods.getValues();
-      console.log('게시글 데이터 제출:', data);
-
       const createdPost = await createPost({
         title: data.title,
         contents: data.content,
         thumbnail: modalData.thumbnail,
         summary: modalData.summary,
       });
-
-      console.log('게시글 생성 성공:', createdPost);
-
       if (createdPost?.id) {
         await savePostTags(createdPost.id, data.tag);
-        console.log('태그 저장 성공');
       }
-
       customToast({
         toastStatus: 'success',
         toastTitle: '게시글 출간 완료',
         toastDescription: '게시글이 성공적으로 출간되었습니다!',
       });
-
-      onClose();
+      navigate(RouterPath.MAIN);
     } catch (error) {
       console.error('게시글 출간 실패:', error);
       customToast({
