@@ -41,7 +41,7 @@ type PostModalProps = {
     contents: string;
     thumbnail: string;
     summary: string;
-  }) => void;
+  }) => Promise<void>;
   imageUrl?: string;
 };
 
@@ -63,6 +63,7 @@ export const PostModal = ({
 }: PostModalProps) => {
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const MAX_IMAGE_SIZE_BYTES = 1024 * 1024 * 2;
   const customToast = useCustomToast();
 
@@ -136,13 +137,18 @@ export const PostModal = ({
     setValue('thumbnail', '');
   };
 
-  const onSubmit = (data: PostModalForm) => {
-    onConfirmButton({
-      title,
-      contents: postContent,
-      thumbnail: data.thumbnail,
-      summary: data.summary,
-    });
+  const onSubmit = async (data: PostModalForm) => {
+    setIsPosting(true);
+    try {
+      await onConfirmButton({
+        title,
+        contents: postContent,
+        thumbnail: data.thumbnail,
+        summary: data.summary,
+      });
+    } finally {
+      setIsPosting(false);
+    }
   };
 
   return (
@@ -152,7 +158,7 @@ export const PostModal = ({
         <ModalHeader mt={5} textAlign='left' ml='3'>
           포스트 미리보기
         </ModalHeader>
-        <ModalCloseButton />
+        {!isPosting && <ModalCloseButton />}
 
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -198,6 +204,7 @@ export const PostModal = ({
                             color: 'white',
                             transition: 'all 0.2s ease-in-out',
                           }}
+                          isDisabled={isPosting}
                         >
                           썸네일 업로드
                           <Input
@@ -233,6 +240,7 @@ export const PostModal = ({
                           maxLength={150}
                           placeholder='나의 포스트를 짧게 소개해보아요.'
                           fontSize='sm'
+                          isDisabled={isPosting}
                         />
                         <Flex w='full' justify='flex-end' mt='2px'>
                           <Text as='b' fontSize='sm' color='customGray.500'>
@@ -256,6 +264,7 @@ export const PostModal = ({
                   h='40px'
                   colorScheme='custom.blue'
                   onClick={onClose}
+                  isDisabled={isPosting}
                 >
                   취소
                 </Button>
@@ -267,8 +276,9 @@ export const PostModal = ({
                   colorScheme='custom.blue'
                   _hover={{}}
                   type='submit'
+                  isDisabled={isPosting}
                 >
-                  {buttonTitle}
+                  {isPosting ? '출간 중...' : buttonTitle}
                 </Button>
               </HStack>
             </ModalFooter>
