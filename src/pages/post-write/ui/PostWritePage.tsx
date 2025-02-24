@@ -33,8 +33,6 @@ export const PostWritePage = () => {
   const onCreatePostButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
       const data = methods.getValues();
-      console.log('게시글 데이터 제출:', data);
-
       const createdPost = await createPost({
         title: data.title,
         contents: data.content,

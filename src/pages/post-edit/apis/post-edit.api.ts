@@ -19,9 +19,9 @@ export const updatePost = async (
   return response.data;
 };
 
-export const updatePostTags = async (postId: number, tagId: number[]) => {
+export const updatePostTags = async (postId: number, tagIds: number[]) => {
   const response = await fetchInstance.put(`${POSTS_PATH}/${postId}/tags`, {
-    body: JSON.stringify({ tagId }),
+    body: JSON.stringify({ tagIds }),
   });
 
   return response.data;

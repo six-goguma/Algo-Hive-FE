@@ -278,7 +278,7 @@ export const PostModal = ({
                   type='submit'
                   isDisabled={isPosting}
                 >
-                  {isPosting ? '출간 중...' : buttonTitle}
+                  {isPosting ? '저장 중...' : buttonTitle}
                 </Button>
               </HStack>
             </ModalFooter>
