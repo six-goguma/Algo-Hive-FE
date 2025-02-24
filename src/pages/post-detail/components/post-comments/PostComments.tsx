@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { Button, Flex, Text, Textarea, VStack, Spinner, HStack } from '@chakra-ui/react';
 
+import { useCustomToast } from '@shared/hooks';
+
 import { getPostsComments, savePostsComments, ResponsePostComments } from '../../apis';
 import { CommentList } from './CommentList';
 
@@ -13,6 +15,7 @@ export const PostComments = () => {
   const [commentContent, setCommentContent] = useState('');
   const [page, setPage] = useState(0);
   const size = 10;
+  const customToast = useCustomToast();
 
   useEffect(() => {
     if (!postId) return;
@@ -27,9 +30,12 @@ export const PostComments = () => {
           sort: { key: 'createdAt', order: 'desc' },
         });
         console.log('API 응답:', response);
-        setComments(response);
-      } catch (error) {
-        console.error('댓글을 불러오는 데 실패했습니다.', error);
+      } catch {
+        customToast({
+          toastStatus: 'error',
+          toastTitle: '게시글 상세 페이지',
+          toastDescription: '댓글을 불러오는 중 오류가 발생했습니다.',
+        });
       } finally {
         setLoading(false);
       }
@@ -38,7 +44,7 @@ export const PostComments = () => {
     fetchComments();
   }, [postId, page]);
 
-  const handleCommentSubmit = async () => {
+  const SubmitComment = async () => {
     if (!postId || !commentContent.trim()) return;
 
     try {
@@ -56,8 +62,12 @@ export const PostComments = () => {
       });
 
       setComments(updatedComments);
-    } catch (error) {
-      console.error('댓글 작성에 실패했습니다.', error);
+    } catch {
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '게시글 상세 페이지',
+        toastDescription: '댓글을 작성하는 중 오류가 발생했습니다.',
+      });
     }
   };
 
@@ -87,7 +97,7 @@ export const PostComments = () => {
         />
       </Flex>
       <Flex w='full' justify='right'>
-        <Button borderRadius='3px' onClick={handleCommentSubmit}>
+        <Button borderRadius='3px' onClick={SubmitComment}>
           댓글 작성
         </Button>
       </Flex>

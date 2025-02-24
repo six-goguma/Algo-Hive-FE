@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { Avatar, Flex, HStack, Text, VStack, Textarea, Button } from '@chakra-ui/react';
 
+import { useCustomToast } from '@shared/hooks';
+
 import {
   deletePostsComments,
   editPostsComments,
@@ -21,8 +23,9 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
   const { postId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.contents);
+  const customToast = useCustomToast();
 
-  const handleDeleteComment = async () => {
+  const DeleteComment = async () => {
     if (!postId) return;
 
     const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
@@ -38,12 +41,16 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
         sort: { key: 'createdAt', order: 'desc' },
       });
       setComments(updatedComments);
-    } catch (error) {
-      console.error('댓글 삭제에 실패했습니다.', error);
+    } catch {
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '게시글 상세 페이지',
+        toastDescription: '댓글을 삭제하는 중 오류가 발생했습니다.',
+      });
     }
   };
 
-  const handleEditComment = async () => {
+  const EditComment = async () => {
     if (!postId || !editContent.trim()) return;
 
     try {
@@ -57,8 +64,12 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
       });
       setComments(updatedComments);
       setIsEditing(false);
-    } catch (error) {
-      console.error('댓글 수정에 실패했습니다.', error);
+    } catch {
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '게시글 상세 페이지',
+        toastDescription: '댓글을 수정하는 중 오류가 발생했습니다.',
+      });
     }
   };
 
@@ -79,7 +90,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
             <Text as='button' fontWeight='700' color='blue.500' onClick={() => setIsEditing(true)}>
               수정
             </Text>
-            <Text as='button' fontWeight='700' color='red.500' onClick={handleDeleteComment}>
+            <Text as='button' fontWeight='700' color='red.500' onClick={DeleteComment}>
               삭제
             </Text>
           </HStack>
@@ -89,7 +100,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
         ) : (
           <Text>{comment.contents}</Text>
         )}
-        {isEditing && <Button onClick={handleEditComment}>수정 완료</Button>}
+        {isEditing && <Button onClick={EditComment}>수정 완료</Button>}
       </VStack>
     </Flex>
   );
