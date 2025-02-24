@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Flex, Text, Textarea, VStack, Spinner, HStack } from '@chakra-ui/react';
 
 import { useCustomToast } from '@shared/hooks';
+import { authStorage } from '@shared/utils';
 
 import { getPostsComments, savePostsComments, ResponsePostComments } from '../../apis';
 import { CommentList } from './CommentList';
@@ -14,11 +15,12 @@ export const PostComments = () => {
   const [loading, setLoading] = useState(true);
   const [commentContent, setCommentContent] = useState('');
   const [page, setPage] = useState(0);
-  const size = 10;
   const customToast = useCustomToast();
+  const size = 10;
+  const isLogin = authStorage.isLogin.get();
 
   useEffect(() => {
-    if (!postId) return;
+    if (!postId || (page === 0 && comments)) return;
 
     const fetchComments = async () => {
       try {
@@ -30,6 +32,7 @@ export const PostComments = () => {
           sort: { key: 'createdAt', order: 'desc' },
         });
         console.log('API 응답:', response);
+        setComments(response);
       } catch {
         customToast({
           toastStatus: 'error',
@@ -44,7 +47,7 @@ export const PostComments = () => {
     fetchComments();
   }, [postId, page]);
 
-  const SubmitComment = async () => {
+  const submitComment = async () => {
     if (!postId || !commentContent.trim()) return;
 
     try {
@@ -90,18 +93,19 @@ export const PostComments = () => {
           w='full'
           h='100px'
           size='sm'
-          placeholder='댓글을 입력해주세요.'
+          placeholder={isLogin ? '댓글을 입력해주세요.' : '로그인하여 댓글을 입력해보세요'}
           resize='none'
           value={commentContent}
           onChange={(e) => setCommentContent(e.target.value)}
+          isDisabled={!isLogin}
         />
       </Flex>
       <Flex w='full' justify='right'>
-        <Button borderRadius='3px' onClick={SubmitComment}>
+        <Button borderRadius='3px' onClick={submitComment} isDisabled={!isLogin}>
           댓글 작성
         </Button>
       </Flex>
-      <Flex w='full' flexDir='column' mt={20} gap={5}>
+      <Flex w='full' flexDir='column' mt={5} gap={5}>
         {comments?.content?.length ? (
           comments.content.map((comment, index) => (
             <CommentList

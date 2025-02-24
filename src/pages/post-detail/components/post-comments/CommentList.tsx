@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Avatar, Flex, HStack, Text, VStack, Textarea, Button } from '@chakra-ui/react';
 
 import { useCustomToast } from '@shared/hooks';
+import { authStorage } from '@shared/utils';
 
 import {
   deletePostsComments,
@@ -25,7 +26,10 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
   const [editContent, setEditContent] = useState(comment.contents);
   const customToast = useCustomToast();
 
-  const DeleteComment = async () => {
+  const nickName = authStorage.nickName.get();
+  const isAuthor = nickName === comment.author;
+
+  const deleteComment = async () => {
     if (!postId) return;
 
     const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
@@ -50,7 +54,7 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
     }
   };
 
-  const EditComment = async () => {
+  const editComment = async () => {
     if (!postId || !editContent.trim()) return;
 
     try {
@@ -86,21 +90,36 @@ export const CommentList = ({ comment, isLast, setComments }: CommentListProps) 
               </Text>
             </Flex>
           </HStack>
-          <HStack spacing={2}>
-            <Text as='button' fontWeight='700' color='blue.500' onClick={() => setIsEditing(true)}>
-              수정
-            </Text>
-            <Text as='button' fontWeight='700' color='red.500' onClick={DeleteComment}>
-              삭제
-            </Text>
-          </HStack>
+          {isAuthor && ( // 현재 사용자가 댓글 작성자인 경우에만 수정/삭제 버튼 표시
+            <HStack spacing={2}>
+              <Text
+                as='button'
+                fontWeight='700'
+                color='blue.500'
+                onClick={() => setIsEditing(true)}
+              >
+                수정
+              </Text>
+              <Text as='button' fontWeight='700' color='red.500' onClick={deleteComment}>
+                삭제
+              </Text>
+            </HStack>
+          )}
         </HStack>
         {isEditing ? (
-          <Textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} />
+          <Textarea
+            resize='none'
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+          />
         ) : (
           <Text>{comment.contents}</Text>
         )}
-        {isEditing && <Button onClick={EditComment}>수정 완료</Button>}
+        {isEditing && (
+          <Flex w='full' justify='flex-end'>
+            <Button onClick={editComment}>수정 완료</Button>
+          </Flex>
+        )}
       </VStack>
     </Flex>
   );
