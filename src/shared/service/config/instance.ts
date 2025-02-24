@@ -5,8 +5,6 @@ const API_PREFIX = `/api/v1`;
 
 // export const BASE_URI = `https://algo.knu-soft.site${API_PREFIX}`;
 export const BASE_URI = `${API_PREFIX}`;
-// export const BASE_URI = `https://algo.knu-soft.site${API_PREFIX}`;
-export const BASE_URI = `${API_PREFIX}`;
 
 export const SERVER_FILE_URI = `https://algo.knu-soft.site`;
 

@@ -6,17 +6,13 @@ import { Container } from '@widgets/container';
 
 import { PostComments, PostContents, PostInfo } from '../components';
 import { usePostDetail } from '../hooks';
+import { SkeletonPostDetail } from './SkeletonPostDetail';
 
 export const PostDetailPage = () => {
   const { postId } = useParams();
-  const { data, isLoading, error } = usePostDetail(postId ? Number(postId) : undefined);
+  const { data, isLoading, error, refetch } = usePostDetail(postId ? Number(postId) : undefined);
 
-  if (isLoading)
-    return (
-      <Flex justify='center' align='center' w='full' h='200px'>
-        Loading...
-      </Flex>
-    );
+  if (isLoading) return <SkeletonPostDetail />;
   if (error || !data?.post)
     return (
       <Flex justify='center' align='center' w='full' h='200px'>
@@ -29,7 +25,7 @@ export const PostDetailPage = () => {
       <Container maxWidth='100vw' flexDirection='column' alignItems='center'>
         <PostInfo post={data.post} tags={data.tags} />
         <PostContents post={data.post} />
-        <PostComments />
+        <PostComments postId={Number(postId)} comments={data.comments} refetch={refetch} />
       </Container>
     </Flex>
   );

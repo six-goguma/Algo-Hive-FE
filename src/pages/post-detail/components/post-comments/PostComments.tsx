@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
-import { Button, Flex, Text, Textarea, VStack, Spinner, HStack } from '@chakra-ui/react';
+import { Button, Flex, Text, Textarea, VStack, HStack } from '@chakra-ui/react';
 
 import { useCustomToast } from '@shared/hooks';
 import { authStorage } from '@shared/utils';
 
-import { usePostComments, useSubmitComment } from '../../hooks/usePostComments';
+import { ResponsePostComments } from '../../apis';
+import { useSubmitComment } from '../../hooks';
 import { CommentList } from './CommentList';
 
-export const PostComments = () => {
-  const { postId } = useParams();
+type PostCommentsProps = {
+  postId: number;
+  comments: ResponsePostComments;
+  refetch: () => void;
+};
+
+export const PostComments = ({ postId, comments, refetch }: PostCommentsProps) => {
   const [commentContent, setCommentContent] = useState('');
   const [page, setPage] = useState(0);
   const customToast = useCustomToast();
@@ -18,12 +23,7 @@ export const PostComments = () => {
   const nickName = authStorage.nickName.get();
   const isLogin = !!nickName;
 
-  const {
-    data: comments,
-    isLoading,
-    refetch,
-  } = usePostComments(postId ? Number(postId) : undefined, page);
-  const { mutate: submitComment, isPending } = useSubmitComment(Number(postId));
+  const { mutate: submitComment, isPending } = useSubmitComment(postId);
 
   const onSubmit = async () => {
     if (!postId || !commentContent.trim()) return;
@@ -37,23 +37,11 @@ export const PostComments = () => {
         customToast({
           toastStatus: 'error',
           toastTitle: '게시글 상세 페이지',
-          toastDescription: '로그인이 되어 있는지 확인해주세요.',
+          toastDescription: '댓글 작성 과정에서 오류가 발생했습니다.',
         });
       },
     });
   };
-
-  const deleteComment = async () => {
-    refetch();
-  };
-
-  if (isLoading) {
-    return (
-      <Flex justify='center' align='center' w='full' h='200px'>
-        <Spinner size='xl' />
-      </Flex>
-    );
-  }
 
   return (
     <VStack w='full' mb={20}>
@@ -87,7 +75,7 @@ export const PostComments = () => {
               key={comment.id}
               comment={comment}
               isLast={index === comments.content.length - 1}
-              onDelete={deleteComment}
+              onRefetch={refetch}
               currentUser={nickName}
             />
           ))

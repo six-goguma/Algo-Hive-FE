@@ -6,23 +6,22 @@ import { useCustomToast } from '@shared/hooks';
 
 import { deletePostsComments, editPostsComments } from '../../apis';
 import { PostCommentsContent } from '../../apis';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 type CommentListProps = {
   comment: PostCommentsContent;
   isLast?: boolean;
-  onDelete: () => void;
+  onRefetch: () => void;
   currentUser: string | null;
 };
 
-export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentListProps) => {
+export const CommentList = ({ comment, isLast, onRefetch, currentUser }: CommentListProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.contents);
   const customToast = useCustomToast();
   const isAuthor = currentUser === comment.author;
-  const queryClient = useQueryClient();
 
-  const { mutate: deleteComment } = useMutation({
+  const { mutate: deleteComment, isPending: isDeleting } = useMutation({
     mutationFn: () => deletePostsComments({ commentId: comment.id }),
     onSuccess: () => {
       customToast({
@@ -30,7 +29,7 @@ export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentL
         toastTitle: '댓글 삭제',
         toastDescription: '댓글이 삭제되었습니다.',
       });
-      onDelete();
+      onRefetch();
     },
     onError: () => {
       customToast({
@@ -41,7 +40,7 @@ export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentL
     },
   });
 
-  const { mutate: editComment } = useMutation({
+  const { mutate: editComment, isPending: isEditingPending } = useMutation({
     mutationFn: () => editPostsComments({ commentId: comment.id, contents: editContent }),
     onSuccess: () => {
       customToast({
@@ -50,7 +49,7 @@ export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentL
         toastDescription: '댓글이 수정되었습니다.',
       });
       setIsEditing(false);
-      queryClient.invalidateQueries({ queryKey: ['postComments'] });
+      onRefetch();
     },
     onError: () => {
       customToast({
@@ -81,28 +80,52 @@ export const CommentList = ({ comment, isLast, onDelete, currentUser }: CommentL
                 fontWeight='700'
                 color='blue.500'
                 onClick={() => setIsEditing(true)}
+                style={{
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.5 : 1,
+                }}
               >
                 수정
               </Text>
-              <Text as='button' fontWeight='700' color='red.500' onClick={() => deleteComment()}>
-                삭제
+              <Text
+                as='button'
+                fontWeight='700'
+                color='red.500'
+                onClick={() => deleteComment()}
+                style={{
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.5 : 1,
+                }}
+              >
+                {isDeleting ? '삭제 중...' : '삭제'}
               </Text>
             </HStack>
           )}
         </HStack>
+
         {isEditing ? (
-          <Textarea
-            resize='none'
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-          />
+          <>
+            <Textarea
+              resize='none'
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              isDisabled={isEditingPending}
+            />
+            <Flex w='full' justify='flex-end'>
+              <Button
+                onClick={() => editComment()}
+                isDisabled={isEditingPending}
+                style={{
+                  cursor: isEditingPending ? 'not-allowed' : 'pointer',
+                  opacity: isEditingPending ? 0.5 : 1,
+                }}
+              >
+                {isEditingPending ? '수정 중...' : '수정 완료'}
+              </Button>
+            </Flex>
+          </>
         ) : (
           <Text>{comment.contents}</Text>
-        )}
-        {isEditing && (
-          <Flex w='full' justify='flex-end'>
-            <Button onClick={() => editComment()}>수정 완료</Button>
-          </Flex>
         )}
       </VStack>
     </Flex>
