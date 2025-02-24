@@ -21,12 +21,11 @@ export default defineConfig({
     },
   },
   server: {
-    //TODO: 개발 끝나고 proxy 없애는 방법 검토
     proxy: {
       '/api/v1': {
         target: 'https://algo.knu-soft.site',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
     },
   },

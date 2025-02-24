@@ -54,18 +54,15 @@ export const PostTag = ({ tag }: PostTagProps) => {
                   size='md'
                   borderRadius='md'
                   variant={selectedTags.includes(tag.id) ? 'solid' : 'outline'}
-                  colorScheme={tag.colorScheme}
-                  bg={selectedTags.includes(tag.id) ? `${tag.colorScheme}.300` : 'transparent'}
-                  color={selectedTags.includes(tag.id) ? 'black' : `${tag.colorScheme}.500`}
+                  bg={selectedTags.includes(tag.id) ? `${tag.color}.300` : 'transparent'}
+                  color={selectedTags.includes(tag.id) ? 'black' : `${tag.color}.500`}
                   _hover={{
-                    bg: `${tag.colorScheme}.300`,
+                    bg: `${tag.color}.300`,
                     color: 'black',
                   }}
                   border='1px solid'
                   borderColor={
-                    selectedTags.includes(tag.id)
-                      ? `${tag.colorScheme}.400`
-                      : `${tag.colorScheme}.500`
+                    selectedTags.includes(tag.id) ? `${tag.color}.400` : `${tag.color}.500`
                   }
                   onClick={() => toggleTag(tag.id)} // ✅ 클릭 시 `toggleTag` 호출
                 >
