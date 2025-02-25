@@ -22,3 +22,7 @@ export const putLikeStatus = async ({ postId }: RequestPostParams) => {
   const response = await fetchInstance.put<{ liked: boolean }>(`/posts/${postId}/likes/status`);
   return response.data.liked;
 };
+
+export const deletePost = async ({ postId }: RequestPostParams) => {
+  await fetchInstance.delete(`/posts/${postId}`);
+};
