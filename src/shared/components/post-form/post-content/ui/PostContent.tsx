@@ -27,6 +27,7 @@ export const PostContent = ({ contents, storageId }: PostContentFieldEditorProps
     const formData = new FormData();
     formData.append('file', file);
     formData.append('storageId', String(storageId));
+    console.log('StorageId', storageId); // ✅ StorageId 확인
 
     try {
       const response = await fetch(`${BASE_URI}/images/upload`, {

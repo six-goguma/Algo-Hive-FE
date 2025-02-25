@@ -103,6 +103,7 @@ export const PostModal = ({
     const formData = new FormData();
     formData.append('file', file);
     formData.append('storageId', String(storageId));
+    console.log('storageId', storageId); // ✅ storageId 확인
 
     try {
       setIsUploading(true);
@@ -153,6 +154,7 @@ export const PostModal = ({
       });
     } finally {
       setIsPosting(false);
+      console.log(storageId); // ✅ storageId 확인
     }
   };
 

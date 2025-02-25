@@ -9,6 +9,7 @@ export type ResponsePostDetail = {
   createdAt: string;
   updatedAt: string;
   author: string;
+  storageId: string;
 };
 
 export type ResponsePostTags = {
