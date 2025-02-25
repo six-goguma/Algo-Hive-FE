@@ -4,4 +4,5 @@ export type CreatePostResponse = {
   contents: string;
   thumbnail: string;
   summary: string;
+  storageId: string;
 };

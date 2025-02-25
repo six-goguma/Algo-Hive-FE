@@ -41,8 +41,10 @@ type PostModalProps = {
     contents: string;
     thumbnail: string;
     summary: string;
+    storageId: string;
   }) => Promise<void>;
   imageUrl?: string;
+  storageId: string;
 };
 
 type PostModalForm = {
@@ -60,6 +62,7 @@ export const PostModal = ({
   postContent,
   postSummary,
   onConfirmButton,
+  storageId,
 }: PostModalProps) => {
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -99,6 +102,8 @@ export const PostModal = ({
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('storageId', String(storageId));
+    console.log('storageId', storageId); // ✅ storageId 확인
 
     try {
       setIsUploading(true);
@@ -145,9 +150,11 @@ export const PostModal = ({
         contents: postContent,
         thumbnail: data.thumbnail,
         summary: data.summary,
+        storageId: storageId,
       });
     } finally {
       setIsPosting(false);
+      console.log(storageId); // ✅ storageId 확인
     }
   };
 
@@ -181,7 +188,7 @@ export const PostModal = ({
                 <Flex bgColor='#E9ECEE' justify='center' w='full' h='166px' flexDir='column'>
                   <VStack spacing={2}>
                     {isUploading ? (
-                      <Spinner size='xl' color='customGray.500' /> // ✅ 업로드 중 스피너 표시
+                      <Spinner size='xl' color='customGray.500' />
                     ) : thumbnail ? (
                       <Image src={thumbnail} alt='thumbnail' maxW='312px' maxH='166px' />
                     ) : (

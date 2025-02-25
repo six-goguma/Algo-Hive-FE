@@ -137,7 +137,7 @@ export const PostEditPage = () => {
       <VStack w='full' py='20px' gap='0'>
         <PostTitle />
         <PostTag />
-        <PostContent contents={postDetail.contents} />
+        <PostContent contents={postDetail.contents} storageId={postDetail.storageId} />
         <PostButtons buttonText='수정하기' onClick={form.handleSubmit(onSubmit, onInvalid)} />
         <PostModal
           title={form.watch('title')}
@@ -149,6 +149,7 @@ export const PostEditPage = () => {
           imageUrl={form.watch('thumbnail')}
           postSummary={form.watch('summary')}
           onConfirmButton={onUpdatePostButton}
+          storageId={postDetail.storageId}
         />
       </VStack>
     </Form>
