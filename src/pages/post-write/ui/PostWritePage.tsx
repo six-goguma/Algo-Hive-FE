@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ import { PostFormData } from '@shared/types';
 
 import { PostModal } from '@widgets/modals';
 
-import { createPost, savePostTags } from '../apis';
+import { createPost, savePostTags, getStorageId } from '../apis';
 
 export const PostWritePage = () => {
   const methods = useForm<PostFormData>({
@@ -25,6 +26,19 @@ export const PostWritePage = () => {
   const navigate = useNavigate();
   const customToast = useCustomToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [storageId, setStorageId] = useState<string | '임시'>('임시');
+
+  useEffect(() => {
+    const fetchStorageId = async () => {
+      try {
+        const id = await getStorageId();
+        setStorageId(id);
+      } catch (error) {
+        console.error('storageId 불러오기 실패:', error);
+      }
+    };
+    fetchStorageId();
+  }, []);
 
   const onSubmit = () => {
     onOpen();
@@ -38,6 +52,7 @@ export const PostWritePage = () => {
         contents: data.content,
         thumbnail: modalData.thumbnail,
         summary: modalData.summary,
+        storageId,
       });
       if (createdPost?.id) {
         await savePostTags(createdPost.id, data.tag);
@@ -85,7 +100,7 @@ export const PostWritePage = () => {
       <VStack w='full' py='20px' gap='0' as='form'>
         <PostTitle />
         <PostTag />
-        <PostContent />
+        <PostContent storageId={storageId} />
         <PostButtons buttonText='작성완료' onClick={methods.handleSubmit(onSubmit, onInvalid)} />
         <PostModal
           title={methods.watch('title')}
@@ -97,6 +112,7 @@ export const PostWritePage = () => {
           imageUrl={methods.watch('thumbnail')}
           postSummary={methods.watch('summary')}
           onConfirmButton={onCreatePostButton}
+          storageId={storageId}
         />
       </VStack>
     </Form>

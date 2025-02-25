@@ -16,15 +16,17 @@ const locale = locales['en'];
 
 type PostContentFieldEditorProps = {
   contents?: string;
+  storageId: string;
 };
 
-export const PostContent = ({ contents }: PostContentFieldEditorProps) => {
+export const PostContent = ({ contents, storageId }: PostContentFieldEditorProps) => {
   const { control } = useFormContext();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const uploadFile = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('storageId', String(storageId));
 
     try {
       const response = await fetch(`${BASE_URI}/images/upload`, {
