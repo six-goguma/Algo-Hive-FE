@@ -1,12 +1,15 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Button, Flex, HStack, Tag, Text, VStack } from '@chakra-ui/react';
 
 import { HeartIcon } from 'lucide-react';
 
-import { ResponsePostDetail, ResponsePostTags } from '@pages/post-detail/apis';
+import { ResponsePostDetail, ResponsePostTags, deletePost } from '@pages/post-detail/apis';
 
 import { TAG_DATA } from '@shared/components/post-form/post-tag/data';
+import { RouterPath } from '@shared/constants';
+import { useCustomToast } from '@shared/hooks';
 import { authStorage, getDynamicPath } from '@shared/utils';
 
 import { useLikeStatus } from '../../hooks';
@@ -19,10 +22,35 @@ type PostInfoProps = {
 export const PostInfo = ({ post, tags }: PostInfoProps) => {
   const nickName = authStorage.nickName.get();
   const isLogin = !!nickName;
-
   const isAuthor = nickName === post.author;
-
   const { isLiked, toggleLike, isPending } = useLikeStatus(post.id, isLogin);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+  const customToast = useCustomToast();
+
+  const onDelete = async () => {
+    if (!window.confirm('정말로 이 게시글을 삭제하시겠습니까?')) return;
+
+    try {
+      setIsDeleting(true);
+      await deletePost({ postId: post.id });
+      customToast({
+        toastStatus: 'success',
+        toastTitle: '게시글 상세 페이지',
+        toastDescription: '게시글을 성공적으로 삭제했습니다.',
+      });
+      navigate(RouterPath.MAIN);
+    } catch (error) {
+      console.error('게시글 삭제 실패:', error);
+      customToast({
+        toastStatus: 'error',
+        toastTitle: '게시글 상세 페이지',
+        toastDescription: '게시글 삭제 과정에서 오류가 발생했습니다.',
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <Flex w='full' mt={10}>
@@ -46,8 +74,14 @@ export const PostInfo = ({ post, tags }: PostInfoProps) => {
                   수정
                 </Button>
               </Link>
-              <Button variant='ghost' colorScheme='red' size='sm'>
-                삭제
+              <Button
+                variant='ghost'
+                colorScheme='red'
+                size='sm'
+                onClick={onDelete}
+                isDisabled={isDeleting}
+              >
+                {isDeleting ? '삭제 중...' : '삭제'}
               </Button>
             </HStack>
           )}

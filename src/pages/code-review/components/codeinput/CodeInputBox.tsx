@@ -119,15 +119,19 @@ export const CodeInputBox = () => {
       return;
     }
 
-    const data = {
-      title: problemName, // 문제 번호를 title로 사용
-      contents: codeReviewResult.candidates[0].content.parts[0].text, // 코드 리뷰 결과를 contents로 사용
-      thumbnail: null, // thumbnail은 null
-      summary: `${problemName} 풀이`, // summary는 {문제 번호} 풀이
-    };
+    const markdownText = codeReviewResult.candidates[0].content.parts[0].text;
 
     try {
-      await uploadReviewResult(data); // uploadReviewResult 함수 호출
+      const blocks = await editor.tryParseMarkdownToBlocks(markdownText); // Markdown을 BlockNote 블록 배열로 변환
+
+      const data = {
+        title: problemName, // 문제 번호를 title로 사용
+        contents: JSON.stringify(blocks), // 변환된 BlockNote 블록 배열을 contents에 저장
+        thumbnail: null,
+        summary: `${problemName} 풀이`,
+      };
+
+      await uploadReviewResult(data);
       customToast({
         toastStatus: 'success',
         toastTitle: '성공!',
