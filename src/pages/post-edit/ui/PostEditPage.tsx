@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, useDisclosure, VStack } from '@chakra-ui/react';
 
 import { getPostDetail, getPostTags } from '@pages/post-detail/apis';
 
 import { PostTitle, PostTag, PostContent, PostButtons, Form } from '@shared/components';
+import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
 import { PostFormData } from '@shared/types';
 
 import { PostModal } from '@widgets/modals';
-import { LoadingView } from '@widgets/view';
 
 import { updatePost, updatePostTags } from '../apis';
+import { SkeletonPostEditPage } from './SkeletonPostEditPage';
 import { useQuery } from '@tanstack/react-query';
 
 export const PostEditPage = () => {
@@ -21,6 +22,7 @@ export const PostEditPage = () => {
   const { postId } = useParams<{ postId: string }>();
   const customToast = useCustomToast();
   const [hasErrorToastShown, setHasErrorToastShown] = useState(false);
+  const navigate = useNavigate();
 
   const {
     data: postDetail,
@@ -80,28 +82,21 @@ export const PostEditPage = () => {
   const onUpdatePostButton = async (modalData: { thumbnail: string; summary: string }) => {
     try {
       const data = form.getValues();
-      console.log('게시글 데이터 제출:', data);
-
-      const updatedPost = await updatePost(Number(postId), {
+      await updatePost(Number(postId), {
         title: data.title,
         contents: data.content,
         thumbnail: modalData.thumbnail,
         summary: modalData.summary,
       });
-
-      console.log('게시글 수정 성공:', updatedPost);
-
       if (data.tag !== null && data.tag !== undefined) {
         await updatePostTags(Number(postId), data.tag);
       }
-
       customToast({
         toastStatus: 'success',
         toastTitle: '게시글 수정 완료',
         toastDescription: '게시글이 성공적으로 수정되었습니다!',
       });
-
-      onClose();
+      navigate(RouterPath.MAIN);
     } catch (error) {
       console.error('게시글 수정 실패:', error);
       customToast({
@@ -134,7 +129,7 @@ export const PostEditPage = () => {
     }
   };
 
-  if (isPostLoading || isTagsLoading) return <LoadingView />;
+  if (isPostLoading || isTagsLoading) return <SkeletonPostEditPage />;
   if (!postDetail || !postTag) return <Box>데이터를 불러올 수 없습니다.</Box>;
 
   return (
@@ -142,7 +137,7 @@ export const PostEditPage = () => {
       <VStack w='full' py='20px' gap='0'>
         <PostTitle />
         <PostTag />
-        <PostContent contents={postDetail.contents} />
+        <PostContent contents={postDetail.contents} storageId={postDetail.storageId} />
         <PostButtons buttonText='수정하기' onClick={form.handleSubmit(onSubmit, onInvalid)} />
         <PostModal
           title={form.watch('title')}
@@ -154,6 +149,7 @@ export const PostEditPage = () => {
           imageUrl={form.watch('thumbnail')}
           postSummary={form.watch('summary')}
           onConfirmButton={onUpdatePostButton}
+          storageId={postDetail.storageId}
         />
       </VStack>
     </Form>

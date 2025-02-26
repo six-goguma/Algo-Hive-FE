@@ -3,16 +3,26 @@ import { RequestPostParams } from '@shared/types';
 
 import { ResponsePostDetail, ResponsePostTags } from './';
 
-export const PostsDetailPath = ({ postId }: RequestPostParams) => `/posts/${postId}`;
-
-export const getPostDetail = async ({ postId }: RequestPostParams): Promise<ResponsePostDetail> => {
-  const response = await fetchInstance.get<ResponsePostDetail>(PostsDetailPath({ postId }));
+export const getPostDetail = async ({ postId }: RequestPostParams) => {
+  const response = await fetchInstance.get<ResponsePostDetail>(`/posts/${postId}`);
   return response.data;
 };
 
-export const PostsTagsPath = ({ postId }: RequestPostParams) => `/posts/${postId}/tags`;
-
-export const getPostTags = async ({ postId }: RequestPostParams): Promise<ResponsePostTags> => {
-  const response = await fetchInstance.get<ResponsePostTags>(PostsTagsPath({ postId }));
+export const getPostTags = async ({ postId }: RequestPostParams) => {
+  const response = await fetchInstance.get<ResponsePostTags>(`/posts/${postId}/tags`);
   return response.data;
+};
+
+export const getLikeStatus = async ({ postId }: RequestPostParams) => {
+  const response = await fetchInstance.get<{ liked: boolean }>(`/posts/${postId}/likes/status`);
+  return response.data.liked;
+};
+
+export const putLikeStatus = async ({ postId }: RequestPostParams) => {
+  const response = await fetchInstance.put<{ liked: boolean }>(`/posts/${postId}/likes/status`);
+  return response.data.liked;
+};
+
+export const deletePost = async ({ postId }: RequestPostParams) => {
+  await fetchInstance.delete(`/posts/${postId}`);
 };

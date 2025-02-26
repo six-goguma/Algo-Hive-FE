@@ -26,7 +26,7 @@ import { Form, FormField, FormItem } from '@shared/components';
 import { useCustomToast } from '@shared/hooks';
 import { BASE_URI } from '@shared/service';
 
-const SERVER_URL = 'http://algo.knu-soft.site';
+const SERVER_URL = 'https://algo.knu-soft.site';
 
 type PostModalProps = {
   isOpen: boolean;
@@ -41,8 +41,10 @@ type PostModalProps = {
     contents: string;
     thumbnail: string;
     summary: string;
-  }) => void;
+    storageId: string;
+  }) => Promise<void>;
   imageUrl?: string;
+  storageId: string;
 };
 
 type PostModalForm = {
@@ -60,9 +62,11 @@ export const PostModal = ({
   postContent,
   postSummary,
   onConfirmButton,
+  storageId,
 }: PostModalProps) => {
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const MAX_IMAGE_SIZE_BYTES = 1024 * 1024 * 2;
   const customToast = useCustomToast();
 
@@ -98,6 +102,8 @@ export const PostModal = ({
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('storageId', String(storageId));
+    console.log('storageId', storageId); // ✅ storageId 확인
 
     try {
       setIsUploading(true);
@@ -136,13 +142,20 @@ export const PostModal = ({
     setValue('thumbnail', '');
   };
 
-  const onSubmit = (data: PostModalForm) => {
-    onConfirmButton({
-      title,
-      contents: postContent,
-      thumbnail: data.thumbnail,
-      summary: data.summary,
-    });
+  const onSubmit = async (data: PostModalForm) => {
+    setIsPosting(true);
+    try {
+      await onConfirmButton({
+        title,
+        contents: postContent,
+        thumbnail: data.thumbnail,
+        summary: data.summary,
+        storageId: storageId,
+      });
+    } finally {
+      setIsPosting(false);
+      console.log(storageId); // ✅ storageId 확인
+    }
   };
 
   return (
@@ -152,7 +165,7 @@ export const PostModal = ({
         <ModalHeader mt={5} textAlign='left' ml='3'>
           포스트 미리보기
         </ModalHeader>
-        <ModalCloseButton />
+        {!isPosting && <ModalCloseButton />}
 
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -175,7 +188,7 @@ export const PostModal = ({
                 <Flex bgColor='#E9ECEE' justify='center' w='full' h='166px' flexDir='column'>
                   <VStack spacing={2}>
                     {isUploading ? (
-                      <Spinner size='xl' color='customGray.500' /> // ✅ 업로드 중 스피너 표시
+                      <Spinner size='xl' color='customGray.500' />
                     ) : thumbnail ? (
                       <Image src={thumbnail} alt='thumbnail' maxW='312px' maxH='166px' />
                     ) : (
@@ -198,6 +211,7 @@ export const PostModal = ({
                             color: 'white',
                             transition: 'all 0.2s ease-in-out',
                           }}
+                          isDisabled={isPosting}
                         >
                           썸네일 업로드
                           <Input
@@ -233,6 +247,7 @@ export const PostModal = ({
                           maxLength={150}
                           placeholder='나의 포스트를 짧게 소개해보아요.'
                           fontSize='sm'
+                          isDisabled={isPosting}
                         />
                         <Flex w='full' justify='flex-end' mt='2px'>
                           <Text as='b' fontSize='sm' color='customGray.500'>
@@ -256,6 +271,7 @@ export const PostModal = ({
                   h='40px'
                   colorScheme='custom.blue'
                   onClick={onClose}
+                  isDisabled={isPosting}
                 >
                   취소
                 </Button>
@@ -267,8 +283,9 @@ export const PostModal = ({
                   colorScheme='custom.blue'
                   _hover={{}}
                   type='submit'
+                  isDisabled={isPosting}
                 >
-                  {buttonTitle}
+                  {isPosting ? '저장 중...' : buttonTitle}
                 </Button>
               </HStack>
             </ModalFooter>

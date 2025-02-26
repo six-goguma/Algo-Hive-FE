@@ -9,6 +9,7 @@ export const createPost = async (postData: {
   contents: string;
   thumbnail: string;
   summary: string;
+  storageId: string;
 }): Promise<CreatePostResponse> => {
   const response = await fetchInstance.post<CreatePostResponse>(`${POSTS_PATH}`, {
     body: JSON.stringify(postData),
@@ -24,13 +25,18 @@ export const createPost = async (postData: {
   return response.data;
 };
 
-export const savePostTags = async (postId: number, tagId: number[] | null) => {
+export const savePostTags = async (postId: number, tagIds: number[] | null) => {
   const response = await fetchInstance.post(`${POSTS_PATH}/${postId}/tags`, {
-    body: JSON.stringify({ tagId }),
+    body: JSON.stringify({ tagIds }),
     headers: {
       'Content-Type': 'application/json',
     },
   });
 
   return response.data;
+};
+
+export const getStorageId = async (): Promise<string> => {
+  const response = await fetchInstance.get<{ storageId: string }>('/make/uuid');
+  return response.data.storageId;
 };
