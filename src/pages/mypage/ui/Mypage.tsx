@@ -5,8 +5,8 @@ import { Flex, VStack } from '@chakra-ui/react';
 import { Pagination } from '@shared/components';
 import { authStorage } from '@shared/utils';
 
-import { MyPostSection, UserProfileSection } from '../components';
-import { useGetPostUser } from '../hooks';
+import { MyPostSection, NicknameSection, ProfileSection, UserProfileSection } from '../components';
+import { useGetPostUser, useGetProfile } from '../hooks';
 
 export const Mypage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +25,8 @@ export const Mypage = () => {
     nickname: userNickname,
   });
 
+  const { data: profileData } = useGetProfile();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     refetch();
@@ -37,6 +39,17 @@ export const Mypage = () => {
   return (
     <Flex w='full' flexDir='column' justify='center' align='center'>
       <UserProfileSection isPending={isPending} />
+      <Flex
+        width='full'
+        maxW={{ base: 'full', sm: '1000px' }}
+        h={{ base: 'auto', sm: '210px' }}
+        mt='30px'
+        align='flex-start'
+        px={{ base: '0', sm: '40px' }}
+      >
+        <ProfileSection profile={profileData?.url} />
+        <NicknameSection />
+      </Flex>
       <Flex w='full' justifyContent='center'>
         <VStack spacing={1} pb={10}>
           <MyPostSection postUserData={postUserData?.content} isPending={isPending} />
