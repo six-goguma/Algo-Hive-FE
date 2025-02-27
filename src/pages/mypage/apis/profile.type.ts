@@ -1,7 +1,11 @@
 export type ResponseGetProfile = {
-  url: string | null;
+  url?: string;
 };
 
-export type ResponseAddProfile = {
+export type ResponseUpdateProfile = {
+  url: string;
+};
+
+export type RequestUpdateProfile = {
   file: File;
 };
