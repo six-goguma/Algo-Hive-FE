@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Flex, Text } from '@chakra-ui/react';
@@ -17,6 +18,29 @@ type MyPostSectionProps = {
 };
 
 export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) => {
+  const [loadedThumbnails, setLoadedThumbnails] = useState<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    if (!isPending && postUserData) {
+      const imageLoaders = postUserData.map((post) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = post.thumbnail ?? DEFAULT_IMAGE;
+          img.onload = () => {
+            setLoadedThumbnails((prev) => ({ ...prev, [post.id]: true }));
+            resolve(true);
+          };
+          img.onerror = () => {
+            setLoadedThumbnails((prev) => ({ ...prev, [post.id]: true }));
+            resolve(true);
+          };
+        });
+      });
+
+      Promise.all(imageLoaders);
+    }
+  }, [isPending, postUserData]);
+
   if (!postUserData || postUserData.length === 0) {
     return (
       <Flex w='full' justifyContent='center' alignItems='center' h='200px'>
@@ -38,7 +62,9 @@ export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) =
                 <PostCards
                   title={post.title}
                   postId={post.id}
-                  thumbnail={post.thumbnail ?? DEFAULT_IMAGE}
+                  thumbnail={
+                    loadedThumbnails[post.id] ? (post.thumbnail ?? DEFAULT_IMAGE) : DEFAULT_IMAGE
+                  }
                   summary={post.summary}
                   createdAt={post.createdAt}
                   likeCount={post.likeCount}
