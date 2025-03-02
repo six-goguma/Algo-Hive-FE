@@ -10,13 +10,18 @@ import {
   MenuItem,
   MenuDivider,
   useBreakpointValue,
+  Image,
 } from '@chakra-ui/react';
 
 import { TriangleDownIcon } from '@chakra-ui/icons';
 
 import { UserIcon, LogOutIcon, SquarePenIcon } from 'lucide-react';
 
+import { useGetProfile } from '@pages/mypage/hooks';
+
 import { RouterPath } from '@shared/constants';
+import { SERVER_URI } from '@shared/service';
+import { authStorage } from '@shared/utils';
 
 type NavigateMenuProps = {
   onClick: () => void;
@@ -24,6 +29,14 @@ type NavigateMenuProps = {
 
 export const NavigateMenu = ({ onClick }: NavigateMenuProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const { data: userData, isPending } = useGetProfile();
+
+  const userProfile = userData ? `${SERVER_URI}${userData.url}` : '';
+
+  if (userProfile !== '') {
+    authStorage.profile.set(userProfile);
+  }
+
   return (
     <Menu>
       {({ isOpen }) => (
@@ -47,7 +60,11 @@ export const NavigateMenu = ({ onClick }: NavigateMenuProps) => {
             )}
             <MenuButton>
               <HStack spacing='10px' cursor='pointer'>
-                <Avatar w='40px' h='auto' src='https://bit.ly/broken-link' />
+                {isPending ? (
+                  <Avatar w='40px' h='auto' src='https://bit.ly/broken-link' />
+                ) : (
+                  <Image src={userProfile} alt='Profile' borderRadius='full' w='40px' h='auto' />
+                )}
                 <TriangleDownIcon width='15px' height='auto' color={isOpen ? 'black' : '#868E96'} />
               </HStack>
             </MenuButton>
