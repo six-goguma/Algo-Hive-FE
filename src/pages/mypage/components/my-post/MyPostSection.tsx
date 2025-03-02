@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { Flex, Text } from '@chakra-ui/react';
 
+import { DEFAULT_IMAGE } from '@shared/constants';
 import { getDynamicPath } from '@shared/utils';
 
 import { Grid } from '@widgets/grid';
@@ -25,6 +26,7 @@ export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) =
       </Flex>
     );
   }
+
   return (
     <>
       <Tabs />
@@ -36,7 +38,7 @@ export const MyPostSection = ({ postUserData, isPending }: MyPostSectionProps) =
                 <PostCards
                   title={post.title}
                   postId={post.id}
-                  thumbnail={post.thumbnail}
+                  thumbnail={post.thumbnail ?? DEFAULT_IMAGE}
                   summary={post.summary}
                   createdAt={post.createdAt}
                   likeCount={post.likeCount}
