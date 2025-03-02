@@ -3,8 +3,9 @@ import { Http, HttpResponse } from '@shared/lib';
 
 const API_PREFIX = `/api/v1`;
 
-// export const BASE_URI = `https://algo.knu-soft.site${API_PREFIX}`;
 export const BASE_URI = `${API_PREFIX}`;
+
+export const SERVER_URI = `https://algo.knu-soft.site`;
 
 export const SERVER_FILE_URI = `https://algo.knu-soft.site`;
 
@@ -13,6 +14,23 @@ export const fetchInstance = new Http(BASE_URI, {
     'Content-Type': 'application/json',
   },
   credentials: 'include',
+});
+
+export const multipartFetchInstance = new Http(BASE_URI, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+  credentials: 'include',
+});
+
+multipartFetchInstance.registerInterceptor({
+  onRequest: (config) => {
+    config.headers = {
+      ...config.headers,
+    };
+
+    return config;
+  },
 });
 
 fetchInstance.registerInterceptor({
