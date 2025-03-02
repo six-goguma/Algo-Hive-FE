@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
 import { useCustomToast } from '@shared/hooks';
+import { queryClient } from '@shared/lib';
 import { BASE_URI, SERVER_URI } from '@shared/service';
 import { authStorage } from '@shared/utils';
+
+import { profilePath } from '../apis';
 
 export const useUploadProfileImage = () => {
   const toast = useCustomToast();
@@ -34,6 +37,8 @@ export const useUploadProfileImage = () => {
       const uploadedUrl = `${SERVER_URI}${data.url}`;
 
       authStorage.profile.set(uploadedUrl);
+
+      queryClient.invalidateQueries({ queryKey: profilePath });
 
       const blob = await (await fetch(uploadedUrl)).blob();
       return new File([blob], 'profileImage', { type: blob.type });
