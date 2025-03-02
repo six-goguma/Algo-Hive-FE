@@ -5,7 +5,7 @@ import { Flex, VStack } from '@chakra-ui/react';
 import { Pagination } from '@shared/components';
 import { authStorage } from '@shared/utils';
 
-import { MyPostSection, NicknameSection, ProfileSection, UserProfileSection } from '../components';
+import { MyPostSection, NicknameSection, ProfileSection } from '../components';
 import { useGetPostUser, useGetProfile } from '../hooks';
 
 export const Mypage = () => {
@@ -38,14 +38,14 @@ export const Mypage = () => {
 
   return (
     <Flex w='full' flexDir='column' justify='center' align='center'>
-      <UserProfileSection isPending={isPending} />
       <Flex
-        width='full'
+        w='full'
         maxW={{ base: 'full', sm: '1000px' }}
         h={{ base: 'auto', sm: '210px' }}
         mt='30px'
         align='flex-start'
         px={{ base: '0', sm: '40px' }}
+        gap={4}
       >
         <ProfileSection profile={profileData?.url} />
         <NicknameSection />
