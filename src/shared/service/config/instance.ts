@@ -7,6 +7,8 @@ export const BASE_URI = `${API_PREFIX}`;
 
 export const SERVER_URI = `https://algo.knu-soft.site`;
 
+export const BASE_WS_URI = `wss://algo.knu-soft.site`;
+
 export const SERVER_FILE_URI = `https://algo.knu-soft.site`;
 
 export const fetchInstance = new Http(BASE_URI, {

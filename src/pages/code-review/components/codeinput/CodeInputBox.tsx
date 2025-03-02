@@ -13,8 +13,6 @@ import { locales } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import { useCreateBlockNote } from '@blocknote/react';
 
-// uploadReviewResult 함수 import
-
 export const CodeInputBox = () => {
   const locale = locales['en'];
   const editor = useCreateBlockNote({
@@ -33,30 +31,25 @@ export const CodeInputBox = () => {
     ],
   });
 
-  const [problemName, setProblemName] = useState<string>(''); // 문제 번호
+  const [problemName, setProblemName] = useState<string>('');
   const [codeReviewResult, setCodeReviewResult] = useState<ResponseCodeReview | null>(null);
 
-  const { mutate, isPending } = useCodeReview(); // react-query 훅 사용
-  const customToast = useCustomToast(); // 커스텀 토스트 훅
+  const { mutate, isPending } = useCodeReview();
+  const customToast = useCustomToast();
 
   const handleSubmit = () => {
-    const content = editor.document; // 현재 편집기의 내용을 JSON 형식으로 가져옴
-    // problemName을 주석으로 추가
-    const nameAddedContent = [
-      {
-        type: 'codeBlock',
-        content: `// 문제 번호: ${problemName}\n${content[0].content}`,
-      },
-      ...content.slice(1), // 나머지 블록 유지
-    ];
+    const codeBlock = editor.document.find((block) => block.type === 'codeBlock');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const content = codeBlock?.content?.[0] as any;
+    const code = JSON.stringify(content.text);
+
     const parseDataToSend = {
-      code: JSON.stringify(nameAddedContent[0].content),
+      code: `// 문제 번호: ${problemName}\n${code}`,
     };
 
-    // 코드 리뷰 요청
     mutate(parseDataToSend.code, {
       onSuccess: (data) => {
-        setCodeReviewResult(data); // 코드 리뷰 결과 저장
+        setCodeReviewResult(data);
       },
       onError: (error) => {
         console.error('Code review failed:', error);
@@ -64,7 +57,6 @@ export const CodeInputBox = () => {
     });
   };
 
-  // 클립보드 복사 함수
   const handleCopyToClipboard = async () => {
     const textToCopy = codeReviewResult?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
@@ -77,7 +69,6 @@ export const CodeInputBox = () => {
       return;
     }
 
-    // 클립보드 API가 지원되는 경우
     if (navigator.clipboard && window.isSecureContext) {
       try {
         await navigator.clipboard.writeText(textToCopy);
@@ -92,7 +83,7 @@ export const CodeInputBox = () => {
       }
     }
 
-    // 📌 HTTP 환경에서는 예전 방식 사용 (document.execCommand)
+    // http 환경
     const textArea = document.createElement('textarea');
     textArea.value = textToCopy;
     document.body.appendChild(textArea);
@@ -108,7 +99,7 @@ export const CodeInputBox = () => {
   };
 
   const navigate = useNavigate();
-  // 게시글로 올리기 함수
+
   const handleUploadReviewResult = async () => {
     if (!codeReviewResult || !problemName) {
       customToast({
@@ -122,11 +113,11 @@ export const CodeInputBox = () => {
     const markdownText = codeReviewResult.candidates[0].content.parts[0].text;
 
     try {
-      const blocks = await editor.tryParseMarkdownToBlocks(markdownText); // Markdown을 BlockNote 블록 배열로 변환
+      const blocks = await editor.tryParseMarkdownToBlocks(markdownText);
 
       const data = {
-        title: problemName, // 문제 번호를 title로 사용
-        contents: JSON.stringify(blocks), // 변환된 BlockNote 블록 배열을 contents에 저장
+        title: problemName,
+        contents: JSON.stringify(blocks),
         thumbnail: null,
         summary: `${problemName} 풀이`,
       };
@@ -173,9 +164,9 @@ export const CodeInputBox = () => {
         <Box h='auto' overflow='auto' mt='10px' mb='10px'>
           <BlockNoteView
             editor={editor}
-            sideMenu={false} // 사이드 메뉴 비활성화
-            formattingToolbar={false} // 포맷팅 툴바 비활성화
-            slashMenu={false} // 슬래시 메뉴 비활성화
+            sideMenu={false}
+            formattingToolbar={false}
+            slashMenu={false}
           />
         </Box>
       </Flex>
@@ -187,7 +178,7 @@ export const CodeInputBox = () => {
         fontSize='14px'
         alignSelf='flex-end'
         onClick={handleSubmit}
-        disabled={isPending} // 로딩 중 버튼 비활성화
+        disabled={isPending}
       >
         {isPending ? <Spinner size='sm' /> : 'AI 코드리뷰'}
       </Button>
@@ -220,7 +211,7 @@ export const CodeInputBox = () => {
           mt='10px'
           fontSize='14px'
           alignSelf='flex-end'
-          onClick={handleUploadReviewResult} // 게시글로 올리기 함수 연결
+          onClick={handleUploadReviewResult}
         >
           게시글로 올리기
         </Button>
