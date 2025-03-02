@@ -1,4 +1,4 @@
-import { fetchInstance } from '@shared/service';
+import { fetchInstance, multipartFetchInstance } from '@shared/service';
 
 import { RequestUpdateProfile, ResponseGetProfile, ResponseUpdateProfile } from './profile.type';
 
@@ -15,9 +15,13 @@ export const updateProfileImage = async ({
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetchInstance.post<ResponseUpdateProfile>(profilePath, {
+  const response = await multipartFetchInstance.post<ResponseUpdateProfile>(profilePath, {
     body: formData,
   });
 
   return response.data;
+};
+
+export const deleteProfileImage = async (): Promise<void> => {
+  await fetchInstance.delete(profilePath);
 };
