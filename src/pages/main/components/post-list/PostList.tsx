@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import { DEFAULT_IMAGE } from '@shared/constants';
 import { getDynamicPath } from '@shared/utils';
 
 import { Grid } from '@widgets/grid';
@@ -21,7 +22,7 @@ export const PostList = ({ postData, isPending }: PostListProps) => {
               <PostCards
                 title={post.title}
                 postId={post.id}
-                thumbnail={post.thumbnail}
+                thumbnail={post.thumbnail ?? DEFAULT_IMAGE}
                 summary={post.summary}
                 createdAt={post.createdAt}
                 likeCount={post.likeCount}
