@@ -5,46 +5,52 @@ import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
 
 import { RouterPath } from '@shared/constants';
 import { useCustomToast } from '@shared/hooks';
-import { BASE_URI, BASE_WS_URI } from '@shared/service';
+import { BASE_URI } from '@shared/service';
+import {
+  connectWebSocket,
+  disconnectWebSocket,
+  subsribeToNoRoom,
+  subscribeToRoom,
+  unsubscribeFromRoom,
+  sendMessage as sendMessageViaWebSocket,
+  subscribeToAllUsers,
+  subscribeToRoomUsers,
+} from '@shared/service';
 import { authStorage } from '@shared/utils';
 
 import { ChatRoomList, ChatRoomInside, ChatUserList } from '../components';
 import { useGetChatRooms, useCreateChatRoom } from '../hooks';
-import { Client } from '@stomp/stompjs';
 
 export const ChatPage = () => {
-  const [roomName, setRoomName] = useState('');
-  const [newRoomName, setNewRoomName] = useState('');
-  const [messages, setMessages] = useState<{ sender: string; content: string; email: string }[]>(
-    [],
-  ); // 메세지 <- 총 메세지(rest + 소켓)
-  const [socketMessages, setSocketMessages] = useState<
-    { sender: string; content: string; email: string }[]
-  >([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [stompClient, setStompClient] = useState<Client | null>(null);
-
   const [page, setPage] = useState(0);
   const size = 10;
   const sort = 'createdAt,desc';
   const { data: chatRooms, refetch } = useGetChatRooms(page, size, sort);
 
-  const [usersInRooms, setUsersInRooms] = useState<{ userName: string; roomName: string }[]>([]); // 채팅방 사용자 목록
-  const [roomUserList, setRoomUserList] = useState<{ [key: string]: number }>({}); // 각 방의 접속자 목록
-  const [isComposing, setIsComposing] = useState(false); // IME 입력 상태 관리
-
-  const messagesEndRef = useRef<HTMLDivElement>(null); // 채팅 메시지 스크롤 조작을 위한 Ref
-  const messageListRef = useRef<HTMLDivElement>(null); // 메시지 목록 스크롤 조작을 위한 Ref
+  const [roomName, setRoomName] = useState('');
+  const [newRoomName, setNewRoomName] = useState('');
+  const [messages, setMessages] = useState<{ sender: string; content: string; email: string }[]>(
+    [],
+  );
+  const [socketMessages, setSocketMessages] = useState<
+    { sender: string; content: string; email: string }[]
+  >([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [usersInRooms, setUsersInRooms] = useState<{ userName: string; roomName: string }[]>([]);
+  const [roomUserList, setRoomUserList] = useState<{ [key: string]: number }>({});
+  const [isComposing, setIsComposing] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageListRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { mutate: createRoom } = useCreateChatRoom();
-  const customToast = useCustomToast();
 
+  const customToast = useCustomToast();
   const [messagePage, setMessagePage] = useState(0);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
-
   const [userName, setUserName] = useState(authStorage.nickName.get());
+
   const [email, setEmail] = useState(authStorage.email.get());
 
   useEffect(() => {
@@ -99,11 +105,8 @@ export const ChatPage = () => {
     if (roomName && messagePage > 0) {
       fetchRecentMessages(roomName, messagePage);
     }
+  }, [messagePage, roomName]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messagePage]);
-
-  //새 메세지 추가 시 자동 스크롤
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -124,127 +127,64 @@ export const ChatPage = () => {
     setTimeout(() => refetch(), 500);
   };
 
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    const messageRequest = {
+      sender: userName,
+      email,
+      content: newMessage,
+      roomName,
+    };
+
+    sendMessageViaWebSocket(roomName, messageRequest);
+    setNewMessage('');
+  };
+
   useEffect(() => {
-    connectToWebSocket();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    connectWebSocket(() => {
+      subsribeToNoRoom();
+      subscribeToAllUsers((userList) => {
+        setUsersInRooms(userList);
+      });
+
+      subscribeToRoomUsers((roomUserList) => {
+        setRoomUserList(roomUserList);
+      });
+    });
+
+    return () => {
+      disconnectWebSocket();
+    };
   }, []);
-
-  const connectToWebSocket = () => {
-    if (stompClient) {
-      stompClient.deactivate();
-    }
-
-    const client = new Client({
-      brokerURL: `${BASE_WS_URI}/api/ws`,
-      debug: (str) => console.log(str),
-      onConnect: () => {
-        console.log('WebSocket에 연결되었습니다.');
-
-        client.subscribe('/topic/users', (messageOutput) => {
-          const userList = JSON.parse(messageOutput.body);
-          setUsersInRooms(userList);
-        });
-
-        client.subscribe('/topic/room-users', (messageOutput) => {
-          const roomUserList = JSON.parse(messageOutput.body);
-          setRoomUserList(roomUserList);
-        });
-
-        client.publish({
-          destination: '/api/app/chat/join',
-          body: JSON.stringify({
-            userName: userName,
-            roomName: '채팅방 미접속',
-          }),
-        });
-      },
-      onStompError: (frame) => {
-        console.error(`STOMP 오류: ${frame}`);
-      },
-    });
-
-    client.activate();
-    setStompClient(client);
-  };
-
-  const connectToChatRoom = () => {
-    if (!roomName || !userName) return;
-
-    if (stompClient) {
-      stompClient.deactivate();
-    }
-
-    const client = new Client({
-      brokerURL: `${BASE_WS_URI}/api/ws`,
-      debug: (str) => console.log(str),
-      onConnect: () => {
-        console.log(`${roomName} 채팅방에 연결되었습니다.`);
-
-        client.subscribe(`/topic/${roomName}`, (messageOutput) => {
-          const message = JSON.parse(messageOutput.body);
-
-          message.content = message.content + ' ';
-
-          setSocketMessages((prevMessages) => [message, ...prevMessages]);
-          setMessages((prevMessages) => [message, ...prevMessages]);
-        });
-
-        client.subscribe('/topic/users', (messageOutput) => {
-          const userList = JSON.parse(messageOutput.body);
-          setUsersInRooms(userList);
-        });
-
-        client.subscribe('/topic/room-users', (messageOutput) => {
-          const roomUserList = JSON.parse(messageOutput.body);
-          setRoomUserList(roomUserList);
-        });
-
-        client.publish({
-          destination: '/api/app/chat/join',
-          body: JSON.stringify({ userName: userName, roomName }),
-        });
-      },
-      onStompError: (frame) => {
-        console.error(`STOMP 오류: ${frame}`);
-      },
-    });
-
-    client.activate();
-    setStompClient(client);
-  };
 
   useEffect(() => {
     if (roomName) {
       setMessagePage(0);
       setMessages([]);
       fetchRecentMessages(roomName, 0);
-      connectToChatRoom();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomName]);
+      disconnectWebSocket();
+      connectWebSocket(() => {
+        subscribeToAllUsers((userList) => {
+          setUsersInRooms(userList);
+        });
 
-  const handleSendMessage = () => {
-    if (!stompClient || !stompClient.connected) {
-      console.log('WebSocket 연결이 활성화되지 않았습니다.');
-      return;
-    }
+        subscribeToRoomUsers((roomUserList) => {
+          setRoomUserList(roomUserList);
+        });
 
-    if (newMessage.trim()) {
-      const messageRequest = {
-        sender: userName,
-        email,
-        content: newMessage,
-        roomName,
-      };
-
-      stompClient.publish({
-        destination: `/api/app/chat/${roomName}`,
-        body: JSON.stringify(messageRequest),
+        subscribeToRoom(roomName, (message) => {
+          setSocketMessages((prevMessages) => [message, ...prevMessages]);
+          setMessages((prevMessages) => [message, ...prevMessages]);
+        });
       });
 
-      setNewMessage('');
+      return () => {
+        unsubscribeFromRoom(roomName);
+        disconnectWebSocket();
+      };
     }
-  };
+  }, [roomName]);
 
   return (
     <Flex flexDir='column' alignItems='center' w='full' h='full'>
@@ -263,7 +203,6 @@ export const ChatPage = () => {
         <Text display={{ base: 'block', sm: 'none' }} mt='10px' fontSize='sm' color='gray.600'>
           밑으로 스크롤하면 채팅과 현재 접속자 목록을 볼 수 있어요
         </Text>
-        {/* 채팅방 목록 */}
         <ChatRoomList
           chatRooms={chatRooms}
           roomName={roomName}
@@ -280,8 +219,6 @@ export const ChatPage = () => {
           isOpen={isOpen}
           onClose={onClose}
         />
-
-        {/* 채팅방 */}
         <ChatRoomInside
           messages={messages}
           newMessage={newMessage}
@@ -297,8 +234,6 @@ export const ChatPage = () => {
           setIsComposing={setIsComposing}
           handleMessageListScroll={handleMessageListScroll}
         />
-
-        {/* 현재 채팅방 사용자 목록 */}
         <ChatUserList usersInRooms={usersInRooms} />
       </Flex>
     </Flex>
