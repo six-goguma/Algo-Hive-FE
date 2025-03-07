@@ -2,6 +2,7 @@ type StorageKey = {
   nickName: string;
   isLogin: boolean;
   email: string;
+  profile: string;
 };
 
 const initStorage = <T extends keyof StorageKey>(key: T, storage = window.sessionStorage) => {
@@ -26,4 +27,5 @@ export const authStorage = {
   nickName: initStorage('nickName', sessionStorage),
   isLogin: initStorage('isLogin', sessionStorage),
   email: initStorage('email', sessionStorage),
+  profile: initStorage('profile', sessionStorage),
 };

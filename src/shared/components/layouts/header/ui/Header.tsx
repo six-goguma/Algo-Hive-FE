@@ -50,6 +50,7 @@ export const Header = () => {
     authStorage.isLogin.set(false);
     authStorage.nickName.set('');
     authStorage.email.set('');
+    authStorage.profile.set('');
   };
 
   const onClickLogin = () => {

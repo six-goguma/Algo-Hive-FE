@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -26,47 +26,57 @@ import { useMutation } from '@tanstack/react-query';
 
 export const UserProfileSection = ({ isPending }: { isPending: boolean }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [nickName, setNickName] = useState(authStorage.nickName.get() || '');
+
   const { data: userImgUrlData, isPending: userImgUrlPending } = useGetProfile();
+
+  const toast = useCustomToast();
 
   const { mutate: deleteUserData } = useMutation({
     mutationFn: deleteUser,
     onSuccess: (response) => {
       console.log(response);
+      toast({
+        toastStatus: 'success',
+        toastTitle: '회원탈퇴',
+        toastDescription: '회원탈퇴가 완료되었습니다.',
+      });
     },
     onError: () => {},
   });
-  const toast = useCustomToast();
-
-  const initialNickname = authStorage.nickName.get();
 
   const form = useForm<Mypage>({
     resolver: zodResolver(MypageSchema),
     mode: 'onChange',
     defaultValues: {
-      nickName: initialNickname,
+      nickName,
       profileImage: '',
     },
   });
 
   const { mutate: changeNickname } = useMutation({
     mutationFn: changeUserNickname,
-    onSuccess: (response) => {
-      onSuccess(response.message);
+    onSuccess: () => {
+      onSuccess();
     },
     onError: () => {
       onError();
     },
   });
 
+  useEffect(() => {
+    setNickName(authStorage.nickName.get() || '');
+  }, []);
+
   const onSubmit = (data: Mypage) => {
     changeNickname({ nickName: data.nickName });
-    console.log(data.nickName);
+    authStorage.nickName.set(data.nickName);
+    setNickName(data.nickName);
+
+    form.reset({ nickName: data.nickName });
   };
 
-  const onSuccess = (updatedNickname: string) => {
-    authStorage.nickName.set(updatedNickname);
-    form.reset({ nickName: updatedNickname });
-
+  const onSuccess = () => {
     toast({
       toastStatus: 'success',
       toastTitle: '마이페이지',
@@ -168,7 +178,7 @@ export const UserProfileSection = ({ isPending }: { isPending: boolean }) => {
                           </Flex>
                         ) : (
                           <Text
-                            w='150px'
+                            w='200px'
                             textAlign='left'
                             fontSize='20px'
                             fontWeight='Bold'
