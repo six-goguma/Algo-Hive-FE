@@ -19,7 +19,7 @@ import { UserIcon, LogOutIcon, SquarePenIcon } from 'lucide-react';
 
 import { useGetProfile } from '@pages/mypage/hooks';
 
-import { RouterPath } from '@shared/constants';
+import { DEFAULT_IMAGE, RouterPath } from '@shared/constants';
 import { SERVER_URI } from '@shared/service';
 import { authStorage } from '@shared/utils';
 
@@ -31,10 +31,12 @@ export const NavigateMenu = ({ onClick }: NavigateMenuProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const { data: userData, isPending } = useGetProfile();
 
-  const userProfile = userData ? `${SERVER_URI}${userData.url}` : '';
+  // 프로필 이미지를 올리지 않은 사용자는 url이 null로 내려온다. 객체 유무만 보면 "...cloudnull"이 된다.
+  const uploadedProfile = userData?.url ? `${SERVER_URI}${userData.url}` : '';
+  const userProfile = uploadedProfile || DEFAULT_IMAGE;
 
-  if (userProfile !== '') {
-    authStorage.profile.set(userProfile);
+  if (uploadedProfile !== '') {
+    authStorage.profile.set(uploadedProfile);
   }
 
   return (
@@ -63,7 +65,14 @@ export const NavigateMenu = ({ onClick }: NavigateMenuProps) => {
                 {isPending ? (
                   <Avatar w='40px' h='auto' src='https://bit.ly/broken-link' />
                 ) : (
-                  <Image src={userProfile} alt='Profile' borderRadius='full' w='40px' h='auto' />
+                  <Image
+                    src={userProfile}
+                    fallbackSrc={DEFAULT_IMAGE}
+                    alt='Profile'
+                    borderRadius='full'
+                    w='40px'
+                    h='auto'
+                  />
                 )}
                 <TriangleDownIcon width='15px' height='auto' color={isOpen ? 'black' : '#868E96'} />
               </HStack>
