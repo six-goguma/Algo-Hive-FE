@@ -1,7 +1,6 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 
-import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
 // Node.js의 path 모듈
@@ -11,7 +10,7 @@ export default defineConfig({
   define: {
     global: 'window',
   },
-  plugins: [react(), basicSsl()],
+  plugins: [react()],
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src/app'),
@@ -22,10 +21,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api/v1': {
-        target: 'https://algo.knu-soft.site',
+      '/api': {
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
+        ws: true,
       },
     },
   },
