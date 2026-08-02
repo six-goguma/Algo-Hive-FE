@@ -1,4 +1,4 @@
-[<img width="1332" alt="알고하이브_배경흰색" src="https://github.com/user-attachments/assets/8ba76484-b1ee-46bc-baa3-2617c8a9662c" />](https://algo.knu-soft.site)
+[<img width="1332" alt="알고하이브_배경흰색" src="https://github.com/user-attachments/assets/8ba76484-b1ee-46bc-baa3-2617c8a9662c" />](https://algo.dobbymin.cloud)
 
 
  <div align="center">  
