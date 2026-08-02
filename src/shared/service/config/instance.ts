@@ -5,11 +5,14 @@ const API_PREFIX = `/api/v1`;
 
 export const BASE_URI = `${API_PREFIX}`;
 
-export const SERVER_URI = `https://algo.knu-soft.site`;
+// 로컬은 vite proxy(→ localhost:8080), 배포는 같은 도메인의 nginx가 /api 를 백엔드로 넘긴다.
+const ORIGIN = import.meta.env.VITE_SERVER_URL ?? window.location.origin;
 
-export const BASE_WS_URI = `wss://algo.knu-soft.site`;
+export const SERVER_URI = ORIGIN;
 
-export const SERVER_FILE_URI = `https://algo.knu-soft.site`;
+export const BASE_WS_URI = ORIGIN.replace(/^http/, 'ws');
+
+export const SERVER_FILE_URI = ORIGIN;
 
 export const fetchInstance = new Http(BASE_URI, {
   headers: {

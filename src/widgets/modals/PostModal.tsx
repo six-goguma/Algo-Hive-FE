@@ -24,9 +24,7 @@ import { ImagePlus } from 'lucide-react';
 
 import { Form, FormField, FormItem } from '@shared/components';
 import { useCustomToast } from '@shared/hooks';
-import { BASE_URI } from '@shared/service';
-
-const SERVER_URL = 'https://algo.knu-soft.site';
+import { BASE_URI, SERVER_FILE_URI } from '@shared/service';
 
 type PostModalProps = {
   isOpen: boolean;
@@ -115,7 +113,7 @@ export const PostModal = ({
       if (!response.ok) throw new Error('파일 업로드 실패');
 
       const data = await response.json();
-      return `${SERVER_URL}${data.url}`;
+      return `${SERVER_FILE_URI}${data.url}`;
     } catch {
       customToast({
         toastStatus: 'error',
