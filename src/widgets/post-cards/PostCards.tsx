@@ -2,6 +2,7 @@ import { Avatar, Divider, Flex, HStack, Image, Text, VStack } from '@chakra-ui/r
 
 import { HeartIcon } from 'lucide-react';
 
+import { DEFAULT_IMAGE } from '@shared/constants';
 import { dateFormat, TextOverFlow } from '@shared/utils';
 
 type PostCardsProps = {
@@ -43,7 +44,14 @@ export const PostCards = ({
       }}
     >
       <Flex w='full' h='167px' bg='customGray.200'>
-        <Image w='full' h='167px' src={thumbnail} alt='thumbnail-img' />
+        <Image
+          w='full'
+          h='167px'
+          objectFit='cover'
+          src={thumbnail || DEFAULT_IMAGE}
+          fallbackSrc={DEFAULT_IMAGE}
+          alt='thumbnail-img'
+        />
       </Flex>
       <Flex w='full' h='full' flexDir='column' p={3} justifyContent='space-between'>
         <VStack w='full' alignItems='start' spacing={1}>
